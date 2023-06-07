@@ -5,10 +5,22 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'login',
     component: () => import('@/views/Login.vue')
-  }
+  },
+  {
+    path: '',
+    component: () => import('@/layout/index.vue'),
+    children: [
+      // {
+      //   path: 'index',
+      //   component: () => import('@/views/index'),
+      //   name: 'Index',
+      //   meta: { title: '首页', icon: 'dashboard', affix: true }
+      // }
+    ]
+  },
 ]
 
 const router = new VueRouter({

@@ -1,0 +1,96 @@
+<template>
+  <div class="header">
+    <i :class="collapseClass" @click="isCollapseChange"></i>
+    <span class="right_box">
+      <i class="el-icon-full-screen icon" @click="requestFullScreen"></i>
+      <img src="@/assets/image/tx.png" alt="头像" />
+      <el-dropdown>
+        <span class="dropdown">
+          fujl<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item>切换主题</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </span>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Header',
+  data() {
+    return {
+      username: 'fujl',
+    }
+  },
+  computed: {
+    isCollapse() {
+      return this.$store.state.app.isCollapse
+    },
+    isFullScreen() {
+      return this.$store.state.app.isFullScreen
+    },
+    collapseClass() {
+      return this.isCollapse ? 'el-icon-s-unfold icon' : 'el-icon-s-fold icon'
+    },
+  },
+  methods: {
+    isCollapseChange() {
+      this.$store.commit('app/COLLAPSE_CHANGE')
+    },
+    requestFullScreen() {
+      if (this.isFullScreen) {
+        var element = document
+        if (element.exitFullscreen) {
+          element.exitFullscreen()
+        } else if (element.webkitExitFullscreen) {
+          element.webkitExitFullscreen()
+        } else if (element.mozCancelFullScreen) {
+          element.mozCancelFullScreen()
+        }
+      } else {
+        var element = document.documentElement
+        if (element.requestFullScreen) {
+          element.requestFullScreen()
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen()
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen()
+        }
+      }
+      this.$store.commit('app/SCREEN_CHANGE')
+    },
+  },
+}
+</script>
+
+<style lang="less" scoped>
+.header {
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+  .icon {
+    font-size: 26px;
+    cursor: pointer;
+  }
+  .right_box {
+    display: flex;
+    align-items: center;
+    img {
+      width: 50px;
+      height: 50px;
+      margin: 0 20px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .dropdown {
+      cursor: pointer;
+    }
+  }
+}
+</style>
