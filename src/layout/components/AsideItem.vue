@@ -1,0 +1,78 @@
+<template>
+  <div class="AsideItem">
+    <el-menu-item v-if="route.type === 'page'" :index="route.id">
+      <i :class="route.icon"></i>
+      <span class="name">{{ route.name }}</span>
+    </el-menu-item>
+    <el-submenu v-else="route.type === 'menu'" :index="route.id">
+      <template slot="title">
+        <i :class="route.icon"></i>
+        <span class="name">{{ route.name }}</span>
+      </template>
+      <AsideItem
+        v-for="item in route.children"
+        :key="item.id"
+        :route="item"
+      ></AsideItem>
+    </el-submenu>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'AsideItem',
+  props: {
+    route: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  data() {
+    return {}
+  },
+  computed: {
+    isCollapse() {
+      return this.$store.state.app.isCollapse
+    },
+    routes() {
+      return this.$store.state.user.routes
+    },
+  },
+  methods: {},
+}
+</script>
+
+<style lang="less" scoped>
+.aside {
+  height: 100vh;
+  background-color: #000;
+  overflow: hidden;
+  .logo {
+    padding: 10px 0;
+    text-align: center;
+    // width: 100%;
+    height: 70px;
+    img {
+      margin: auto;
+    }
+  }
+  .el-menu {
+    height: calc(100vh - 70px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    .el-menu-item.is-active::before {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      top: 5px;
+      left: 0;
+      width: 3px;
+      height: 40px;
+      background-color: rgb(100, 190, 255);
+    }
+    .name {
+      padding-left: 10px;
+    }
+  }
+}
+</style>

@@ -69,11 +69,13 @@ export default {
 <style lang="less" scoped>
 .header {
   padding: 0 20px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 70px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   .icon {
     font-size: 26px;
     cursor: pointer;

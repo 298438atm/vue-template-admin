@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { login } from '@/api/login'
+import { login } from '@/api/user'
 import SessionCRUD from '@/utils/sessionCRUD'
 export default {
   name: 'Login',
