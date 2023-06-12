@@ -2,16 +2,17 @@ import request from '@/utils/request'
 
 export function login (data) {
   return request({
-    url: '/vue2AdminTempalte/login',
+    url: '/login',
     method: 'post',
     noToken: true,
     data
   })
 }
 
-export function getUserInfo () {
+export function getMenu () {
   return request({
-    url: '/vue2AdminTempalte/getUserInfo',
-    method: 'get'
+    url: '/getMenu',
+    method: 'get',
+    
   })
 }

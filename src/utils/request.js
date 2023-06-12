@@ -2,7 +2,7 @@ import axios from 'axios'
 import SessiomCrud from '@/utils/sessionCRUD'
 import { Notification } from 'element-ui';
 const request = axios.create({
-  baseURL: 'https://mock.apifox.cn/m1/2843598-0-default',
+  baseURL: 'http://localhost:3333',
   timeout: 100000
 })
 

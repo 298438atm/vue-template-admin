@@ -1,10 +1,10 @@
 <template>
   <div class="AsideItem">
-    <el-menu-item v-if="route.type === 'page'" :index="route.id">
+    <el-menu-item v-if="route.type === 'page'" :index="route.path" @click="$router.push(route.path)">
       <i :class="route.icon"></i>
       <span class="name">{{ route.name }}</span>
     </el-menu-item>
-    <el-submenu v-else="route.type === 'menu'" :index="route.id">
+    <el-submenu v-else="route.type === 'menu'" :index="route.path">
       <template slot="title">
         <i :class="route.icon"></i>
         <span class="name">{{ route.name }}</span>

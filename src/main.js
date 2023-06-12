@@ -3,9 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './plugins/element.js'
+import MyTable from '@/components/TablePage/index.vue'
 
+Vue.component('MyTable', MyTable)
 Vue.config.productionTip = false
-
 new Vue({
   router,
   store,

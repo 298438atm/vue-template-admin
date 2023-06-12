@@ -1,0 +1,77 @@
+[
+  {
+    "name": "首页",
+    "path": "/home",
+    "remark": "我是备注",
+    "type": "page",
+    "icon": "el-icon-setting",
+    "id": "home",
+    "component": "Home"
+  },
+  {
+    "name": "系统设置",
+    "path": "/systemSetting",
+    "remark": "我是备注",
+    "type": "menu",
+    "icon": "el-icon-setting",
+    "id": "systemSetting",
+    "children": [
+      {
+        "name": "字典管理",
+        "path": "/systemSetting/dict",
+        "remark": "我是备注",
+        "type": "page",
+        "icon": "el-icon-reading",
+        "id": "dict",
+        "component": "systemSetting/dict"
+      },
+      {
+        "name": "角色管理",
+        "path": "/systemSetting/role",
+        "remark": "我是备注",
+        "type": "page",
+        "icon": "el-icon-bank-card",
+        "id": "role",
+        "component": "systemSetting/role"
+      },
+      {
+        "name": "菜单管理",
+        "path": "/systemSetting/menu",
+        "remark": "我是备注",
+        "type": "page",
+        "icon": "el-icon-menu",
+        "id": "menu",
+        "component": "systemSetting/menu"
+      }
+    ]
+  },
+  {
+    "name": "业务模拟",
+    "path": "business",
+    "remark": "我是备注",
+    "type": "menu",
+    "icon": "el-icon-s-cooperation",
+    "id": "business",
+    "children": [
+      {
+        "name": "商品管理",
+        "path": "goods",
+        "remark": "我是备注",
+        "type": "menu",
+        "icon": "el-icon-s-shop",
+        "id": "goods",
+        "children": [
+          {
+            "name": "新进商品",
+            "path": "/business/goods/newAddGoods",
+            "remark": "我是备注",
+            "type": "page",
+            "icon": "el-icon-s-data",
+            "id": "newAddGoods",
+            "component": "business/goods/newAddGoods"
+          }
+        ]
+      }
+    ]
+  }
+]

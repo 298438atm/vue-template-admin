@@ -8,8 +8,9 @@
       text-color="#fff"
       background-color="#000"
       active-text-color="#64beff"
+      :default-active="$route.path"
     >
-      <AsideItem v-for="item in routes" :key="item.id" :route="item"></AsideItem>
+      <AsideItem v-for="item in routes" :key="item.path" :route="item"></AsideItem>
     </el-menu>
   </div>
 </template>
@@ -28,7 +29,6 @@ export default {
       return this.$store.state.app.isCollapse
     },
     routes() {
-      console.log(this.$store.state);
       return this.$store.state.user.routes
     },
   },
@@ -38,6 +38,7 @@ export default {
 
 <style lang="less" scoped>
 .aside {
+  flex-shrink: 0;
   height: 100vh;
   background-color: #000;
   overflow: hidden;

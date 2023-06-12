@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	</head>
+	<body>
+		<div id="app">
+			<el-table :data="tableData" border>
+				<el-table-column prop="name" width="180">
+					<template #default={row}>
+						<el-radio v-model="radioValue" @change="radioChange(row)" :label="row.id">&nbsp;</el-radio>
+					</template>
+				</el-table-column>
+				<el-table-column prop="name" label="姓名" width="180"></el-table-column>
+				<el-table-column prop="name" label="年龄" width="180"></el-table-column>
+			</el-table>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script>
+			new Vue({
+				el: '#app',
+				data() {
+					return {
+						tableData: [
+							{id: 1, name: 'fufu', age: 20},
+							{id: 2, name: 'dandan', age: 20},
+							{id: 3, name: 'weiwei', age: 20},
+							{id: 4, name: 'lili', age: 20},
+							{id: 5, name: 'zhouzhou', age: 20},
+							{id: 6, name: 'huahua', age: 20},
+							{id: 7, name: 'yuanyuan', age: 20}
+						],
+						selectObj: {},
+						radioValue: null
+					}
+				},
+				methods:{
+					radioChange(row) {
+						this.selectObj = row
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
+

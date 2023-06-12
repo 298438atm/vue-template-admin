@@ -1,21 +1,27 @@
 <template>
   <div class="pageTags" ref="pageTags">
-    <div class="left" v-if="isShowMove">
+    <div class="left move_icon" v-if="isShowMove">
       <i class="el-icon-arrow-left" @click="tagsBoxMove('left')"></i>
     </div>
     <div class="tags_box" ref="tagsBox">
       <div
         v-for="item in tags"
+        :key="item.path"
         class="tag_item"
-        :class="{ active: item.path === activeTags }"
-        @click="tagsChange(item)"
+        :class="{ active: item.path === $route.path }"
+        @click="$router.push(item.path)"
+        @mouseenter="tagsBoxEnter(item)"
+        @mouseleave="showClosePath = undefined"
       >
-        <span>{{ item.name }}</span>
-        <!-- <i class="el-icon-circle-close close"></i> -->
-        <i class="el-icon-error close"></i>
+        <span>{{ item.meta.name }}</span>
+        <i
+          class="el-icon-error close"
+          v-if="showClosePath === item.path"
+          @click="delTag(item)"
+        ></i>
       </div>
     </div>
-    <div class="right" v-if="isShowMove">
+    <div class="right move_icon" v-if="isShowMove">
       <i class="el-icon-arrow-right" @click="tagsBoxMove('right')"></i>
     </div>
   </div>
@@ -26,88 +32,31 @@ export default {
   name: 'PageTags',
   data() {
     return {
-      activeTags: '1',
       isShowMove: false,
-      moveWidth: 0,
-      tags: [
-        {
-          name: '首页1',
-          path: '1',
-        },
-        {
-          name: '首页2',
-          path: '2',
-        },
-        {
-          name: '首页3',
-          path: '3',
-        },
-        {
-          name: '首页4',
-          path: '4',
-        },
-        {
-          name: '首页5',
-          path: '1',
-        },
-        {
-          name: '首页6',
-          path: '2',
-        },
-        {
-          name: '首页7',
-          path: '3',
-        },
-        {
-          name: '首页8',
-          path: '4',
-        },
-        {
-          name: '首页9',
-          path: '1',
-        },
-        {
-          name: '首页10',
-          path: '2',
-        },
-        {
-          name: '首页11',
-          path: '3',
-        },
-        {
-          name: '首页12',
-          path: '4',
-        },
-        {
-          name: '首页13',
-          path: '1',
-        },
-        {
-          name: '首页14',
-          path: '2',
-        },
-        {
-          name: '首页15',
-          path: '3',
-        },
-        {
-          name: '首页16',
-          path: '4',
-        },
-        {
-          name: '首页17',
-          path: '1',
-        },
-        {
-          name: '首页18',
-          path: '2',
-        },
-      ],
+      canMoveWidth: 0, //可移动距离
+      moveWidth: 80, //每次移动的距离
+      showClosePath: undefined,
     }
   },
+  computed: {
+    tags() {
+      return this.$store.state.pageTags.tags
+    },
+  },
   methods: {
-    tagsChange(tag) {
-      this.activeTags = tag.path
+    // 鼠标移入显示删除图标，只剩一个不可删除
+    tagsBoxEnter(tag) {
+      if (this.tags.length === 1) {
+        return
+      }
+      this.showClosePath = tag.path
+    },
+    // 删除tag
+    delTag(tag) {
+      this.$store.commit('pageTags/DEL_TAG', tag)
+      if (tag.path === this.$route.path) {
+        this.$router.push(this.tags[this.tags.length - 1]['path'])
+      }
     },
     tagsBoxMove(type) {
       const leftValue = Math.abs(
@@ -118,17 +67,17 @@ export default {
         if (leftValue === 0) {
           this.$refs.tagsBox.style.left = '0px'
         } else {
-          if (leftValue - 80 <= 0) {
+          if (leftValue - this.moveWidth <= 0) {
             this.$refs.tagsBox.style.left = '0px'
           } else {
-            this.$refs.tagsBox.style.left = -(leftValue - 80) + 'px'
+            this.$refs.tagsBox.style.left = -(leftValue - this.moveWidth) + 'px'
           }
         }
       } else {
-        if (leftValue + 80 >= this.moveWidth) {
-          this.$refs.tagsBox.style.left = -this.moveWidth + 'px'
+        if (leftValue + this.moveWidth >= this.canMoveWidth) {
+          this.$refs.tagsBox.style.left = -this.canMoveWidth + 'px'
         } else {
-          this.$refs.tagsBox.style.left = -(leftValue + 80) + 'px'
+          this.$refs.tagsBox.style.left = -(leftValue + this.moveWidth) + 'px'
         }
       }
     },
@@ -139,19 +88,27 @@ export default {
       deep: true,
       handler() {
         this.$nextTick(() => {
-          console.log(Array.from(this.$refs.tagsBox.children))
           const tagsBoxWidth = Array.from(this.$refs.tagsBox.children).reduce(
             (pre, next) => pre + next.offsetWidth,
             0
           )
           const pageTagsWidth = this.$refs.pageTags.offsetWidth - 60
           if (tagsBoxWidth > pageTagsWidth) {
-            this.moveWidth = tagsBoxWidth - pageTagsWidth
+            this.canMoveWidth = tagsBoxWidth - pageTagsWidth
             this.isShowMove = true
           } else {
             this.isShowMove = false
           }
         })
+      },
+    },
+    $route: {
+      deep: true,
+      immediate: true,
+      handler(newV) {
+        if (!this.tags.map((item) => item.path).includes(newV.path)) {
+          this.$store.commit('pageTags/ADD_TAG', newV)
+        }
       },
     },
   },
@@ -169,7 +126,6 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    transition: all .5s ease;
     .tag_item {
       display: flex;
       flex-shrink: 0;
@@ -178,45 +134,36 @@ export default {
       padding: 10px 20px;
       font-size: 14px;
       cursor: pointer;
-      
+      transition: all 0.3s ease;
+      border-bottom: 2px solid transparent;
       .close {
-        display: none;
         padding-left: 5px;
         font-size: 16px;
       }
     }
-    .tag_item:hover .close {
-      display: inline-block;
+    .active {
+      color: #64beff !important;
+      border-bottom: 2px solid #64beff;
     }
   }
+  
 
-  .active {
-    color: #64beff !important;
-    border-bottom: 2px solid #64beff;
+  .move_icon {
+    position: absolute;
+    top: 10px;
+    width: 30px;
+    text-align: center;
+    color: gray;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: rgb(252, 252, 252);
+    z-index: 9;
   }
   .left {
-    position: absolute;
     left: 0;
-    top: 10px;
-    width: 30px;
-    text-align: center;
-    color: gray;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: rgb(252, 252, 252);
-    z-index: 9;
   }
   .right {
-    position: absolute;
-    top: 10px;
     right: 0;
-    width: 30px;
-    text-align: center;
-    color: gray;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: rgb(252, 252, 252);
-    z-index: 9;
   }
 }
 </style>

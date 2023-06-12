@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import app from './modules/app'
 import user from './modules/user'
+import pageTags from './modules/pageTags'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -15,6 +16,7 @@ export default new Vuex.Store({
   },
   modules: {
     app,
-    user
+    user,
+    pageTags
   }
 })

@@ -1,0 +1,109 @@
+<template>
+  <el-card class="my_table">
+    <el-table style="width: 100%" v-bind="$attrs" v-loading="load">
+      <el-table-column
+        v-if="selectType === 'multiple'"
+        type="selection"
+        :width="selectionWidth"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        v-else-if="selectType === 'radio'"
+        type="index"
+        :width="selectionWidth"
+        align="center"
+      >
+        <template #default="{ $index }">
+          <el-radio v-model="radioValue" :label="$index"></el-radio>
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="orderNumber"
+        type="index"
+        label="序号"
+        :width="orderNumberWidth"
+        align="center"
+      >
+      </el-table-column>
+      <el-table-column v-for="item in columns" v-bind="item"></el-table-column>
+    </el-table>
+    <div class="pagination_box" v-if="pageObj">
+      <el-pagination
+        v-bind="mergePageObj"
+      >
+      </el-pagination>
+    </div>
+  </el-card>
+</template>
+
+<script>
+export default {
+  name: 'MyTable',
+  props: {
+    // 选择框类型  multiple：多选，radio：单选，none：不需要选择
+    selectType: {
+      type: String,
+      default: 'radio',
+    },
+    orderNumber: {
+      type: Boolean,
+      default: true,
+    },
+    orderNumberWidth: {
+      type: String,
+      default: '60',
+    },
+    selectionWidth: {
+      type: String,
+      default: '60',
+    },
+    // 列表字段
+    columns: {
+      type: Array,
+      default: () => [],
+    },
+    pageObj: {
+      type: [Object, Boolean],
+      default: () => ({}),
+    },
+    load: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  computed: {
+    mergePageObj() {
+      if (this.pageObj) {
+        return Object.assign({}, this.localPageObj, this.pageObj)
+      } else {
+        this.localPageObj
+      }
+    }
+  },
+  data() {
+    return {
+      radioValue: undefined,
+      localPageObj: {
+        total: 0,
+        layout: 'total, sizes, prev, pager, next, jumper',
+        pageSizes: [10, 20, 50, 100],
+        currentPage: 1,
+        pageSize: 10
+      }
+    }
+  },
+}
+</script>
+
+<style lang="less" scoped>
+.my_table {
+  margin-top: 20px;
+}
+.pagination_box {
+  margin-top: 20px;
+  text-align: right;
+}
+/deep/ .el-radio__label {
+  display: none;
+}
+</style>

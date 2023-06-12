@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { getUserInfo, login } from '@/api/user'
 import SessionCRUD from '@/utils/sessionCRUD'
 export default {
   name: 'Login',
@@ -48,6 +48,7 @@ export default {
         this.loading = false
         const { token } = res
         SessionCRUD.set('token', token)
+        this.$router.push('/home')
       })
     }
   }
