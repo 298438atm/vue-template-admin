@@ -13,8 +13,25 @@
           @click="searchShowToggle"
           >{{ isRetract ? '收起' : '展开' }}</el-button
         >
-        <el-button type="primary" icon="el-icon-share" @click="search">刷新表格</el-button>
-        <el-button type="primary" icon="el-icon-delete">刷选列表</el-button>
+        <el-button type="primary" icon="el-icon-share" @click="search"
+          >刷新表格</el-button
+        >
+        <el-popover placement="top" width="160">
+          <p>请勾选想要展示的列：</p>
+          <div>
+            <el-checkbox-group v-model="showColumList">
+              <el-checkbox
+                v-for="item in columns"
+                :key="item.prop"
+                :label="item.prop"
+                >{{ item.label }}</el-checkbox
+              >
+            </el-checkbox-group>
+          </div>
+          <el-button slot="reference" type="primary" icon="el-icon-delete"
+            >刷选列表</el-button
+          >
+        </el-popover>
       </el-button-group>
     </div>
   </div>
@@ -28,16 +45,28 @@ export default {
     search: Function,
     isRetract: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+    columns: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
+      showColumList: this.columns.map(item => item.prop),
     }
   },
-  methods: {
-    
-  },
+  methods: {},
+  watch: {
+    showColumList: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        this.$emit('changeShowColumList', val)
+      }
+    }
+  }
 }
 </script>
 

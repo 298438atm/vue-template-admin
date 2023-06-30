@@ -6,8 +6,8 @@
     <el-menu
       :collapse="isCollapse"
       text-color="#fff"
-      background-color="#000"
-      active-text-color="#64beff"
+      background-color="#03748b"
+      active-text-color="#002b33"
       :default-active="$route.path"
     >
       <AsideItem v-for="item in routes" :key="item.path" :route="item"></AsideItem>
@@ -40,7 +40,7 @@ export default {
 .aside {
   flex-shrink: 0;
   height: 100vh;
-  background-color: #000;
+  background-color: #03748b;
   overflow: hidden;
   .logo {
     padding: 10px 0;
@@ -54,6 +54,7 @@ export default {
   .el-menu {
     height: calc(100vh - 70px);
     overflow-y: scroll;
+    overflow-x: hidden;
   }
   // 解决menu收缩的时候卡顿
   .el-menu:not(.el-menu--collapse) {
@@ -62,8 +63,8 @@ export default {
 }
 // 设置整个滚动条
 *::-webkit-scrollbar {
-  width: 6px;
-  background-color: black;
+  width: 1px;
+  background-color: #03748b;
 }
 // 设置没有占用到的滚动条
 *::-webkit-scrollbar-track {

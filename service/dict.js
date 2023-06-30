@@ -1,18 +1,18 @@
 
 const dictData = {
-	'fruits': [
-		{value: '1', label: '西瓜'},
-		{value: '2', label: '苹果'},
-		{value: '3', label: '菠萝'},
-		{value: '4', label: '香蕉'},
-		{value: '5', label: '葡萄'}
+	'goodsType': [
+		{value: '1', label: '数码产品'},
+		{value: '2', label: '服装鞋帽'},
+		{value: '3', label: '食品饮料'},
+		{value: '4', label: '生活用品'},
+		{value: '5', label: '瓜果蔬菜'}
 	],
-	'song': [
-		{value: '1', label: '相亲相爱的一家人'},
-		{value: '2', label: '感恩的♥'},
-		{value: '3', label: '团结就是力量'},
-		{value: '4', label: '没有共产党就是没有新中国'},
-		{value: '5', label: '学习雷锋好榜样'}
+	'priceRegion': [
+		{value: '1', label: '0-99'},
+		{value: '2', label: '100-199'},
+		{value: '3', label: '200-499'},
+		{value: '4', label: '500-999'},
+		{value: '5', label: '大于1000'}
 	],
 	'movies': [
 		{value: '1', label: '肖申克的救赎'},
@@ -23,11 +23,15 @@ const dictData = {
 	]
 }
 function getDict(arr) {
-	let resArr = {}
+	let data = {}
 	arr.forEach(item => {
-		resArr[item] = dictData[item]
+		data[item] = dictData[item]
 	})
-	return resArr
+	return {
+		code: 200,
+		data,
+		msg: '获取成功'
+	}
 }
 
 function getPermission() {

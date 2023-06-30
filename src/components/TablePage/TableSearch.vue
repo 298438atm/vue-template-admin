@@ -12,13 +12,13 @@
         </div>
         <div class="btn_box">
           <slot name="btn">
-            <el-button>重置</el-button>
-            <el-button type="primary">查询</el-button>
+            <el-button @click="search('reset')">重置</el-button>
+            <el-button @click="search('search')" type="primary">查询</el-button>
           </slot>
         </div>
       </div>
     </template>
-    <el-form label-width="120px">
+    <el-form label-width="120px" @keyup.enter.native="search">
       <div ref="formItemBoxRef" class="form_item_box">
         <slot name="formItem"></slot>
       </div>
@@ -49,13 +49,10 @@ export default {
     },
     formItemCol: {
       type: Object,
-      default: () => ({
-        xs: 24,
-        sm: 12,
-        md: 8,
-        lg: 6,
-        xl: 4,
-      }),
+      default: () => ({}),
+    },
+    search: {
+      type: Function,
     },
   },
   model: {
@@ -75,6 +72,13 @@ export default {
       retackt: false,
       hideColStartIndex: 0,
       currentWidthField: 'span',
+      localFormItemCol: {
+        xs: 24,
+        sm: 12,
+        md: 8,
+        lg: 6,
+        xl: 4
+      },
     }
   },
   mounted() {
@@ -108,7 +112,7 @@ export default {
         const widthMultiple = element.getAttribute('widthMultiple')
         let spanNum =
           Number(element.getAttribute(this.currentWidthField)) ||
-          this.formItemCol[this.currentWidthField]
+          this.localFormItemCol[this.currentWidthField]
         if (widthMultiple) {
           spanNum = spanNum * widthMultiple
         }
@@ -135,7 +139,16 @@ export default {
       this.retackt = !this.retackt
     },
   },
-  watch: {},
+  watch: {
+    // 如何有用户自定义传入的col布局，则覆盖本地的默认布局
+    formItemCol: {
+      immediate: true,
+      deep: true,
+      handler(newV) {
+        this.localFormItemCol = Object.assign(this.localFormItemCol, newV)
+      }
+    }
+  },
 }
 </script>
 
@@ -167,15 +180,5 @@ export default {
   i {
     padding-left: 5px;
   }
-}
-</style>
-<style>
-.el-input,
-.el-select,
-.el-date-picker,
-.el-time-select,
-.el-date-editor,
-.el-range-editor {
-  width: 100%;
 }
 </style>

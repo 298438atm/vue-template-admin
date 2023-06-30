@@ -1,16 +1,34 @@
 <template>
   <div>
-    <TableSearch v-show="isRetract">
+    <TableSearch v-show="isRetract" :search="search">
       <template #formItem>
         <slot name="formItem"></slot>
       </template>
     </TableSearch>
-    <BtnBox :searchShowToggle="searchShowToggle" :isRetract="isRetract" :search="$attrs.search">
+    <BtnBox
+      :searchShowToggle="() => (isRetract = !isRetract)"
+      :isRetract="isRetract"
+      :search="search"
+      :columns="columns"
+      @changeShowColumList="changeShowColumList"
+    >
       <template #btnBox>
         <slot name="btnBox"></slot>
       </template>
     </BtnBox>
-    <MyTable v-bind="$attrs" v-on="$listeners"></MyTable>
+    <MyTable
+      v-bind="$attrs"
+      v-on="$listeners"
+      :search="search"
+      :showColumList="showColumList"
+    >
+      <template v-for="item in columns" #[item.prop]="{ data }">
+        <slot :name="item.prop" :data="data"></slot>
+      </template>
+      <template #endColumn>
+        <slot name="endColumn"></slot>
+      </template>
+    </MyTable>
   </div>
 </template>
 
@@ -21,22 +39,29 @@ import BtnBox from './BtnBox.vue'
 export default {
   name: 'TablePage',
   components: { TableSearch, MyTable, BtnBox },
+  props: {
+    columns: {
+      type: Array,
+      default: () => [],
+    },
+    search: {
+      type: Function,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
-      isRetract: false
+      isRetract: true,
+      showColumList: [],
     }
   },
-  
   methods: {
-    search(type) {
-      if (type === 'search') {
-      } else if (type === 'reset') {
-      }
-    },
-    searchShowToggle() {
-      this.isRetract = !this.isRetract
+    changeShowColumList(selectedProp) {
+      this.showColumList = this.columns.filter((item) =>
+        selectedProp.includes(item.prop)
+      )
     }
-  },
+  }
 }
 </script>
 

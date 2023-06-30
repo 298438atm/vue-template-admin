@@ -1,50 +1,63 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title></title>
-		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-	</head>
-	<body>
-		<div id="app">
-			<el-table :data="tableData" border>
-				<el-table-column prop="name" width="180">
-					<template #default={row}>
-						<el-radio v-model="radioValue" @change="radioChange(row)" :label="row.id">&nbsp;</el-radio>
-					</template>
-				</el-table-column>
-				<el-table-column prop="name" label="姓名" width="180"></el-table-column>
-				<el-table-column prop="name" label="年龄" width="180"></el-table-column>
-			</el-table>
-		</div>
-		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-		<script>
-			new Vue({
-				el: '#app',
-				data() {
-					return {
-						tableData: [
-							{id: 1, name: 'fufu', age: 20},
-							{id: 2, name: 'dandan', age: 20},
-							{id: 3, name: 'weiwei', age: 20},
-							{id: 4, name: 'lili', age: 20},
-							{id: 5, name: 'zhouzhou', age: 20},
-							{id: 6, name: 'huahua', age: 20},
-							{id: 7, name: 'yuanyuan', age: 20}
-						],
-						selectObj: {},
-						radioValue: null
-					}
-				},
-				methods:{
-					radioChange(row) {
-						this.selectObj = row
-					}
-				}
-			})
-		</script>
-	</body>
-</html>
 
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<style>
+		#connector {
+			position: absolute;
+			z-index: 0;
+			background-color: #000;
+			height: 2px;
+			width: 0;
+		}
+
+		.item {
+			position: relative;
+			width: 100px;
+			height: 100px;
+			text-align: center;
+			/* margin: 50px; */
+			background-color: #ccc;
+			z-index: 1;
+		}
+		#item2 {
+			top: 100px;
+			left: 100px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="wrapper">
+		<div class="item" id="item1">元素1</div>
+		<div class="item" id="item2">元素2</div>
+	</div>
+	<script>
+		function drawConnector() {
+			const item1 = document.getElementById('item1');
+			const item2 = document.getElementById('item2');
+			const wrapper = document.getElementById('wrapper');
+			const connector = document.createElement('div');
+			connector.id = 'connector';
+			wrapper.appendChild(connector);
+			let x1 = item1.offsetLeft + (item1.offsetWidth / 2);
+			let y1 = item1.offsetTop + (item1.offsetHeight / 2);
+			let x2 = item2.offsetLeft + (item2.offsetWidth / 2);
+			let y2 = item2.offsetTop + (item2.offsetHeight / 2);
+			let length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+			let cx = ((x1 + x2) / 2) - (length / 2);
+			let cy = ((y1 + y2) / 2) - (2 / 2);
+			let angle = Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI);
+			connector.style.left = `${cx}px`;
+			connector.style.top = `${cy}px`;
+			connector.style.width = `${length}px`;
+			connector.style.transform = `rotate(${angle}deg)`;
+		}
+		drawConnector();
+	</script>
+</body>
+
+</html>

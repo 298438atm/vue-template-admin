@@ -1,11 +1,12 @@
 const express = require('express')
 const app = express()
-const {getDict, getPermission} = require('./dict.js')
+// const dict = require('./router/dict')
 const {login} = require('./user.js')
 const {addMenu, getMenu} = require('./menu.js')
 const { getTableList } = require('./table.js')
-app.use(express.urlencoded())
-app.use(express.json())
+require('./utils/index')
+const APIRouter = require('./router/index')
+
 app.all("*", function (req, res, next) {
   //设置允许跨域的域名，*代表允许任意域名跨域
   res.header("Access-Control-Allow-Origin", "*");
@@ -20,11 +21,14 @@ app.all("*", function (req, res, next) {
   }
 });
 
-// 字典和按钮权限
-app.post('/getDict', (req, res) => {
-  let data = getDict(req.body)
-	res.send(data)
+app.use(express.urlencoded())
+app.use(express.json())
+app.use((req, res, next) => {
+  setTimeout(next, 500)
 })
+app.use(APIRouter)
+// 字典和按钮权限
+// app.use('/dict', dict)
 app.get('/getPermission', (req, res) => {
 	res.send(getPermission())
 })

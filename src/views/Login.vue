@@ -39,12 +39,14 @@ export default {
       loading: false
     }
   },
+  created() {
+    window.app = this
+  },
   methods: {
     async submit () {
       await this.$refs.form.validate()
       this.loading = true
       login(this.form).then(res => {
-        this.$message.success('登录成功！')
         this.loading = false
         const { token } = res
         SessionCRUD.set('token', token)

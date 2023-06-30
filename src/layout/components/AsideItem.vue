@@ -2,12 +2,12 @@
   <div class="AsideItem">
     <el-menu-item v-if="route.type === 'page'" :index="route.path" @click="$router.push(route.path)">
       <i :class="route.icon"></i>
-      <span class="name">{{ route.name }}</span>
+      <span v-show="!isCollapse">{{ route.name }}</span>
     </el-menu-item>
-    <el-submenu v-else="route.type === 'menu'" :index="route.path">
+    <el-submenu v-else-if="route.type === 'menu'" :index="route.path">
       <template slot="title">
         <i :class="route.icon"></i>
-        <span class="name">{{ route.name }}</span>
+        <span v-show="!isCollapse">{{ route.name }}</span>
       </template>
       <AsideItem
         v-for="item in route.children"
@@ -45,7 +45,7 @@ export default {
 <style lang="less" scoped>
 .aside {
   height: 100vh;
-  background-color: #000;
+  background-color: #03748b;
   overflow: hidden;
   .logo {
     padding: 10px 0;
@@ -69,9 +69,6 @@ export default {
       width: 3px;
       height: 40px;
       background-color: rgb(100, 190, 255);
-    }
-    .name {
-      padding-left: 10px;
     }
   }
 }

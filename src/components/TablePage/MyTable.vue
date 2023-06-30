@@ -1,6 +1,11 @@
 <template>
   <el-card class="my_table">
-    <el-table style="width: 100%" v-bind="$attrs" v-loading="load">
+    <el-table
+      style="width: 100%"
+      v-bind="$attrs"
+      v-loading="load"
+      v-on="$listeners"
+    >
       <el-table-column
         v-if="selectType === 'multiple'"
         type="selection"
@@ -25,11 +30,24 @@
         align="center"
       >
       </el-table-column>
-      <el-table-column v-for="item in columns" v-bind="item"></el-table-column>
+      <el-table-column
+        v-for="item in showColumList"
+        v-bind="item"
+        :key="item.prop"
+      >
+        <template #default="data">
+          <slot :name="item.prop" :data="data">
+            {{ data.row[item.prop] }}
+          </slot>
+        </template>
+      </el-table-column>
+      <slot name="endColumn"></slot>
     </el-table>
     <div class="pagination_box" v-if="pageObj">
       <el-pagination
         v-bind="mergePageObj"
+        @size-change="sizeChange"
+        @current-change="currentChange"
       >
       </el-pagination>
     </div>
@@ -43,7 +61,7 @@ export default {
     // 选择框类型  multiple：多选，radio：单选，none：不需要选择
     selectType: {
       type: String,
-      default: 'radio',
+      default: 'multiple',
     },
     orderNumber: {
       type: Boolean,
@@ -57,8 +75,8 @@ export default {
       type: String,
       default: '60',
     },
-    // 列表字段
-    columns: {
+    // 列表展示字段
+    showColumList: {
       type: Array,
       default: () => [],
     },
@@ -69,7 +87,8 @@ export default {
     load: {
       type: Boolean,
       default: false,
-    }
+    },
+    search: Function,
   },
   computed: {
     mergePageObj() {
@@ -78,7 +97,7 @@ export default {
       } else {
         this.localPageObj
       }
-    }
+    },
   },
   data() {
     return {
@@ -88,9 +107,17 @@ export default {
         layout: 'total, sizes, prev, pager, next, jumper',
         pageSizes: [10, 20, 50, 100],
         currentPage: 1,
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     }
+  },
+  methods: {
+    sizeChange(val) {
+      this.search('pagination', { pageSize: val })
+    },
+    currentChange(val) {
+      this.search('pagination', { currentPage: val })
+    },
   },
 }
 </script>

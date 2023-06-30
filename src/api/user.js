@@ -5,7 +5,8 @@ export function login (data) {
     url: '/login',
     method: 'post',
     noToken: true,
-    data
+    data,
+    autoLoad: 'loading'
   })
 }
 
