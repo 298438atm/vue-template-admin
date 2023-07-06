@@ -40,7 +40,7 @@ function formatRoutes(routes) {
   const resRoutes = []
   routes.forEach(item => {
     let obj = {
-      path: item.path,
+      path: item.path || '',
       meta: { name: item.name, keepAlive: item.keepAlive || false },
       component: routerCompnentHanlde(item, 1),
       name: item.name

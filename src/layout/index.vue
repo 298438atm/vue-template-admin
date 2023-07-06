@@ -17,7 +17,6 @@
 import Aside from './components/Aside.vue'
 import Header from './components/Header.vue'
 import PageTags from './components/PageTags.vue'
-import { getMenu } from '@/api/user'
 export default {
   name: 'Layout',
   components: { Aside, Header, PageTags },

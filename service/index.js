@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 // const dict = require('./router/dict')
 const {login} = require('./user.js')
-const {addMenu, getMenu} = require('./menu.js')
 const { getTableList } = require('./table.js')
 require('./utils/index')
 const APIRouter = require('./router/index')
@@ -35,16 +34,9 @@ app.get('/getPermission', (req, res) => {
 app.post('/login', (req, res) => {
   login(res)
 })
-app.get('/getMenu', (req, res) => {
-  getMenu(res)
-})
 app.get('/getTable', (req, res) => {
   getTableList(req.query,res)
 })
-app.post('/addMenu', (req, res) => {
-  res.send(addMenu(req.body))
-})
-
 app.get('/raceList', (req, res) => {
   res.send({
     code: 200,

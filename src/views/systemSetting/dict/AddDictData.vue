@@ -95,16 +95,10 @@
               :rules="formRules.dictDataStatus"
               v-if="row.isEdit"
             >
-              <el-switch
-                v-model="row.dictDataStatus"
-                active-text="启用"
-                inactive-text="停用"
-                active-value="1"
-                inactive-value="2"
-              ></el-switch>
+              <StatusSwitch v-model="form.dictDataStatus"></StatusSwitch>
             </el-form-item>
             <span v-else class="pr16">{{
-              row['dictDataStatus'] === '1' ? '启用' : '停用'
+              row['dictDataStatus']  ? '启用' : '停用'
             }}</span>
           </template>
         </el-table-column>
@@ -241,7 +235,7 @@ export default {
         dictDataName: '',
         dictDataCode: '',
         dictDataRemark: '',
-        dictDataStatus: '1',
+        dictDataStatus: true,
         isEdit: true,
       })
     },

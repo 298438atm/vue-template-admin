@@ -22,13 +22,7 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="字典类型状态" prop="dictTypeStatus">
-        <el-switch
-          v-model.trim="form.dictTypeStatus"
-          active-text="启用"
-          inactive-text="停用"
-          active-value="1"
-          inactive-value="2"
-        ></el-switch>
+        <StatusSwitch v-model="form.dictTypeStatus"></StatusSwitch>
       </el-form-item>
       <el-form-item label="字典类型备注" prop="dictTypeRemark">
         <el-input
@@ -105,6 +99,7 @@ export default {
       form: {
         dictTypeCode: undefined,
         dictTypeName: undefined,
+        dictTypeStatus: true
       },
       submitLoading: false,
       rules: {
@@ -139,8 +134,7 @@ export default {
         done()
       }
       this.localVisible = false
-      this.$refs.ruleForm.clearValidate()
-      this.form = {}
+      this.$refs.ruleForm.resetFields()
     },
     submit() {
       this.submitLoading = true

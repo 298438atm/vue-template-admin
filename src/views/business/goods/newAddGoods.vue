@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MyTable
+    <TablePage
       :data="tableData"
       :columns="columns"
       :pageObj="pageObj"
@@ -56,7 +56,7 @@
       <template #btnBox>
         <el-button type="primary">新增</el-button>
       </template>
-    </MyTable>
+    </TablePage>
   </div>
 </template>
 

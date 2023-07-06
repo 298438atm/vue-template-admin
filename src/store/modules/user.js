@@ -1,4 +1,4 @@
-import { getMenu, test } from '@/api/user'
+import { getMenuList } from '@/api/menu'
 export default {
   namespaced: true,
   state: {
@@ -12,7 +12,7 @@ export default {
   actions: {
     getMenu({ commit }) {
       return new Promise((resolve, reject) => {
-        getMenu().then(res => {
+        getMenuList().then(res => {
           commit('ROUTES_CHANGE', res)
           resolve(res)
         })

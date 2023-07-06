@@ -23,6 +23,7 @@
 			background-color: #ccc;
 			z-index: 1;
 		}
+
 		#item2 {
 			top: 100px;
 			left: 100px;
@@ -36,27 +37,117 @@
 		<div class="item" id="item2">元素2</div>
 	</div>
 	<script>
-		function drawConnector() {
-			const item1 = document.getElementById('item1');
-			const item2 = document.getElementById('item2');
-			const wrapper = document.getElementById('wrapper');
-			const connector = document.createElement('div');
-			connector.id = 'connector';
-			wrapper.appendChild(connector);
-			let x1 = item1.offsetLeft + (item1.offsetWidth / 2);
-			let y1 = item1.offsetTop + (item1.offsetHeight / 2);
-			let x2 = item2.offsetLeft + (item2.offsetWidth / 2);
-			let y2 = item2.offsetTop + (item2.offsetHeight / 2);
-			let length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-			let cx = ((x1 + x2) / 2) - (length / 2);
-			let cy = ((y1 + y2) / 2) - (2 / 2);
-			let angle = Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI);
-			connector.style.left = `${cx}px`;
-			connector.style.top = `${cy}px`;
-			connector.style.width = `${length}px`;
-			connector.style.transform = `rotate(${angle}deg)`;
-		}
-		drawConnector();
+		let menu = [
+			{
+				"name": "首页",
+				"path": "/home",
+				"remark": "我是备注",
+				"type": "page",
+				"icon": "el-icon-setting",
+				"id": "home",
+				"component": "Home",
+				"status": true
+			},
+			{
+				"name": "系统设置",
+				"path": "/systemSetting",
+				"remark": "我是备注",
+				"type": "menu",
+				"icon": "el-icon-setting",
+				"id": "systemSetting",
+				"status": true,
+				"children": [
+					{
+						"name": "字典管理",
+						"path": "/systemSetting/dict",
+						"remark": "我是备注",
+						"type": "page",
+						"icon": "el-icon-reading",
+						"id": "dict",
+						"component": "systemSetting/dict",
+						"status": true
+					},
+					{
+						"name": "角色管理",
+						"path": "/systemSetting/role",
+						"remark": "我是备注",
+						"type": "page",
+						"icon": "el-icon-bank-card",
+						"id": "role",
+						"status": true,
+						"component": "systemSetting/role"
+					},
+					{
+						"name": "菜单管理",
+						"path": "/systemSetting/menu",
+						"remark": "我是备注",
+						"type": "page",
+						"icon": "el-icon-menu",
+						"id": "menu",
+						"status": true,
+						"component": "systemSetting/menu"
+					}
+				]
+			},
+			{
+				"name": "业务模拟",
+				"path": "business",
+				"remark": "我是备注",
+				"type": "menu",
+				"icon": "el-icon-s-cooperation",
+				"id": "business",
+				"status": true,
+				"children": [
+					{
+						"name": "商品管理",
+						"path": "goods",
+						"remark": "我是备注",
+						"type": "menu",
+						"icon": "el-icon-s-shop",
+						"id": "goods",
+						"status": true,
+						"children": [
+							{
+								"name": "新进商品",
+								"path": "/business/goods/newAddGoods",
+								"remark": "我是备注",
+								"type": "page",
+								"icon": "el-icon-s-data",
+								"id": "newAddGoods",
+								"status": true,
+								"component": "business/goods/newAddGoods"
+							}
+						]
+					}
+				]
+			},
+			{
+				"type": "menu",
+				"name": "测试菜单",
+				"status": true,
+				"keepAlive": false,
+				"parentMenu": "rootMenu",
+				"code": "test",
+				"icon": "setting",
+				"remark": "菜单备注\n菜单备注\n",
+				"createTime": "2023-07-04 11:11:56",
+				"id": "1688440316303rpx89bj9jkm"
+			},
+			{
+				"type": "menu",
+				"name": "测试菜单",
+				"status": true,
+				"keepAlive": false,
+				"parentMenu": "rootMenu",
+				"code": "test",
+				"icon": "setting",
+				"remark": "菜单备注\n菜单备注\n",
+				"createTime": "2023-07-04 11:12:13",
+				"id": "1688440333183rfltubwzvqf"
+			}
+		]
+		
+		console.log(filterFun(['home', '1688440316303rpx89bj9jkm', 'goods'], menu), '22');
 	</script>
 </body>
 

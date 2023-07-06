@@ -4,8 +4,7 @@ function getMenu(res) {
     let arr = JSON.parse(dataStr)
     res.send({
       code: 200,
-      data: arr,
-      msg: '操作成功！'
+      data: arr
     }) 
   })
 }

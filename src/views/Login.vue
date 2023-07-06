@@ -23,8 +23,8 @@ export default {
   data () {
     return {
       form: {
-        username: undefined,
-        password: undefined
+        username: 'admin',
+        password: 'admin'
       },
       rules: {
         username: [
@@ -33,7 +33,7 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { pattern: /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,12}$/, message: '密码格式不正确', trigger: 'blur' }
+          // { pattern: /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,12}$/, message: '密码格式不正确', trigger: 'blur' }
         ]
       },
       loading: false

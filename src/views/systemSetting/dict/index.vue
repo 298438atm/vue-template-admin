@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MyTable
+    <TablePage
       :data="tableData"
       :columns="columns"
       :pageObj="pageObj"
@@ -42,7 +42,7 @@
           type="danger"
           v-show="ids.length > 0"
           :loading="delBtnLoading"
-          v-remind="{ hander: selectDel }"
+          @click="selectDel"
         >
           删除
         </el-button>
@@ -53,7 +53,7 @@
         }}</el-button>
       </template>
       <template #dictTypeStatus="{ data }">
-        <span>{{ data.row['dictTypeStatus'] === '1' ? '启用' : '停用' }}</span>
+        <span>{{ data.row['dictTypeStatus'] ? '启用' : '停用' }}</span>
       </template>
       <template #endColumn>
         <el-table-column prop="operate" label="操作" align="center">
@@ -64,10 +64,10 @@
               v-remind="{
                 hander: dictTypeStatusChange.bind(null, row),
                 message: `确认${
-                  row.dictTypeStatus === '1' ? '停用' : '启用'
+                  row.dictTypeStatus ? '停用' : '启用'
                 }该条数据吗？`,
               }"
-              >{{ row.dictTypeStatus === '1' ? '停用' : '启用' }}</el-button
+              >{{ row.dictTypeStatus ? '停用' : '启用' }}</el-button
             >
             <el-button type="text" @click="openDictTypeForm('edit', row)"
               >编辑</el-button
@@ -77,14 +77,14 @@
               class="btn_text_red"
               :loading="row.delLoading"
               :disabled="row.disabled"
-              v-remind="{ hander: rowDel.bind(null, row) }"
+              @click="rowDel(row)"
               >删除</el-button
             >
             {{ row.loading }}
           </template>
         </el-table-column>
       </template>
-    </MyTable>
+    </TablePage>
     <AddDictType
       v-bind="dictTypeProps"
       :visible.sync="dictTypeProps.visible"
@@ -144,7 +144,6 @@ export default {
         currentPage: 1,
         pageSize: 10,
       },
-      tableLoading: false,
       dictTypeProps: {
         visible: false,
         type: 'add',
@@ -157,7 +156,8 @@ export default {
         dictTypeName: '',
       },
       ids: [],
-      delBtnLoading: false,
+      tableLoading: false,
+      delBtnLoading: false
     }
   },
   created() {
@@ -175,9 +175,9 @@ export default {
       this.tableLoading = true
       API.getDictTypeList(Object.assign({}, this.pageObj, this.form)).then(
         (res) => {
+          this.tableLoading = false
           this.tableData = res.record
           this.pageObj.total = res.total
-          this.tableLoading = false
         }
       )
     },

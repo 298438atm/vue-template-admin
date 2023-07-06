@@ -1,11 +1,11 @@
-import qs from 'qs'
 import request from '@/utils/request'
 
 export function getDictTypeList(params) {
   return request({
     url: '/dict/getDictTypeList',
     method: 'get',
-    params
+    params,
+    load: 'tableLoading'
   })
 }
 export function getDictDataList(id) {
@@ -34,7 +34,8 @@ export function del(data) {
   return request({
     url: '/dict/del',
     method: 'delete',
-    data
+    data,
+    load: 'delBtnLoading'
   })
 }
 export function check(params) {

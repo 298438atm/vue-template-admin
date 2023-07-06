@@ -85,7 +85,7 @@ export default {
       default: () => ({}),
     },
     load: {
-      type: Boolean,
+      type: [Boolean, undefined],
       default: false,
     },
     search: Function,

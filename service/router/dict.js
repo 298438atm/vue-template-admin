@@ -132,10 +132,10 @@ Router.delete('/del', function (req, res) {
 
 Router.post('/getDictDatasBydictTypes', function (req, res) {
   let resData = {}
-  let dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8')).filter(item => item.dictTypeStatus === '1')
+  let dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8')).filter(item => item.dictTypeStatus)
   dictData.forEach(item => {
     if (req.body.includes(item.dictTypeCode)) {
-      resData[item.dictTypeCode] = item.dictData.filter(item => item.dictDataStatus === '1')
+      resData[item.dictTypeCode] = item.dictData.filter(item => item.dictDataStatus)
     }
   })
   res.send({
@@ -149,7 +149,7 @@ Router.get('/changeDictypeStatus/:id', function (req, res) {
   let dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8'))
   const index = dictData.findIndex(item => item.id === id)
   if (index > -1) {
-    dictData[index]['dictTypeStatus'] = (dictData[index]['dictTypeStatus'] === '1' ? '2' : '1')
+    dictData[index]['dictTypeStatus'] = (dictData[index]['dictTypeStatus'] ? false : true)
   }
   fs.writeFileSync('./data/dict.json', JSON.stringify(dictData))
   res.send({

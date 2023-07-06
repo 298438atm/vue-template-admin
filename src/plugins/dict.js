@@ -2,9 +2,14 @@ import {getDictDatasBydictTypes} from "@/api/dict"
 const install = function(Vue) {
   Vue.mixin({
     data() {
-      return {
-				dict: {}
+			if (Array.isArray(this.$options.dicts)) {
+				return {
+					dict: {}
+				}
+			} else {
+				return {}
 			}
+      
     },
     created() {
       if (this.$options.dicts instanceof Array) {
