@@ -6,148 +6,60 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
 	<style>
-		#connector {
-			position: absolute;
-			z-index: 0;
-			background-color: #000;
-			height: 2px;
-			width: 0;
-		}
-
-		.item {
-			position: relative;
-			width: 100px;
-			height: 100px;
+		.title {
+			padding: 5px 0;
+			font-size: 20px;
+			font-weight: bold;
 			text-align: center;
-			/* margin: 50px; */
-			background-color: #ccc;
-			z-index: 1;
+			background-color: #efede0;
 		}
-
-		#item2 {
-			top: 100px;
-			left: 100px;
+		body {
+			padding: 0;
+			margin: 0;
+		}
+		ul {
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+		li {
+			padding: 5px 0;
+			padding-left: 20px;
+		}
+		li:nth-child(odd) {
+			background-color: #cbe7fd;
+		}
+		li:nth-child(even) {
+			background-color: #efede0;
 		}
 	</style>
 </head>
 
 <body>
 	<div id="wrapper">
-		<div class="item" id="item1">元素1</div>
-		<div class="item" id="item2">元素2</div>
+		<div class="title">参考模板</div>
+		<ul>
+			<li>合同签订日期：2017-06-24T13:16:11</li>
+			<li>项目名称：北岸江山三期5幢</li>
+			<li>房屋坐落：江北区观音桥街道建新西路34号1号地块B宗5幢29-7</li>
+			<li>出卖人：重庆国兴置业有限公司</li>
+			<li>代理人姓名：xxx</li>
+			<li>代理人证件类型：</li>
+			<li>代理人证件号码：</li>
+			<li>买受人：</li>
+			<li>买受人证件类型：</li>
+			<li>买方证件号码：</li>
+			<li>建筑面积：</li>
+			<li>套内面积：</li>
+			<li>分摊面积：</li>
+			<li>户型：</li>
+			<li>用途：</li>
+			<li>成交金额：</li>
+			<li>预售许可证：</li>
+		</ul>
 	</div>
 	<script>
-		let menu = [
-			{
-				"name": "首页",
-				"path": "/home",
-				"remark": "我是备注",
-				"type": "page",
-				"icon": "el-icon-setting",
-				"id": "home",
-				"component": "Home",
-				"status": true
-			},
-			{
-				"name": "系统设置",
-				"path": "/systemSetting",
-				"remark": "我是备注",
-				"type": "menu",
-				"icon": "el-icon-setting",
-				"id": "systemSetting",
-				"status": true,
-				"children": [
-					{
-						"name": "字典管理",
-						"path": "/systemSetting/dict",
-						"remark": "我是备注",
-						"type": "page",
-						"icon": "el-icon-reading",
-						"id": "dict",
-						"component": "systemSetting/dict",
-						"status": true
-					},
-					{
-						"name": "角色管理",
-						"path": "/systemSetting/role",
-						"remark": "我是备注",
-						"type": "page",
-						"icon": "el-icon-bank-card",
-						"id": "role",
-						"status": true,
-						"component": "systemSetting/role"
-					},
-					{
-						"name": "菜单管理",
-						"path": "/systemSetting/menu",
-						"remark": "我是备注",
-						"type": "page",
-						"icon": "el-icon-menu",
-						"id": "menu",
-						"status": true,
-						"component": "systemSetting/menu"
-					}
-				]
-			},
-			{
-				"name": "业务模拟",
-				"path": "business",
-				"remark": "我是备注",
-				"type": "menu",
-				"icon": "el-icon-s-cooperation",
-				"id": "business",
-				"status": true,
-				"children": [
-					{
-						"name": "商品管理",
-						"path": "goods",
-						"remark": "我是备注",
-						"type": "menu",
-						"icon": "el-icon-s-shop",
-						"id": "goods",
-						"status": true,
-						"children": [
-							{
-								"name": "新进商品",
-								"path": "/business/goods/newAddGoods",
-								"remark": "我是备注",
-								"type": "page",
-								"icon": "el-icon-s-data",
-								"id": "newAddGoods",
-								"status": true,
-								"component": "business/goods/newAddGoods"
-							}
-						]
-					}
-				]
-			},
-			{
-				"type": "menu",
-				"name": "测试菜单",
-				"status": true,
-				"keepAlive": false,
-				"parentMenu": "rootMenu",
-				"code": "test",
-				"icon": "setting",
-				"remark": "菜单备注\n菜单备注\n",
-				"createTime": "2023-07-04 11:11:56",
-				"id": "1688440316303rpx89bj9jkm"
-			},
-			{
-				"type": "menu",
-				"name": "测试菜单",
-				"status": true,
-				"keepAlive": false,
-				"parentMenu": "rootMenu",
-				"code": "test",
-				"icon": "setting",
-				"remark": "菜单备注\n菜单备注\n",
-				"createTime": "2023-07-04 11:12:13",
-				"id": "1688440333183rfltubwzvqf"
-			}
-		]
-		
-		console.log(filterFun(['home', '1688440316303rpx89bj9jkm', 'goods'], menu), '22');
+
 	</script>
 </body>
 

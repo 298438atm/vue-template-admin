@@ -72,6 +72,7 @@ Router.delete('/delMenu', function (req, res) {
           delMenu(ids, item.children)
         }
       } else {
+        console.log(ids);
         list.splice(index, 1)
       }
     });

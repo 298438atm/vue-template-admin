@@ -43,13 +43,13 @@
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="form.type === 'page'">
-          <el-form-item prop="route" :label="formLabelType + '路由'">
-            <MyInput v-model="form.route"> </MyInput>
+          <el-form-item prop="path" :label="formLabelType + '路由'">
+            <MyInput v-model="form.path"> </MyInput>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="type === 'menu'">
-          <el-form-item prop="path" label="组件地址">
-            <MyInput v-model="form.path"> </MyInput>
+          <el-form-item prop="component" label="组件地址">
+            <MyInput v-model="form.component"> </MyInput>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="form.type !== 'button'">
@@ -131,10 +131,10 @@ export default {
         type: 'menu',
         name: undefined,
         code: undefined,
-        path: undefined,
+        component: undefined,
         status: true,
         keepAlive: false,
-        route: undefined,
+        path: undefined,
         icon: undefined,
         remark: undefined,
       },
@@ -173,7 +173,7 @@ export default {
       },
       cuerentParentMenuType: undefined,
       allowTypes: ['menu', 'page'],
-      submitLoading: false
+      submitLoading: false,
     }
   },
   methods: {

@@ -3,7 +3,7 @@
     <TablePage
       :data="tableData"
       :columns="columns"
-      :pageObj="pageObj"
+      :pageObj="false"
       :search="search"
       :load="this.tableLoading"
       :orderNumber="false"

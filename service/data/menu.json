@@ -1,1 +1,125 @@
-[{"name":"首页","path":"/home","remark":"我是备注","type":"page","icon":"el-icon-setting","id":"home","component":"Home","status":true,"parentMenu":"rootMenu","children":[]},{"name":"系统设置","path":"/systemSetting","remark":"我是备注","type":"menu","icon":"el-icon-setting","id":"systemSetting","status":true,"parentMenu":"rootMenu","children":[{"name":"字典管理","path":"/systemSetting/dict","remark":"我是备注","type":"page","icon":"el-icon-reading","id":"dict","component":"systemSetting/dict","status":true,"parentMenu":"systemSetting","children":[]},{"name":"角色管理","path":"/systemSetting/role","remark":"我是备注","type":"page","icon":"el-icon-bank-card","id":"role","status":true,"component":"systemSetting/role","parentMenu":"systemSetting","children":[]},{"name":"菜单管理","path":"/systemSetting/menu","remark":"我是备注","type":"page","icon":"el-icon-menu","id":"menu","status":true,"component":"systemSetting/menu","parentMenu":"systemSetting","children":[]}]},{"name":"业务模拟","path":"business","remark":"我是备注","type":"menu","icon":"el-icon-s-cooperation","id":"business","parentMenu":"rootMenu","status":true,"children":[{"name":"商品管理","path":"goods","remark":"我是备注","type":"menu","icon":"el-icon-s-shop","id":"goods","parentMenu":"business","status":true,"children":[{"name":"新进商品","path":"/business/goods/newAddGoods","remark":"我是备注","type":"page","icon":"el-icon-s-data","id":"newAddGoods","parentMenu":"goods","status":true,"component":"business/goods/newAddGoods","children":[]}]}]},{"parentMenu":"rootMenu","type":"menu","name":"123","code":"123","status":true,"keepAlive":false,"icon":"el-icon-lock","remark":"123","createTime":"2023-07-06 15:30:29","id":"1688628629144y6548dyfq7","children":[]},{"parentMenu":"rootMenu","type":"menu","name":"123","code":"123","status":true,"keepAlive":false,"icon":"el-icon-lock","remark":"123","createTime":"2023-07-06 15:30:29","id":"1688628629144y6548dyfq7123","children":[]},{"parentMenu":"rootMenu","type":"menu","name":"123","code":"123","status":true,"keepAlive":false,"icon":"el-icon-lock","remark":"123","createTime":"2023-07-06 15:30:29","id":"1688628629144y6548dyfq732","children":[]},{"parentMenu":"rootMenu","type":"menu","name":"123","code":"123","status":true,"keepAlive":false,"icon":"el-icon-lock","remark":"123","createTime":"2023-07-06 15:30:29","id":"1688628629144y6548dyfq713","children":[]},{"parentMenu":"rootMenu","type":"menu","name":"测试菜单","code":"test","status":true,"keepAlive":false,"icon":"el-icon-lock","remark":"123","createTime":"2023-07-06 17:19:29","id":"168863516961636yuyhruhif","children":[{"parentMenu":"168863516961636yuyhruhif","type":"page","name":"页面名称","code":"demo","status":true,"keepAlive":false,"icon":"el-icon-lock","remark":"123123","route":"/123","createTime":"2023-07-06 18:09:27","id":"1688638167421m7vupx73grh"}]},{"parentMenu":"rootMenu","type":"menu","name":"1","code":"1","status":true,"keepAlive":false,"icon":"el-icon-unlock","remark":"11","children":[]},{"parentMenu":"rootMenu","type":"menu","name":"1","code":"1","status":true,"keepAlive":false,"icon":"el-icon-unlock","remark":"1133333","children":[]},{"parentMenu":"rootMenu","type":"menu","name":"1123123123","code":"11231312313","status":true,"keepAlive":false,"icon":"el-icon-unlock","remark":"1133333","children":[]},{"parentMenu":"rootMenu","type":"page","name":"页面名称","code":"demo","status":true,"keepAlive":false,"icon":"el-icon-lock","remark":"123123","route":"/123","children":[]}]
+[
+  {
+    "name": "首页",
+    "path": "/home",
+    "remark": "我是备注",
+    "type": "page",
+    "icon": "el-icon-setting",
+    "id": "home",
+    "component": "Home",
+    "status": true,
+    "parentMenu": "rootMenu",
+    "children": []
+  },
+  {
+    "name": "系统设置",
+    "path": "/systemSetting",
+    "remark": "我是备注",
+    "type": "menu",
+    "icon": "el-icon-setting",
+    "id": "systemSetting",
+    "status": true,
+    "parentMenu": "rootMenu",
+    "children": [
+      {
+        "name": "字典管理",
+        "path": "/systemSetting/dict",
+        "remark": "我是备注",
+        "type": "page",
+        "icon": "el-icon-reading",
+        "id": "dict",
+        "component": "systemSetting/dict",
+        "status": true,
+        "parentMenu": "systemSetting",
+        "children": []
+      },
+      {
+        "name": "角色管理",
+        "path": "/systemSetting/role",
+        "remark": "我是备注",
+        "type": "page",
+        "icon": "el-icon-bank-card",
+        "id": "role",
+        "status": true,
+        "component": "systemSetting/role",
+        "parentMenu": "systemSetting",
+        "children": []
+      },
+      {
+        "name": "菜单管理",
+        "path": "/systemSetting/menu",
+        "remark": "我是备注",
+        "type": "page",
+        "icon": "el-icon-menu",
+        "id": "menu",
+        "status": true,
+        "component": "systemSetting/menu",
+        "parentMenu": "systemSetting",
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": "业务模拟",
+    "path": "business",
+    "remark": "我是备注",
+    "type": "menu",
+    "icon": "el-icon-s-cooperation",
+    "id": "business",
+    "parentMenu": "rootMenu",
+    "status": true,
+    "children": [
+      {
+        "name": "商品管理",
+        "path": "goods",
+        "remark": "我是备注",
+        "type": "menu",
+        "icon": "el-icon-s-shop",
+        "id": "goods",
+        "parentMenu": "business",
+        "status": true,
+        "children": [
+          {
+            "name": "新进商品",
+            "path": "/business/goods/newAddGoods",
+            "remark": "我是备注",
+            "type": "page",
+            "icon": "el-icon-s-data",
+            "id": "newAddGoods",
+            "parentMenu": "goods",
+            "status": true,
+            "component": "business/goods/newAddGoods",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "parentMenu": "rootMenu",
+    "type": "menu",
+    "name": "测试菜单",
+    "code": "test",
+    "status": true,
+    "keepAlive": false,
+    "icon": "el-icon-lock",
+    "remark": "123",
+    "createTime": "2023-07-06 17:19:29",
+    "id": "168863516961636yuyhruhif",
+    "children": [
+      {
+        "parentMenu": "168863516961636yuyhruhif",
+        "type": "page",
+        "name": "页面名称",
+        "code": "demo",
+        "status": true,
+        "keepAlive": false,
+        "icon": "el-icon-lock",
+        "remark": "123123",
+        "route": "/123",
+        "createTime": "2023-07-06 18:09:27",
+        "id": "1688638167421m7vupx73grh"
+      }
+    ]
+  }
+]
