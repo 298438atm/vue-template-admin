@@ -7,6 +7,9 @@
         <PageTags></PageTags>
       </el-header>
       <el-main>
+        <keep-alive v-if="$route.meta.keepAlive">
+          <router-view></router-view>
+        </keep-alive>
         <router-view></router-view>
       </el-main>
     </el-container>

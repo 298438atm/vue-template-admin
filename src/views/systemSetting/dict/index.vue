@@ -24,14 +24,10 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="字典状态">
-          <el-select v-model="form.dictTypeStatus">
-            <el-option
-              v-for="item in dict['systemStatus']"
-              :key="item.value"
-              :value="item.value"
-              :label="item.label"
-            ></el-option>
-          </el-select>
+          <MySelect
+            v-model="form.dictDataStatus"
+            :options="dict['systemStatus']"
+          ></MySelect>
         </el-form-item>
       </template>
       <template #btnBox>
@@ -52,21 +48,13 @@
           data.row['dictTypeName']
         }}</el-button>
       </template>
-      <template #dictTypeStatus="{ data }">
-        <span>{{ data.row['dictTypeStatus'] ? '启用' : '停用' }}</span>
-      </template>
       <template #endColumn>
         <el-table-column prop="operate" label="操作" align="center">
           <template #default="{ row }">
             <el-button
               type="text"
               :loading="row.statusLoading"
-              v-remind="{
-                hander: dictTypeStatusChange.bind(null, row),
-                message: `确认${
-                  row.dictTypeStatus ? '停用' : '启用'
-                }该条数据吗？`,
-              }"
+              @click="dictTypeStatusChange(row)"
               >{{ row.dictTypeStatus ? '停用' : '启用' }}</el-button
             >
             <el-button type="text" @click="openDictTypeForm('edit', row)"
@@ -132,6 +120,7 @@ export default {
           label: '字典类型状态',
           prop: 'dictTypeStatus',
           align: 'center',
+          statusTag: true,
         },
         {
           label: '备注',
@@ -157,7 +146,7 @@ export default {
       },
       ids: [],
       tableLoading: false,
-      delBtnLoading: false
+      delBtnLoading: false,
     }
   },
   created() {

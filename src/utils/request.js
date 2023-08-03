@@ -1,16 +1,16 @@
 import axios from 'axios'
+import router from '@/router';
 import SessiomCrud from '@/utils/sessionCRUD'
+import systemConfig from '@/config/system'
 import { Notification } from 'element-ui';
 import { Message } from 'element-ui';
-import { MessageBox } from 'element-ui';
 const request = axios.create({
   baseURL: 'http://localhost:3333',
   timeout: 100000
 })
 
 request.interceptors.request.use(config => {
-  console.log(config, this, 'config');
-  const { noToken, method, params } = config
+  const { noToken } = config
   if (!noToken) {
     const token = SessiomCrud.get('token')
     if (!token) {
@@ -22,43 +22,32 @@ request.interceptors.request.use(config => {
   return config
 })
 
-function performAsyncOperation(remind) {
-  return new Promise((resolve, reject) => {
-    MessageBox.confirm(remind.title, {
-      ...remind
-    }).then(() => {
-      resolve()
-    }).catch(err => {
-      reject(err)
-    })
-  })
-}
-
 request.interceptors.response.use(res => {
-  const { load } = res.config
-  if (window.myVue && load) {
-    window.myVue[load] = false
-  }
+  // 无权限
   if (res.status === 401) {
+    router.push('/404')
     return res
   }
   if (res.status === 200) {
-    if (res.data.code === 200) {
-      if (res.data.msg) {
+    if (systemConfig.strictRestrictions) {
+      if (res.data.code === 200) {
+        if (res.data.msg && systemConfig.automaticTip && !res.config.noTips) {
+          Message({
+            type: 'success',
+            message: res.data.msg
+          })
+        }
+        return Promise.resolve(res.data.data)
+      } else {
         Message({
-          type: 'success',
+          type: 'error',
           message: res.data.msg
         })
+        return Promise.reject(res.data)
       }
-      return res.data.data
     } else {
-      Message({
-        type: 'error',
-        message: res.data.msg
-      })
-      return Promise.reject(res.data)
+      return Promise.resolve(res.data)
     }
-
   } else {
     Message({
       type: 'error',

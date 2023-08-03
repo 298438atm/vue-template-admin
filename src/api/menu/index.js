@@ -4,30 +4,42 @@ export function getMenuList(params) {
   return request({
     url: '/menu/getMenuList',
     method: 'get',
-    params,
-    load: 'tableLoading'
+    params
+  })
+}
+export function getRoutes(params) {
+  return request({
+    url: '/menu/getRoutes',
+    method: 'get',
+    params
   })
 }
 export function addEditMenu(data) {
   return request({
     url: '/menu/addEditMenu',
     method: 'post',
-    data,
-    load: 'submitLoading'
+    data
   })
 }
 export function delMenu(data) {
   return request({
     url: '/menu/delMenu',
     method: 'delete',
-    data,
-    load: 'delBtnLoading',
-    remind: {title: '提示', message: '确认删除所选数据吗？', type: 'warning'}
+    data
+  })
+}
+
+export function changeMenuStatus(id) {
+  return request({
+    url: '/menu/changeMenuStatus',
+    method: 'get',
+    params: { id }
   })
 }
 
 export default {
   getMenuList,
   addEditMenu,
-  delMenu
+  delMenu,
+  changeMenuStatus
 }

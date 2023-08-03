@@ -19,7 +19,11 @@
         </el-col>
         <el-col :span="12">
           <el-form-item prop="type" :label="formLabelType + '类型'" required>
-            <el-radio-group v-model="form.type">
+            <el-radio-group
+              v-model="form.type"
+              :placeholder="`请选择${formLabelType}类型`"
+              @change="menuTypeChange"
+            >
               <el-radio-button
                 v-for="item in dict['menuType']"
                 :label="item.value"
@@ -30,31 +34,45 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-
         <el-col :span="12">
           <el-form-item prop="name" :label="formLabelType + '名称'">
-            <MyInput v-model="form.name"></MyInput>
+            <MyInput
+              v-model="form.name"
+              :placeholder="`请输入${formLabelType}名称`"
+            ></MyInput>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item prop="code" :label="formLabelType + '编码'">
-            <MyInput v-model="form.code" placeholder="请选择父级菜单">
+            <MyInput
+              v-model="form.code"
+              :placeholder="`请输入${formLabelType}编码`"
+            >
             </MyInput>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="form.type === 'page'">
           <el-form-item prop="path" :label="formLabelType + '路由'">
-            <MyInput v-model="form.path"> </MyInput>
+            <MyInput
+              v-model="form.path"
+              :placeholder="`请输入${formLabelType}路由`"
+            ></MyInput>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="type === 'menu'">
+        <el-col :span="12" v-if="form.type === 'page'">
           <el-form-item prop="component" label="组件地址">
-            <MyInput v-model="form.component"> </MyInput>
+            <MyInput
+              v-model="form.component"
+              :placeholder="`请输入${formLabelType}组件地址`"
+            ></MyInput>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="form.type !== 'button'">
           <el-form-item prop="icon" :label="formLabelType + '图标'">
-            <MyIcon v-model="form.icon"></MyIcon>
+            <MyIcon
+              v-model="form.icon"
+              :placeholder="`请选择${formLabelType}图标`"
+            ></MyIcon>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -73,7 +91,11 @@
         </el-col>
         <el-col :span="24">
           <el-form-item prop="remark" :label="formLabelType + '备注'">
-            <MyInput v-model="form.remark" type="textarea"></MyInput>
+            <MyInput
+              v-model="form.remark"
+              type="textarea"
+              :placeholder="`请输入${formLabelType}备注`"
+            ></MyInput>
           </el-form-item>
         </el-col>
       </el-row>
@@ -177,12 +199,35 @@ export default {
     }
   },
   methods: {
+    // 切换时清除非当前类型的字段数据
+    menuTypeChange(type) {
+      if (type !== 'page') {
+        this.form.path = undefined
+        this.form.component = undefined
+        this.form.keepAlive = undefined
+      }
+      if (type === 'button') {
+        this.form.icon = undefined
+      }
+    },
     cancel(done) {
       if (typeof done === 'function') {
         done()
       }
-      this.localVisible = false
+      this.form = {
+        parentMenu: 'rootMenu',
+        type: 'menu',
+        name: undefined,
+        code: undefined,
+        component: undefined,
+        status: true,
+        keepAlive: false,
+        path: undefined,
+        icon: undefined,
+        remark: undefined,
+      }
       this.$refs.form.resetFields()
+      this.localVisible = false
     },
     parentMenuClick(node) {
       this.cuerentParentMenuType = node.type
@@ -209,8 +254,10 @@ export default {
   },
   watch: {
     visible(newV) {
-      if (newV && this.type === 'edit') {
-        this.form = this.formData
+      if (newV) {
+        if (this.type === 'edit') {
+          this.form = this.formData
+        }
       }
     },
   },

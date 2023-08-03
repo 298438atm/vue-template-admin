@@ -38,7 +38,6 @@ function getTableList(params, res) {
   setTimeout(() => {
     res.send({
       code: 200,
-      msg: '操作成功！',
       data: resObj
     })
   }, 1000);

@@ -38,6 +38,32 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="dictDataType"
+          label="字典数据类型"
+          width="120"
+          align="center"
+        >
+          <template #header>
+            <span class="red_color">*</span><span>字典数据类型</span>
+          </template>
+          <template #default="{ row, $index }">
+            <el-form-item
+              :prop="'tableData.' + $index + '.dictDataType'"
+              :rules="formRules.dictDataType"
+              v-if="row.isEdit"
+            >
+              <MySelect
+                v-model="row.dictDataType"
+                :options="dict['fieldType']"
+                @change="dictDataTypeChange(row)"
+              ></MySelect>
+            </el-form-item>
+            <span v-else class="pr16">{{
+              getDictLabel('fieldType', row['dictDataType'])
+            }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="dictDataCode"
           label="字典数据编码"
           width="300"
@@ -53,11 +79,19 @@
               v-if="row.isEdit"
             >
               <el-input
+                v-if="row.dictDataType === 'string'"
                 v-model.trim="row.dictDataCode"
                 maxlength="15"
                 show-word-limit
                 clearable
               ></el-input>
+              <el-input-number style="width: 100%" v-else-if="row.dictDataType === 'number'" v-model="row.dictDataCode"></el-input-number>
+              <MySelect
+                v-else-if="row.dictDataType === 'boolean'"
+                v-model="row.dictDataCode"
+                :options="booleanOptions"
+                optionKey="value"
+              ></MySelect>
             </el-form-item>
             <span v-else class="pr16">{{ row['dictDataCode'] }}</span>
           </template>
@@ -66,6 +100,7 @@
           prop="dictDataRemark"
           label="字典数据备注"
           align="center"
+          width="300"
         >
           <template #default="{ row, $index }">
             <el-form-item
@@ -95,11 +130,11 @@
               :rules="formRules.dictDataStatus"
               v-if="row.isEdit"
             >
-              <StatusSwitch v-model="form.dictDataStatus"></StatusSwitch>
+              <StatusSwitch v-model="row.dictDataStatus"></StatusSwitch>
             </el-form-item>
-            <span v-else class="pr16">{{
-              row['dictDataStatus']  ? '启用' : '停用'
-            }}</span>
+            <span v-else>
+              <StatusTag :type="row['dictDataStatus']"></StatusTag>
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="120">
@@ -151,6 +186,7 @@ import API from '@/api/dict'
 
 export default {
   name: 'AddDictData',
+  dicts: ['fieldType'],
   props: {
     type: String,
     visible: {
@@ -203,6 +239,9 @@ export default {
           },
         ],
         dictDataCode: [
+          { required: true, message: '请选择字典数据类型', trigger: 'change' },
+        ],
+        dictDataCode: [
           { required: true, message: '请输入字典数据编码', trigger: 'blur' },
           {
             validator: debounce(
@@ -216,6 +255,16 @@ export default {
       },
       submitLoad: false,
       tableLoading: false,
+      booleanOptions: [
+        {
+          label: true,
+          value: true,
+        },
+        {
+          label: false,
+          value: false,
+        },
+      ],
     }
   },
   methods: {
@@ -225,6 +274,9 @@ export default {
       }
       this.$refs.formRules.clearValidate()
       this.localVisible = false
+    },
+    dictDataTypeChange(row) {
+      this.$set(row, 'dictDataCode', undefined)
     },
     addRow() {
       if (this.formData.tableData.some((item) => item.isEdit)) {
@@ -237,6 +289,7 @@ export default {
         dictDataRemark: '',
         dictDataStatus: true,
         isEdit: true,
+        dictDataType: 'string',
       })
     },
     delRow(index) {

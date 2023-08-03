@@ -1,54 +1,53 @@
 <template>
   <div>
     <TablePage
+      row-key="id"
       :data="tableData"
       :columns="columns"
       :pageObj="false"
       :search="search"
-      :load="this.tableLoading"
       :orderNumber="false"
-      row-key="id"
+      :load="this.tableLoading"
+      :expand-row-keys="expandRowKeys"
       @selection-change="selectChange"
     >
       <template #formItem>
         <el-form-item label="菜单名称">
           <el-input
-            v-model="form.dictTypeName"
+            v-model="form.name"
             placeholder="请输入字典名称"
             clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="菜单状态">
-          <el-select v-model="form.dictTypeStatus">
-            <el-option
-              v-for="item in dict['systemStatus']"
-              :key="item.value"
-              :value="item.value"
-              :label="item.label"
-            ></el-option>
+          <el-select v-model="form.status">
+            <el-option :value="true" label="启用"></el-option>
+            <el-option :value="false" label="停用"></el-option>
           </el-select>
         </el-form-item>
       </template>
+      <template #name="{ data }">
+        <span v-if="data.row.name.indexOf(form.name) > -1">
+          {{ data.row.name.substr(0, data.row.name.indexOf(form.name))
+          }}<span style="color: #f50">{{ form.name }}</span
+          >{{
+            data.row.name.substr(
+              data.row.name.indexOf(form.name) + form.name.length
+            )
+          }}
+        </span>
+        <span v-else>{{ data.row.name }}</span>
+      </template>
       <template #btnBox>
-        <el-button type="primary" @click="openMenuForm('add')"
-          >新增</el-button
-        >
+        <el-button type="primary" @click="openMenuForm('add')">新增</el-button>
         <el-button
           type="danger"
           v-show="ids.length > 0"
           :loading="delBtnLoading"
-          @click="selectDel"
+          @click="delMenu"
         >
           删除
         </el-button>
-      </template>
-      <template #dictTypeName="{ data }">
-        <el-button type="text" @click="openDictDataForm(data.row)">{{
-          data.row['dictTypeName']
-        }}</el-button>
-      </template>
-      <template #status="{ data }">
-        <span>{{ data.row['status'] ? '启用' : '停用' }}</span>
       </template>
       <template #endColumn>
         <el-table-column prop="operate" label="操作" align="center">
@@ -56,13 +55,8 @@
             <el-button
               type="text"
               :loading="row.statusLoading"
-              v-remind="{
-                hander: dictTypeStatusChange.bind(null, row),
-                message: `确认${
-                  row.dictTypeStatus === '1' ? '停用' : '启用'
-                }该条数据吗？`,
-              }"
-              >{{ row.dictTypeStatus === '1' ? '停用' : '启用' }}</el-button
+              @click="menuStatusChange(row, row.status ? '停用' : '启用')"
+              >{{ row.status ? '停用' : '启用' }}</el-button
             >
             <el-button type="text" @click="openMenuForm('edit', row)"
               >编辑</el-button
@@ -72,7 +66,7 @@
               class="btn_text_red"
               :loading="row.delLoading"
               :disabled="row.disabled"
-              @click="rowDel(row)"
+              @click="delMenu(row)"
               >删除</el-button
             >
             {{ row.loading }}
@@ -80,7 +74,10 @@
         </el-table-column>
       </template>
     </TablePage>
-    <AddMenu :visible.sync="menuDialogData.visible" v-bind="menuDialogData"></AddMenu>
+    <AddMenu
+      :visible.sync="menuDialogData.visible"
+      v-bind="menuDialogData"
+    ></AddMenu>
   </div>
 </template>
 
@@ -95,7 +92,9 @@ export default {
   dicts: ['systemStatus'],
   data() {
     return {
-      form: {},
+      form: {
+        name: '',
+      },
       tableData: [],
       columns: [
         {
@@ -112,6 +111,7 @@ export default {
           label: '状态',
           prop: 'status',
           align: 'center',
+          statusTag: true,
         },
         {
           label: '备注',
@@ -128,11 +128,12 @@ export default {
         visible: false,
         type: 'add',
         formData: {},
-        search: this.search
+        search: this.search,
       },
       ids: [],
+      expandRowKeys: [],
       tableLoading: false,
-      delBtnLoading: false
+      delBtnLoading: false,
     }
   },
   created() {
@@ -150,6 +151,11 @@ export default {
       this.tableLoading = true
       API.getMenuList(Object.assign({}, this.pageObj, this.form)).then(
         (res) => {
+          if (type === 'search') {
+            this.expandRowKeys = res.map((item) => item.id)
+          } else if (type === 'reset') {
+            this.expandRowKeys = ['systemSetting']
+          }
           this.tableLoading = false
           this.tableData = res
         }
@@ -159,21 +165,31 @@ export default {
     selectChange(select) {
       this.ids = select.map((item) => item.id)
     },
-    selectDel() {
-      this.delBtnLoading = true
-      API.delMenu(this.ids).then((res) => {
+    async delMenu(row) {
+      await this.$confirm(`确认删除所选数据吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+      let ids = []
+      if (row) {
+        this.$set(row, 'delLoading', true)
+        ids = [row.id]
+      } else {
         this.delBtnLoading = false
+        ids = this.ids
+      }
+      API.delMenu(ids).then((res) => {
+        row ? this.$set(row, 'delLoading', false) : (this.delBtnLoading = false)
         this.search()
       })
     },
-    rowDel(row) {
-      this.$set(row, 'delLoading', true)
-      API.delMenu([row.id]).then((res) => {
-        this.search()
-        this.$set(row, 'delLoading', false)
+    async menuStatusChange(row, text) {
+      await this.$confirm(`确认${text}该数据吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
-    },
-    dictTypeStatusChange(row) {
       this.$set(row, 'statusLoading', true)
       API.changeMenuStatus(row.id).then(() => {
         this.$set(row, 'statusLoading', false)
@@ -184,7 +200,7 @@ export default {
       this.menuDialogData.visible = true
       this.menuDialogData.type = type
       this.menuDialogData.formData = clone(row)
-    }
+    },
   },
 }
 </script>

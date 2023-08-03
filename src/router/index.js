@@ -28,6 +28,7 @@ function addRoutes(routesList) {
     component: () => import('@/layout/index.vue'),
     children: formatRoutes(routesList)
   }
+  console.log(formatRoutes(routesList), 'formatRoutes(routesList)');
   router.addRoute(waitAddRoutes)
   router.addRoute({
     path: '*',
@@ -41,7 +42,7 @@ function formatRoutes(routes) {
   routes.forEach(item => {
     let obj = {
       path: item.path || '',
-      meta: { name: item.name, keepAlive: item.keepAlive || false },
+      meta: { name: item.name, keepAlive: item.keepAlive || false, icon: item.icon },
       component: routerCompnentHanlde(item, 1),
       name: item.name
     }

@@ -10,10 +10,6 @@
 export default {
   name: 'StatusSwitch',
   props: {
-    switchList: {
-      type: Array,
-      default: () => [],
-    },
     modelValue: {
       type: Boolean,
       default: true
@@ -32,13 +28,7 @@ export default {
         this.$emit('updateModelValue', newV)
       }
     }
-  },
-  dicts: ['systemStatus'],
-  data() {
-    return {
-
-    }
-  },
+  }
 }
 </script>
 

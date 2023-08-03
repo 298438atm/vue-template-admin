@@ -4,62 +4,45 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
 	<style>
-		.title {
-			padding: 5px 0;
-			font-size: 20px;
-			font-weight: bold;
-			text-align: center;
-			background-color: #efede0;
-		}
-		body {
-			padding: 0;
-			margin: 0;
-		}
-		ul {
-			padding: 0;
-			margin: 0;
-			list-style: none;
-		}
-		li {
-			padding: 5px 0;
-			padding-left: 20px;
-		}
-		li:nth-child(odd) {
-			background-color: #cbe7fd;
-		}
-		li:nth-child(even) {
-			background-color: #efede0;
+		#wrapper {}
+
+		.right {
+			word-break: break-all;
 		}
 	</style>
 </head>
 
 <body>
 	<div id="wrapper">
-		<div class="title">参考模板</div>
-		<ul>
-			<li>合同签订日期：2017-06-24T13:16:11</li>
-			<li>项目名称：北岸江山三期5幢</li>
-			<li>房屋坐落：江北区观音桥街道建新西路34号1号地块B宗5幢29-7</li>
-			<li>出卖人：重庆国兴置业有限公司</li>
-			<li>代理人姓名：xxx</li>
-			<li>代理人证件类型：</li>
-			<li>代理人证件号码：</li>
-			<li>买受人：</li>
-			<li>买受人证件类型：</li>
-			<li>买方证件号码：</li>
-			<li>建筑面积：</li>
-			<li>套内面积：</li>
-			<li>分摊面积：</li>
-			<li>户型：</li>
-			<li>用途：</li>
-			<li>成交金额：</li>
-			<li>预售许可证：</li>
-		</ul>
+		<span class="left">标题：</span>
+		<span class="right"></span>
 	</div>
 	<script>
-
+		function formatTime(formatTimeStr = 'YYYY-MM-DD hh:mm:ss', date = new Date()) {
+			if (Object.prototype.toString.call(new Date(date)) === '[object Date]') {
+				let YYYY = date.getFullYear()
+				let M = String(date.getMonth() + 1)
+				let D = String(date.getDate())
+				let h = String(date.getHours())
+				let m = String(date.getMinutes())
+				let s = String(date.getSeconds())
+				let str = formatTimeStr.replace(/YYYY/g, YYYY);
+				let obj = { M, D, h, m, s }
+				for (const key in obj) {
+					if (Object.hasOwnProperty.call(obj, key)) {
+						const value = obj[key];
+						const reg = new RegExp(`(${key}+)`, 'g')
+						str = str.replace(reg, ($1) => {
+							return $1.length === 2 ? (value < 10 ? '0' + value : value) : value
+						})
+					}
+				}
+				return str
+			} else {
+				throw new Error('您传入的类型不是时间格式！')
+			}
+		}
 	</script>
 </body>
 

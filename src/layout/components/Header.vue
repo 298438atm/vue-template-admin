@@ -1,7 +1,14 @@
 <template>
   <div class="header">
-    <i :class="collapseClass" @click="isCollapseChange"></i>
-    <span class="right_box">
+    <div class="left_box">
+      <i :class="collapseClass" @click="isCollapseChange"></i>
+      <div class="current_path">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item v-for="(item, index) in showRoutePath" :key="index">{{item.name}}</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+    </div>
+    <div class="right_box">
       <i class="el-icon-full-screen icon" @click="requestFullScreen"></i>
       <img src="@/assets/image/tx.png" alt="头像" />
       <el-dropdown>
@@ -13,7 +20,7 @@
           <el-dropdown-item>切换主题</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-    </span>
+    </div>
   </div>
 </template>
 
@@ -25,6 +32,9 @@ export default {
       username: 'fujl',
     }
   },
+  created() {
+    console.log(this.$route, '123')
+  },
   computed: {
     isCollapse() {
       return this.$store.state.app.isCollapse
@@ -34,6 +44,9 @@ export default {
     },
     collapseClass() {
       return this.isCollapse ? 'el-icon-s-unfold icon' : 'el-icon-s-fold icon'
+    },
+    showRoutePath() {
+      return this.$route.matched.filter((item) => item.name)
     },
   },
   methods: {
@@ -76,9 +89,19 @@ export default {
   width: 100%;
   height: 70px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  .icon {
-    font-size: 26px;
-    cursor: pointer;
+  & > .left_box {
+    display: flex;
+    align-content: center;
+    .icon {
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .current_path {
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+      font-size: 14px;
+    }
   }
   .right_box {
     display: flex;

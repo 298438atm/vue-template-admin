@@ -7,16 +7,16 @@
     name: 'StatusTag',
     props: {
       status: {
-        type: String,
-        default: ''
+        type: Boolean,
+        default: false
       }
     },
     computed: {
       tagType() {
-        return this.status == '1' ? 'info' : 'danger'
+        return this.status ? '' : 'danger'
       },
       text() {
-        return  this.status == '1' ? '启用' : '停用'
+        return  this.status ? '启用' : '停用'
       }
     },
     data() {

@@ -1,11 +1,13 @@
 <template>
-<span>role</span>
+  <div>
+    
+  </div>
 </template>
 
 <script>
-
+export default {
+  name: 'Role',
+}
 </script>
 
-<style lang='less' scoped>
-
-</style>
+<style lang="less" scoped></style>

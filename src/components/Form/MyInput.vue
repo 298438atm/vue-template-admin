@@ -48,9 +48,6 @@ export default {
     prop: 'modelValue',
     event: 'updateModelValue',
   },
-  created() {
-    console.log(this.$slots)
-  },
   computed: {
     localValue: {
       get() {

@@ -9,7 +9,8 @@
     "component": "Home",
     "status": true,
     "parentMenu": "rootMenu",
-    "children": []
+    "children": [],
+    "code": "home"
   },
   {
     "name": "系统设置",
@@ -31,7 +32,8 @@
         "component": "systemSetting/dict",
         "status": true,
         "parentMenu": "systemSetting",
-        "children": []
+        "children": [],
+        "code": "dict"
       },
       {
         "name": "角色管理",
@@ -43,7 +45,8 @@
         "status": true,
         "component": "systemSetting/role",
         "parentMenu": "systemSetting",
-        "children": []
+        "children": [],
+        "code": "role"
       },
       {
         "name": "菜单管理",
@@ -55,9 +58,11 @@
         "status": true,
         "component": "systemSetting/menu",
         "parentMenu": "systemSetting",
-        "children": []
+        "children": [],
+        "code": "menu"
       }
-    ]
+    ],
+    "code": "systemSetting"
   },
   {
     "name": "业务模拟",
@@ -89,37 +94,13 @@
             "parentMenu": "goods",
             "status": true,
             "component": "business/goods/newAddGoods",
-            "children": []
+            "children": [],
+            "code": "newAddGoods"
           }
-        ]
+        ],
+        "code": "goods"
       }
-    ]
-  },
-  {
-    "parentMenu": "rootMenu",
-    "type": "menu",
-    "name": "测试菜单",
-    "code": "test",
-    "status": true,
-    "keepAlive": false,
-    "icon": "el-icon-lock",
-    "remark": "123",
-    "createTime": "2023-07-06 17:19:29",
-    "id": "168863516961636yuyhruhif",
-    "children": [
-      {
-        "parentMenu": "168863516961636yuyhruhif",
-        "type": "page",
-        "name": "页面名称",
-        "code": "demo",
-        "status": true,
-        "keepAlive": false,
-        "icon": "el-icon-lock",
-        "remark": "123123",
-        "route": "/123",
-        "createTime": "2023-07-06 18:09:27",
-        "id": "1688638167421m7vupx73grh"
-      }
-    ]
+    ],
+    "code": "business"
   }
 ]

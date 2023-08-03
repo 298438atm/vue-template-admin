@@ -4,9 +4,7 @@
       <div class="header_box">
         <div class="left_box">
           <slot name="title">
-            <span class="icon">
-              <i :class="icon"></i>
-            </span>
+            <i :class="$route.meta.icon" class="icon"></i>
             <span class="name">{{ title || $route.name }}</span>
           </slot>
         </div>
@@ -53,6 +51,7 @@ export default {
     },
     search: {
       type: Function,
+      default: () => {}
     },
   },
   model: {
@@ -77,7 +76,7 @@ export default {
         sm: 12,
         md: 8,
         lg: 6,
-        xl: 4
+        xl: 4,
       },
     }
   },
@@ -146,8 +145,8 @@ export default {
       deep: true,
       handler(newV) {
         this.localFormItemCol = Object.assign(this.localFormItemCol, newV)
-      }
-    }
+      },
+    },
   },
 }
 </script>
@@ -162,7 +161,7 @@ export default {
     align-items: center;
   }
   .icon {
-    font-size: 24px;
+    font-size: 20px;
   }
   .name {
     font-size: 18px;

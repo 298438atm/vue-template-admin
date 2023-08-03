@@ -6,9 +6,9 @@ const Router = express.Router()
 const fs = require('fs')
 //挂载具体路由
 Router.get('/getDictTypeList', function (req, res) {
-  const { dictTypeName = '', dictTypeCode = '', currentPage, pageSize } = req.query
+  const { dictTypeName = '', dictTypeCode = '', dictTypeStatus = '', currentPage, pageSize } = req.query
   const dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8'))
-  const record = dictData.filter(item => item.dictTypeName.includes(dictTypeName) && item.dictTypeCode.includes(dictTypeCode)).slice(currentPage - 1, currentPage - 1 + pageSize)
+  const record = dictData.filter(item => item.dictTypeName.includes(dictTypeName) && item.dictTypeCode.includes(dictTypeCode) && (dictTypeStatus !== '' ? String(item.dictTypeStatus).includes(dictTypeStatus) : true)).slice(currentPage - 1, currentPage - 1 + pageSize)
   res.send({
     code: 200,
     data: {
@@ -36,7 +36,7 @@ Router.get('/getDictDataList', function (req, res) {
       msg: '字典类型id错误'
     })
   }
-  
+
 })
 
 Router.get('/check', function (req, res) {
@@ -100,7 +100,7 @@ Router.post('/addEditDictType', function (req, res) {
   })
 })
 Router.post('/addEditDictData', function (req, res) {
-  const {id, dictDataList} = req.body
+  const { id, dictDataList } = req.body
   const dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8'))
   const index = dictData.findIndex(item => item.id === id)
   if (index > -1) {
@@ -117,7 +117,7 @@ Router.post('/addEditDictData', function (req, res) {
       msg: '字典类型id错误'
     })
   }
-  
+
 })
 
 Router.delete('/del', function (req, res) {

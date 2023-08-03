@@ -37,7 +37,10 @@
       >
         <template #default="data">
           <slot :name="item.prop" :data="data">
-            {{ data.row[item.prop] }}
+            <div v-if="item.statusTag">
+              <StatusTag :status="data.row[item.prop]"></StatusTag>
+            </div>
+            <span v-else>{{ data.row[item.prop] }}</span>
           </slot>
         </template>
       </el-table-column>
