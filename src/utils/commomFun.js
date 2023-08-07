@@ -1,4 +1,4 @@
-function formatTime(formatTimeStr = 'YYYY-MM-DD hh:mm:ss', date = new Date()) {
+export function formatTime(formatTimeStr = 'YYYY-MM-DD hh:mm:ss', date = new Date()) {
   if (Object.prototype.toString.call(new Date(date)) === '[object Date]') {
     let YYYY = date.getFullYear()
     let M = String(date.getMonth() + 1)
@@ -21,4 +21,17 @@ function formatTime(formatTimeStr = 'YYYY-MM-DD hh:mm:ss', date = new Date()) {
   } else {
     throw new Error('您传入的类型不是时间格式！')
   }
+}
+// 返回数据类型
+export function returnType(data) {
+  return Object.prototype.toString.call(data).slice(8, -1)
+}
+export function verifyType(data, type) {
+  return returnType(data) === type
+}
+
+export default {
+  formatTime,
+  returnType,
+  verifyType
 }

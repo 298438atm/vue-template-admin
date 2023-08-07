@@ -8,7 +8,7 @@
         v-for="item in tags"
         :key="item.path"
         class="tag_item"
-        :class="{ active: item.path === $route.path }"
+        :style="item.path === $route.path ? activeStyle : ''"
         @click="$router.push(item.path)"
         @mouseenter="tagsBoxEnter(item)"
         @mouseleave="showClosePath = undefined"
@@ -41,6 +41,15 @@ export default {
   computed: {
     tags() {
       return this.$store.state.pageTags.tags
+    },
+    themeColor() {
+      return this.$store.state.theme.primaryColor
+    },
+    activeStyle() {
+      return {
+        color: this.themeColor,
+        borderBottom: `2px solid ${this.themeColor}`,
+      }
     },
   },
   methods: {
@@ -141,12 +150,7 @@ export default {
         font-size: 16px;
       }
     }
-    .active {
-      color: #64beff !important;
-      border-bottom: 2px solid #64beff;
-    }
   }
-  
 
   .move_icon {
     position: absolute;

@@ -28,7 +28,6 @@ function addRoutes(routesList) {
     component: () => import('@/layout/index.vue'),
     children: formatRoutes(routesList)
   }
-  console.log(formatRoutes(routesList), 'formatRoutes(routesList)');
   router.addRoute(waitAddRoutes)
   router.addRoute({
     path: '*',

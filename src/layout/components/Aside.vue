@@ -1,36 +1,42 @@
 <template>
-  <div class="aside">
+  <div class="aside" :style="`--menuColor: ${menuColor}`">
     <div class="logo">
       <img src="@/assets/image/logo.png" alt="logo" height="50" />
     </div>
     <el-menu
       :collapse="isCollapse"
-      text-color="#fff"
-      background-color="#03748b"
-      active-text-color="#002b33"
+      :text-color="menuTextColor"
+      :background-color="menuColor"
       :default-active="$route.path"
+      :active-text-color="menuTextActiveColor"
     >
-      <AsideItem v-for="item in routes" :key="item.path" :route="item"></AsideItem>
+      <AsideItem
+        v-for="item in routes"
+        :key="item.path"
+        :route="item"
+      ></AsideItem>
     </el-menu>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import AsideItem from './AsideItem.vue'
 export default {
   name: 'Aside',
   components: { AsideItem },
-  props: {},
-  data() {
-    return {}
-  },
   computed: {
-    isCollapse() {
-      return this.$store.state.app.isCollapse
-    },
-    routes() {
-      return this.$store.state.user.routes
-    },
+    ...mapState('theme', [
+      'menuColor',
+      'menuTextColor',
+      'menuTextActiveColor',
+    ]),
+    ...mapState('app', [
+      'isCollapse'
+    ]),
+    ...mapState('user', [
+      'routes'
+    ])
   },
   methods: {},
 }
@@ -40,7 +46,7 @@ export default {
 .aside {
   flex-shrink: 0;
   height: 100vh;
-  background-color: #03748b;
+  background-color: var(--menuColor);
   overflow: hidden;
   .logo {
     padding: 10px 0;
@@ -64,7 +70,7 @@ export default {
 // 设置整个滚动条
 *::-webkit-scrollbar {
   width: 1px;
-  background-color: #03748b;
+  background-color: var(--menuColor);
 }
 // 设置没有占用到的滚动条
 *::-webkit-scrollbar-track {

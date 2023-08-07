@@ -4,36 +4,43 @@
       <i :class="collapseClass" @click="isCollapseChange"></i>
       <div class="current_path">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item v-for="(item, index) in showRoutePath" :key="index">{{item.name}}</el-breadcrumb-item>
+          <el-breadcrumb-item
+            v-for="(item, index) in showRoutePath"
+            :key="index"
+            >{{ item.name }}</el-breadcrumb-item
+          >
         </el-breadcrumb>
       </div>
     </div>
     <div class="right_box">
-      <i class="el-icon-full-screen icon" @click="requestFullScreen"></i>
+      <i class="el-icon-full-screen" @click="requestFullScreen"></i>
       <img src="@/assets/image/tx.png" alt="头像" />
-      <el-dropdown>
+      <el-dropdown @command="dropdownClick">
         <span class="dropdown">
           fujl<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>退出登录</el-dropdown-item>
-          <el-dropdown-item>切换主题</el-dropdown-item>
+          <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+          <el-dropdown-item command="toggleTheme">
+            <span @click="showThemePicker">切换主题</span>
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <ThemePicker :visible.sync="visible"></ThemePicker>
   </div>
 </template>
 
 <script>
+import ThemePicker from '@/components/ThemePicker'
 export default {
   name: 'Header',
+  components: { ThemePicker },
   data() {
     return {
       username: 'fujl',
+      visible: false
     }
-  },
-  created() {
-    console.log(this.$route, '123')
   },
   computed: {
     isCollapse() {
@@ -75,6 +82,19 @@ export default {
       }
       this.$store.commit('app/SCREEN_CHANGE')
     },
+    dropdownClick(command) {
+      switch (command) {
+        case 'toggleTheme':
+          this.showThemePicker()
+          break;
+      
+        default:
+          break;
+      }
+    },
+    showThemePicker() {
+      this.visible = true
+    }
   },
 }
 </script>
@@ -105,11 +125,12 @@ export default {
   }
   .right_box {
     display: flex;
+    align-content: center;
     align-items: center;
     img {
       width: 50px;
       height: 50px;
-      margin: 0 20px;
+      margin: 0 10px;
       border-radius: 50%;
       overflow: hidden;
     }
