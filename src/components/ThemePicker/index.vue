@@ -170,7 +170,9 @@ export default {
       }
       this.updateTheme()
     },
-    resetTheme() {},
+    resetTheme() {
+      this.initColor()
+    },
     submit() {
       // 如果主题色有修改则变化主题色
       if (this.themeColorValue !== this.themeColor) {

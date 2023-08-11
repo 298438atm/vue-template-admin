@@ -43,7 +43,7 @@ export default {
       return this.$store.state.pageTags.tags
     },
     themeColor() {
-      return this.$store.state.theme.primaryColor
+      return this.$store.state.theme.themeColor
     },
     activeStyle() {
       return {

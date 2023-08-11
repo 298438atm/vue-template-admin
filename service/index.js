@@ -32,6 +32,7 @@ app.get('/getPermission', (req, res) => {
 	res.send(getPermission())
 })
 app.post('/login', (req, res) => {
+  console.log(req.body, '111');
   login(res)
 })
 app.get('/getTable', (req, res) => {

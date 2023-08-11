@@ -1,5 +1,6 @@
 const fs=require('fs')
 function login(res) {
+  console.log(res.body);
   res.send({
     code: 200,
     msg: '登录成功！',
