@@ -178,14 +178,14 @@ export default {
         name: [
           {
             required: true,
-            message: '请输入菜单名称',
+            message: '请输入名称',
             trigger: ['blur', 'change'],
           },
         ],
         code: [
           {
             required: true,
-            message: '请输入菜单编码',
+            message: '请输入编码',
             trigger: ['blur', 'change'],
           },
         ],

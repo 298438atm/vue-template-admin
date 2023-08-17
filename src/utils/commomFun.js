@@ -1,3 +1,5 @@
+import lodash from 'lodash'
+
 export function formatTime(formatTimeStr = 'YYYY-MM-DD hh:mm:ss', date = new Date()) {
   if (Object.prototype.toString.call(new Date(date)) === '[object Date]') {
     let YYYY = date.getFullYear()
@@ -33,5 +35,6 @@ export function verifyType(data, type) {
 export default {
   formatTime,
   returnType,
-  verifyType
+  verifyType,
+  ...lodash
 }

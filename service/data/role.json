@@ -1,8 +1,1 @@
-[
-  {
-    "name": "管理员",
-    "code": "admin",
-    "remark": "",
-    "permissions": []
-  }
-]
+[{"name":"管理员","code":"admin","remark":"我是备注","status":"1","sort":1,"id":"123231312321312","roleIds":["home","systemSetting","dict","role","menu","business","goods","newAddGoods","16914771628189bbvkw0rgln"]}]

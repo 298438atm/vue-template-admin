@@ -1,8 +1,6 @@
 const express = require('express')
 const app = express()
 // const dict = require('./router/dict')
-const {login} = require('./user.js')
-const { getTableList } = require('./table.js')
 require('./utils/index')
 const APIRouter = require('./router/index')
 
@@ -28,22 +26,22 @@ app.use((req, res, next) => {
 app.use(APIRouter)
 // 字典和按钮权限
 // app.use('/dict', dict)
-app.get('/getPermission', (req, res) => {
-	res.send(getPermission())
-})
-app.post('/login', (req, res) => {
-  console.log(req.body, '111');
-  login(res)
-})
-app.get('/getTable', (req, res) => {
-  getTableList(req.query,res)
-})
-app.get('/raceList', (req, res) => {
-  res.send({
-    code: 200,
-    data: [1,2,3,4,5,6,7,8,9,10]
-  })
-})
+// app.get('/getPermission', (req, res) => {
+// 	res.send(getPermission())
+// })
+// app.post('/login', (req, res) => {
+//   console.log(req.body, '111');
+//   login(res)
+// })
+// app.get('/getTable', (req, res) => {
+//   getTableList(req.query,res)
+// })
+// app.get('/raceList', (req, res) => {
+//   res.send({
+//     code: 200,
+//     data: [1,2,3,4,5,6,7,8,9,10]
+//   })
+// })
 
 app.listen(3333, () => {
   console.log(`服务启动成功`)
