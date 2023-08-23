@@ -13,7 +13,7 @@
           @click="searchShowToggle"
           >{{ isRetract ? '收起' : '展开' }}</el-button
         >
-        <el-button type="primary" icon="el-icon-share" @click="search"
+        <el-button type="primary" icon="el-icon-refresh" @click="search"
           >刷新表格</el-button
         >
         <el-popover placement="top" width="160">

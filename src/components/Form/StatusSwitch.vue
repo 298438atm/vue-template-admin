@@ -3,6 +3,8 @@
     v-model="switchValue"
     active-text="启用"
     inactive-text="停用"
+    active-value="1"
+    inactive-value="0"
   ></el-switch>
 </template>
 
@@ -11,8 +13,8 @@ export default {
   name: 'StatusSwitch',
   props: {
     modelValue: {
-      type: Boolean,
-      default: true
+      type: String,
+      default: '1'
     }
   },
   model: {

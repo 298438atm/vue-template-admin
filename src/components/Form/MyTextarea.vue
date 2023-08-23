@@ -1,7 +1,7 @@
 <template>
   <el-input
     v-model="localValue"
-    :maxlength="$attrs.maxlength || 20"
+    :maxlength="$attrs.maxlength || 300"
     :show-word-limit="$attrs.showWordLimit || true"
     :clearable="$attrs.clearable || true"
     :rows="$attrs.row || 3"

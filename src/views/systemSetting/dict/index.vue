@@ -31,14 +31,18 @@
         </el-form-item>
       </template>
       <template #btnBox>
-        <el-button type="primary" @click="openDictTypeForm('add')"
+        <el-button
+          type="primary"
+          @click="openDictTypeForm('add')"
+          icon="el-icon-plus"
           >新增</el-button
         >
         <el-button
           type="danger"
           v-show="ids.length > 0"
+          icon="el-icon-delete"
           :loading="delBtnLoading"
-          @click="selectDel"
+          @click="delDict"
         >
           删除
         </el-button>
@@ -51,24 +55,22 @@
       <template #endColumn>
         <el-table-column prop="operate" label="操作" align="center">
           <template #default="{ row }">
-            <el-button
-              type="text"
+            <MyTableBtn
+              btnType="status"
+              :status="row.dictTypeStatus"
               :loading="row.statusLoading"
               @click="dictTypeStatusChange(row)"
-              >{{ row.dictTypeStatus ? '停用' : '启用' }}</el-button
-            >
-            <el-button type="text" @click="openDictTypeForm('edit', row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              class="btn_text_red"
+            ></MyTableBtn>
+            <MyTableBtn
+              btnType="edit"
+              @click="openDictTypeForm('edit', row)"
+            ></MyTableBtn>
+            <MyTableBtn
+              btnType="del"
               :loading="row.delLoading"
-              :disabled="row.disabled"
-              @click="rowDel(row)"
-              >删除</el-button
+              @click="delDict(row)"
             >
-            {{ row.loading }}
+            </MyTableBtn>
           </template>
         </el-table-column>
       </template>
@@ -143,6 +145,7 @@ export default {
         type: 'add',
         dictTypeId: '',
         dictTypeName: '',
+        dictDataType: 'string',
       },
       ids: [],
       tableLoading: false,
@@ -164,35 +167,43 @@ export default {
       this.tableLoading = true
       API.getDictTypeList(Object.assign({}, this.pageObj, this.form)).then(
         (res) => {
-          this.tableLoading = false
           this.tableData = res.record
           this.pageObj.total = res.total
         }
-      )
+      ).finally(() => {
+        this.tableLoading = false
+      })
     },
     // 勾选
     selectChange(select) {
       this.ids = select.map((item) => item.id)
     },
-    selectDel() {
-      this.delBtnLoading = true
-      API.del(this.ids).then((res) => {
-        this.delBtnLoading = false
-        this.search()
+    async delDict(row) {
+      await this.$confirm(`确认删除所选数据吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
-    },
-    rowDel(row) {
-      this.$set(row, 'delLoading', true)
-      API.del([row.id]).then((res) => {
-        this.$set(row, 'delLoading', false)
-        this.search()
-      })
+      if (row.id) {
+        this.$set(row, 'delLoading', true)
+      } else {
+        this.delBtnLoading = true
+      }
+      API.del(row.id ? [row.id] : this.ids)
+        .then(() => {
+          this.search()
+        })
+        .finally(() => {
+          this.delBtnLoading = false
+          this.$set(row, 'delLoading', false)
+        })
     },
     dictTypeStatusChange(row) {
       this.$set(row, 'statusLoading', true)
       API.changeDictypeStatus(row.id).then(() => {
-        this.$set(row, 'statusLoading', false)
         this.search()
+      }).finally(() => {
+        this.$set(row, 'statusLoading', false)
       })
     },
     openDictTypeForm(type, row) {
@@ -201,10 +212,11 @@ export default {
       console.log(clone)
       this.dictTypeProps.formData = clone(row)
     },
-    openDictDataForm(row) {
+    openDictDataForm({ dictDataType, id, dictTypeName }) {
       this.dictDataProps.visible = true
-      this.dictDataProps.dictTypeId = row.id
-      this.dictDataProps.dictTypeName = row.dictTypeName
+      this.dictDataProps.dictTypeId = id
+      this.dictDataProps.dictTypeName = dictTypeName
+      this.dictDataProps.dictDataType = dictDataType
     },
   },
 }

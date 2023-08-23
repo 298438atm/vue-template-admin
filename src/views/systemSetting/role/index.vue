@@ -4,9 +4,10 @@
       row-key="id"
       :data="tableData"
       :columns="columns"
-      :pageObj="false"
       :search="search"
       :load="this.tableLoading"
+      :pageObj="pageObj"
+      show-overflow-tooltip
       @selection-change="selectChange"
     >
       <template #formItem>
@@ -57,24 +58,27 @@
       <template #endColumn>
         <el-table-column prop="operate" label="操作" align="center">
           <template #default="{ row }">
-            <el-button
-              type="text"
-              :loading="row.statusLoading"
-              @click="menuStatusChange(row, row.status ? '停用' : '启用')"
-              >{{ row.status === '0' ? '停用' : '启用' }}</el-button
-            >
-            <el-button type="text" @click="openRoleForm('edit', row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              class="btn_text_red"
-              :loading="row.delLoading"
-              :disabled="row.disabled"
-              @click="delRole(row)"
-              >删除</el-button
-            >
-            {{ row.loading }}
+            <div v-if="row.code !== 'admin'">
+              <el-button
+                type="text"
+                :loading="row.statusLoading"
+                @click="
+                  roleStatusChange(row, row.status === '0' ? '启用' : '停用')
+                "
+                >{{ row.status === '0' ? '启用' : '停用' }}</el-button
+              >
+              <el-button type="text" @click="openRoleForm('edit', row)"
+                >编辑</el-button
+              >
+              <el-button
+                type="text"
+                class="btn_text_red"
+                :loading="row.delLoading"
+                :disabled="row.disabled"
+                @click="delRole(row)"
+                >删除</el-button
+              >
+            </div>
           </template>
         </el-table-column>
       </template>
@@ -121,6 +125,7 @@ export default {
           label: '备注',
           prop: 'remark',
           align: 'center',
+          showOverflowTooltip: true,
         },
       ],
       pageObj: {
@@ -153,16 +158,15 @@ export default {
       }
       this.tableLoading = true
       API.getRoleList(Object.assign({}, this.pageObj, this.form)).then(
-        (res) => {
-          if (type === 'search') {
-            this.expandRowKeys = res.map((item) => item.id)
-          } else if (type === 'reset') {
-            this.expandRowKeys = ['systemSetting']
-          }
-          this.tableLoading = false
-          this.tableData = res
+        ({ currentPage, total, pageSize, record }) => {
+          this.tableData = record
+          this.pageObj.currentPage = currentPage
+          this.pageObj.pageSize = pageSize
+          this.pageObj.total = total
         }
-      )
+      ).finally(() => {
+        this.tableLoading = false
+      })
     },
     // 勾选
     selectChange(select) {
@@ -182,21 +186,27 @@ export default {
         this.delBtnLoading = true
         ids = this.ids
       }
-      API.delRole(ids).then((res) => {
-        row ? this.$set(row, 'delLoading', false) : (this.delBtnLoading = false)
-        this.search()
-      })
+      API.delRole(ids)
+        .then((res) => {
+          this.search()
+        })
+        .finally(() => {
+          row.id
+            ? this.$set(row, 'delLoading', false)
+            : (this.delBtnLoading = false)
+        })
     },
-    async menuStatusChange(row, text) {
+    async roleStatusChange(row, text) {
       await this.$confirm(`确认${text}该数据吗？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
       this.$set(row, 'statusLoading', true)
-      API.changeMenuStatus(row.id).then(() => {
-        this.$set(row, 'statusLoading', false)
+      API.changeRoleStatus(row.id).then(() => {
         this.search()
+      }).finally(() => {
+        this.$set(row, 'statusLoading', false)
       })
     },
     openRoleForm(type, row = {}) {

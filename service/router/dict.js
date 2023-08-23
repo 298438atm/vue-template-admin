@@ -8,14 +8,14 @@ const fs = require('fs')
 Router.get('/getDictTypeList', function (req, res) {
   const { dictTypeName = '', dictTypeCode = '', dictTypeStatus = '', currentPage, pageSize } = req.query
   const dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8'))
-  const record = dictData.filter(item => item.dictTypeName.includes(dictTypeName) && item.dictTypeCode.includes(dictTypeCode) && (dictTypeStatus !== '' ? String(item.dictTypeStatus).includes(dictTypeStatus) : true)).slice(currentPage - 1, currentPage - 1 + pageSize)
+  const record = dictData.filter(item => item.dictTypeName.includes(dictTypeName) && item.dictTypeCode.includes(dictTypeCode) && (dictTypeStatus === '' ? true : dictTypeStatus === item.dictTypeStatus)).slice(currentPage - 1, currentPage - 1 + pageSize)
   res.send({
     code: 200,
     data: {
       record,
       total: record.length,
-      currentPage,
-      pageSize
+      currentPage: Number(currentPage),
+      pageSize: Number(pageSize)
     }
   })
 })
@@ -73,7 +73,7 @@ Router.get('/check', function (req, res) {
 })
 
 Router.post('/addEditDictType', function (req, res) {
-  const { id, dictTypeName, dictTypeCode, dictTypeRemark } = req.body
+  const { id, dictTypeName, dictTypeCode, dictTypeRemark, dictDataType } = req.body
   const dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8'))
   if (id) {
     const index = dictData.findIndex(item => item.id === id)
@@ -81,6 +81,7 @@ Router.post('/addEditDictType', function (req, res) {
       dictData[index]['dictTypeName'] = dictTypeName
       dictData[index]['dictTypeCode'] = dictTypeCode
       dictData[index]['dictTypeRemark'] = dictTypeRemark
+      dictData[index]['dictDataType'] = dictDataType
     } else {
       res.send({
         code: 500,
@@ -100,7 +101,11 @@ Router.post('/addEditDictType', function (req, res) {
   })
 })
 Router.post('/addEditDictData', function (req, res) {
-  const { id, dictDataList } = req.body
+  let { id, dictDataList } = req.body
+  dictDataList = dictDataList.map(item => {
+    delete item.isEdit
+    return item
+  })
   const dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8'))
   const index = dictData.findIndex(item => item.id === id)
   if (index > -1) {
@@ -132,7 +137,7 @@ Router.delete('/del', function (req, res) {
 
 Router.post('/getDictDatasBydictTypes', function (req, res) {
   let resData = {}
-  let dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8')).filter(item => item.dictTypeStatus)
+  let dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8')).filter(item => item.dictTypeStatus === '1')
   dictData.forEach(item => {
     if (req.body.includes(item.dictTypeCode)) {
       resData[item.dictTypeCode] = item.dictData.filter(item => item.dictDataStatus)
@@ -149,7 +154,7 @@ Router.get('/changeDictypeStatus/:id', function (req, res) {
   let dictData = JSON.parse(fs.readFileSync('./data/dict.json', 'utf8'))
   const index = dictData.findIndex(item => item.id === id)
   if (index > -1) {
-    dictData[index]['dictTypeStatus'] = (dictData[index]['dictTypeStatus'] ? false : true)
+    dictData[index]['dictTypeStatus'] = (dictData[index]['dictTypeStatus'] === '1' ? '0' : '1')
   }
   fs.writeFileSync('./data/dict.json', JSON.stringify(dictData))
   res.send({

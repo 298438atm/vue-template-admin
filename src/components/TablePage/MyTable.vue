@@ -5,6 +5,7 @@
       v-bind="$attrs"
       v-loading="load"
       v-on="$listeners"
+      show-overflow-tooltip
     >
       <el-table-column
         v-if="selectType === 'multiple'"

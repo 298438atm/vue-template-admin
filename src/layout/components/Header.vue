@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       username: 'fujl',
-      visible: false
+      visible: false,
     }
   },
   computed: {
@@ -86,15 +86,26 @@ export default {
       switch (command) {
         case 'toggleTheme':
           this.showThemePicker()
-          break;
-      
+          break
+        case 'logout':
+          this.logout()
+          break
         default:
-          break;
+          break
       }
     },
     showThemePicker() {
       this.visible = true
-    }
+    },
+    async logout() {
+      await this.$confirm('正在退出登录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+      sessionStorage.removeItem('token')
+      this.$router.push('/login')
+    },
   },
 }
 </script>

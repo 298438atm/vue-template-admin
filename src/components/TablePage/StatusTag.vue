@@ -7,8 +7,8 @@
     name: 'StatusTag',
     props: {
       status: {
-        type: [Boolean, String],
-        default: false
+        type: String,
+        default: '1'
       }
     },
     computed: {

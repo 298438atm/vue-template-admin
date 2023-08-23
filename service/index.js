@@ -18,30 +18,20 @@ app.all("*", function (req, res, next) {
   }
 });
 
+global.secretKey = 'fujunlingyangdandan'
 app.use(express.urlencoded())
 app.use(express.json())
+const noTokenApi = ['/user/login']
 app.use((req, res, next) => {
-  setTimeout(next, 500)
+  setTimeout(() => {
+    if (noTokenApi.includes(req._parsedUrl.pathname)) {
+      next()
+    } else {
+      global.selfUtils.tokenVerify(req, res, next)
+    }
+  }, 500);
 })
 app.use(APIRouter)
-// 字典和按钮权限
-// app.use('/dict', dict)
-// app.get('/getPermission', (req, res) => {
-// 	res.send(getPermission())
-// })
-// app.post('/login', (req, res) => {
-//   console.log(req.body, '111');
-//   login(res)
-// })
-// app.get('/getTable', (req, res) => {
-//   getTableList(req.query,res)
-// })
-// app.get('/raceList', (req, res) => {
-//   res.send({
-//     code: 200,
-//     data: [1,2,3,4,5,6,7,8,9,10]
-//   })
-// })
 
 app.listen(3333, () => {
   console.log(`服务启动成功`)

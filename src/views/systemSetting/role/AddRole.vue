@@ -17,16 +17,14 @@
             </MyInput>
           </el-form-item>
           <el-form-item prop="status" label="是否启用">
-            <el-switch
-              v-model="form.status"
-              active-value="1"
-              active-inactive="0"
-              active-text="启用"
-              inactive-text="停用"
-            ></el-switch>
+            <StatusSwitch v-model="form.status"></StatusSwitch>
           </el-form-item>
           <el-form-item prop="sort" label="排序">
-             <el-input-number v-model="form.sort" controls-position="right" :min="1"></el-input-number>
+            <el-input-number
+              v-model="form.sort"
+              controls-position="right"
+              :min="1"
+            ></el-input-number>
           </el-form-item>
           <el-form-item prop="remark" label="角色备注">
             <MyTextarea v-model="form.remark" :placeholder="`请输入角色备注`">
@@ -34,7 +32,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <MyTree type="role" v-model="form.roleIds" ref="myTree"></MyTree>
+          <MyTree
+            v-if="localVisible"
+            type="role"
+            v-model="form.roleIds"
+          ></MyTree>
         </el-col>
       </el-row>
     </el-form>
@@ -78,15 +80,17 @@ export default {
     },
   },
   data() {
-    const checkNameOrCode = ({field}, value, callback) => {
+    const checkNameOrCode = ({ field }, value, callback) => {
       const typeName = field === 'name' ? '名称' : '编码'
-      API.checkNameOrCode({ field, [field]: value, id: this.form.id }).then(res => {
-        if (res) {
-          callback()
-        } else {
-          callback(new Error( typeName + '名称不能重复！'))
+      API.checkNameOrCode({ field, [field]: value, id: this.form.id }).then(
+        (res) => {
+          if (res) {
+            callback()
+          } else {
+            callback(new Error(typeName + '名称不能重复！'))
+          }
         }
-      })
+      )
     }
     return {
       form: {
@@ -94,7 +98,7 @@ export default {
         code: undefined,
         status: '1',
         remark: undefined,
-        roleIds: []
+        roleIds: [],
       },
       rules: {
         name: [
@@ -104,12 +108,9 @@ export default {
             trigger: ['blur', 'change'],
           },
           {
-            validator: this.$commomFun.debounce(
-              checkNameOrCode,
-              500
-            ),
+            validator: this.$commomFun.debounce(checkNameOrCode, 500, {leading: true}),
             trigger: ['blur', 'change'],
-          }
+          },
         ],
         code: [
           {
@@ -118,12 +119,9 @@ export default {
             trigger: ['blur', 'change'],
           },
           {
-            validator: this.$commomFun.debounce(
-              checkNameOrCode,
-              500
-            ),
+            validator: this.$commomFun.debounce(checkNameOrCode, 500),
             trigger: ['blur', 'change'],
-          }
+          },
         ],
         status: [
           {
@@ -153,21 +151,23 @@ export default {
         code: undefined,
         status: '1',
         remark: undefined,
-        roleIds: []
+        roleIds: [],
       }
       this.$refs.form.resetFields()
-      this.$refs.myTree.$refs.tree.setCheckedKeys([]);
       this.localVisible = false
     },
     submit() {
+      this.submitLoading = true
       this.$refs.form.validate((flag) => {
         if (flag) {
-          this.submitLoading = true
-          API.addEditMenu(this.form).then((res) => {
-            this.submitLoading = false
+          API.addEditRole(this.form).then((res) => {
             this.cancel()
             this.search()
+          }).finally(() => {
+            this.submitLoading = false
           })
+        } else {
+          this.submitLoading = false
         }
       })
     },
@@ -177,9 +177,6 @@ export default {
       if (newV) {
         if (this.type === 'edit') {
           this.form = this.formData
-          this.$nextTick(() => {
-            this.$refs.myTree.$refs.tree.setCheckedKeys( this.formData.roleIds);
-          })
         }
       }
     },

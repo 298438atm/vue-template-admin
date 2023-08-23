@@ -10,8 +10,8 @@
         </div>
         <div class="btn_box">
           <slot name="btn">
-            <el-button @click="search('reset')">重置</el-button>
-            <el-button @click="search('search')" type="primary">查询</el-button>
+            <el-button @click="search('reset')" icon="el-icon-refresh-right">重置</el-button>
+            <el-button @click="search('search')" type="primary" icon="el-icon-search">查询</el-button>
           </slot>
         </div>
       </div>
@@ -103,11 +103,12 @@ export default {
     },
     // 设置表单元素宽度
     setFormItemWidth() {
-      const formItemList = this.$refs.formItemBoxRef.children
+      const formItemList = this.$refs.formItemBoxRef?.children || 0
       let sumSpanNum = 0
       let flag = false
       for (let index = 0; index < formItemList.length; index++) {
         const element = formItemList[index]
+        // widthMultiple为设置的宽度的倍数，如widthMultiple等于2则为设置宽度的两倍
         const widthMultiple = element.getAttribute('widthMultiple')
         let spanNum =
           Number(element.getAttribute(this.currentWidthField)) ||

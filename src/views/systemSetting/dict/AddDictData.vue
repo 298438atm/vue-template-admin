@@ -2,7 +2,7 @@
   <el-dialog
     :visible="localVisible"
     :title="title"
-    width="1200px"
+    width="1000px"
     :before-close="cancal"
   >
     <el-form ref="formRules" :model="formData">
@@ -15,7 +15,7 @@
         <el-table-column
           prop="dictDataName"
           label="字典数据名称"
-          width="300"
+          width="200"
           align="center"
         >
           <template #header>
@@ -34,39 +34,13 @@
                 clearable
               ></el-input>
             </el-form-item>
-            <span v-else class="pr16">{{ row['dictDataName'] }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="dictDataType"
-          label="字典数据类型"
-          width="120"
-          align="center"
-        >
-          <template #header>
-            <span class="red_color">*</span><span>字典数据类型</span>
-          </template>
-          <template #default="{ row, $index }">
-            <el-form-item
-              :prop="'tableData.' + $index + '.dictDataType'"
-              :rules="formRules.dictDataType"
-              v-if="row.isEdit"
-            >
-              <MySelect
-                v-model="row.dictDataType"
-                :options="dict['fieldType']"
-                @change="dictDataTypeChange(row)"
-              ></MySelect>
-            </el-form-item>
-            <span v-else class="pr16">{{
-              getDictLabel('fieldType', row['dictDataType'])
-            }}</span>
+            <span v-else>{{ row['dictDataName'] }}</span>
           </template>
         </el-table-column>
         <el-table-column
           prop="dictDataCode"
           label="字典数据编码"
-          width="300"
+          width="200"
           align="center"
         >
           <template #header>
@@ -79,28 +53,31 @@
               v-if="row.isEdit"
             >
               <el-input
-                v-if="row.dictDataType === 'string'"
+                v-if="dictDataType === 'string'"
                 v-model.trim="row.dictDataCode"
                 maxlength="15"
                 show-word-limit
                 clearable
               ></el-input>
-              <el-input-number style="width: 100%" v-else-if="row.dictDataType === 'number'" v-model="row.dictDataCode"></el-input-number>
+              <el-input-number
+                style="width: 100%"
+                v-else-if="dictDataType === 'number'"
+                v-model="row.dictDataCode"
+              ></el-input-number>
               <MySelect
-                v-else-if="row.dictDataType === 'boolean'"
+                v-else-if="dictDataType === 'boolean'"
                 v-model="row.dictDataCode"
                 :options="booleanOptions"
                 optionKey="value"
               ></MySelect>
             </el-form-item>
-            <span v-else class="pr16">{{ row['dictDataCode'] }}</span>
+            <span v-else>{{ row['dictDataCode'] }}</span>
           </template>
         </el-table-column>
         <el-table-column
           prop="dictDataRemark"
           label="字典数据备注"
           align="center"
-          width="300"
         >
           <template #default="{ row, $index }">
             <el-form-item
@@ -115,7 +92,7 @@
                 clearable
               ></el-input>
             </el-form-item>
-            <span v-else class="pr16">{{ row['dictDataRemark'] }}</span>
+            <span v-else>{{ row['dictDataRemark'] }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -143,7 +120,6 @@
               v-if="row.isEdit"
               type="text"
               icon="el-icon-edit"
-              class="mb14"
               @click="saveRow(row, $index)"
               >保存</el-button
             >
@@ -151,14 +127,13 @@
               v-else
               type="text"
               icon="el-icon-edit"
-              class="mb14"
-              @click="row.isEdit = true"
+              @click="$set(row, 'isEdit', true)"
               >编辑</el-button
             >
             <el-button
               type="text"
               icon="el-icon-delete"
-              class="btn_text_red mb14"
+              class="btn_text_red"
               @click="delRow($index)"
               >删除</el-button
             >
@@ -196,6 +171,7 @@ export default {
     search: Function,
     dictTypeId: String,
     dictTypeName: String,
+    dictDataType: String,
   },
   computed: {
     localVisible: {
@@ -257,12 +233,12 @@ export default {
       tableLoading: false,
       booleanOptions: [
         {
-          label: true,
-          value: true,
+          label: 'true',
+          value: 'true',
         },
         {
-          label: false,
-          value: false,
+          label: 'false',
+          value: 'false',
         },
       ],
     }
@@ -287,7 +263,7 @@ export default {
         dictDataName: '',
         dictDataCode: '',
         dictDataRemark: '',
-        dictDataStatus: true,
+        dictDataStatus: '1',
         isEdit: true,
         dictDataType: 'string',
       })
@@ -366,11 +342,7 @@ export default {
   padding: 16px 0 0 0;
 }
 // 非输入框时文本显示垂直居中
-.pr16 {
-  position: relative;
-  top: -6px;
-}
-.mb14 {
-  margin-bottom: 14px;
+.el-form-item {
+  margin-bottom: 0px;
 }
 </style>

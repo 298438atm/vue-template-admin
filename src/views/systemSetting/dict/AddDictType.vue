@@ -21,6 +21,9 @@
           show-word-limit
         ></el-input>
       </el-form-item>
+      <el-form-item label="字典数据类型" prop="dictDataType">
+        <MySelect :options="dictDataTypeList" v-model="form.dictDataType" :disabled="type === 'edit'"></MySelect>
+      </el-form-item>
       <el-form-item label="字典类型状态" prop="dictTypeStatus">
         <StatusSwitch v-model="form.dictTypeStatus"></StatusSwitch>
       </el-form-item>
@@ -99,8 +102,23 @@ export default {
       form: {
         dictTypeCode: undefined,
         dictTypeName: undefined,
-        dictTypeStatus: true
+        dictTypeStatus: '1',
+        dictDataType: 'string'
       },
+      dictDataTypeList: [
+        {
+          label: '字符串',
+          value: 'string'
+        },
+        {
+          label: '数值',
+          value: 'number'
+        },
+        {
+          label: '布尔值',
+          value: 'boolean'
+        }
+      ],
       submitLoading: false,
       rules: {
         dictTypeName: [
@@ -125,6 +143,9 @@ export default {
             trigger: 'change',
           },
         ],
+        dictDataType: [
+          { required: true, message: '请选择字典数据类型', trigger: 'change' },
+        ]
       },
     }
   },

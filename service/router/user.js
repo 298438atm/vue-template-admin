@@ -1,7 +1,7 @@
 
 //导入express
 const express = require('express')
-
+const jwt = require('jsonwebtoken');
 //创建路由对象
 const Router = express.Router()
 const fs = require('fs')
@@ -11,10 +11,12 @@ Router.get('/login', function (req, res) {
   const userData = JSON.parse(fs.readFileSync('./data/user.json', 'utf8'))
   const filterUser = userData.filter(item => item.username === username && item.password === password)
   if (filterUser.length === 1) {
+    const payload = filterUser[0];
+    const token = jwt.sign(payload, global.secretKey);
     res.send({
       code: 200,
       data: {
-        token: '123123123123'
+        token
       },
       msg: '登录成功！'
     })

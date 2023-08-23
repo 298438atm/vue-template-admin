@@ -7,7 +7,7 @@
     "icon": "el-icon-setting",
     "id": "home",
     "component": "Home",
-    "status": true,
+    "status": "1",
     "parentMenu": "rootMenu",
     "children": [],
     "code": "home"
@@ -19,7 +19,7 @@
     "type": "menu",
     "icon": "el-icon-setting",
     "id": "systemSetting",
-    "status": true,
+    "status": "1",
     "parentMenu": "rootMenu",
     "children": [
       {
@@ -30,7 +30,7 @@
         "icon": "el-icon-reading",
         "id": "dict",
         "component": "systemSetting/dict",
-        "status": true,
+        "status": "1",
         "parentMenu": "systemSetting",
         "children": [],
         "code": "dict"
@@ -42,7 +42,7 @@
         "type": "page",
         "icon": "el-icon-bank-card",
         "id": "role",
-        "status": true,
+        "status": "1",
         "component": "systemSetting/role",
         "parentMenu": "systemSetting",
         "children": [],
@@ -55,7 +55,7 @@
         "type": "page",
         "icon": "el-icon-menu",
         "id": "menu",
-        "status": true,
+        "status": "1",
         "component": "systemSetting/menu",
         "parentMenu": "systemSetting",
         "children": [],
@@ -72,7 +72,7 @@
     "icon": "el-icon-s-cooperation",
     "id": "business",
     "parentMenu": "rootMenu",
-    "status": true,
+    "status": "0",
     "children": [
       {
         "name": "商品管理",
@@ -82,7 +82,7 @@
         "icon": "el-icon-s-shop",
         "id": "goods",
         "parentMenu": "business",
-        "status": true,
+        "status": "1",
         "children": [
           {
             "name": "新进商品",
@@ -92,7 +92,7 @@
             "icon": "el-icon-s-data",
             "id": "newAddGoods",
             "parentMenu": "goods",
-            "status": true,
+            "status": "1",
             "component": "business/goods/newAddGoods",
             "children": [
               {
@@ -100,9 +100,22 @@
                 "type": "button",
                 "name": "新增按钮",
                 "code": "newAddGoods_addbtn",
-                "status": true,
+                "status": "1",
                 "createTime": "2023-08-08 14:46:02",
                 "id": "16914771628189bbvkw0rgln"
+              },
+              {
+                "parentMenu": "newAddGoods",
+                "type": "page",
+                "name": "123213",
+                "code": "123123",
+                "component": "12",
+                "status": "0",
+                "keepAlive": false,
+                "path": "123123",
+                "icon": "el-icon-star-off",
+                "createTime": "2023-08-23 10:46:12",
+                "id": "1692758772462sd7jalqau3l"
               }
             ],
             "code": "newAddGoods"

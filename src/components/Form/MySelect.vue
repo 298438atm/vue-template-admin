@@ -1,5 +1,6 @@
 <template>
   <el-select
+    style="width: 100%"
     v-model="localValue"
     :placeholder="$attrs.placeholder ? $attrs.placeholder : '请选择'"
     :clearable="$attrs.clearable ? $attrs.clearable : true"

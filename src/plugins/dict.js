@@ -30,7 +30,7 @@ const install = function (Vue) {
 			getDictValue(dictName, label) {
 				let dictArr = this.dict[dictName]
 				if (Array.isArray(dictArr) && dictArr.length > 0) {
-					return dictArr.filter(item => item.label === label)[0].label
+					return dictArr.filter(item => item.label === label)[0]?.label
 				} else {
 					console.error('未匹配到对应字典的label值')
 					return ''
@@ -39,7 +39,7 @@ const install = function (Vue) {
 			getDictLabel(dictName, value) {
 				let dictArr = this.dict[dictName]
 				if (Array.isArray(dictArr) && dictArr.length > 0) {
-					return dictArr.filter(item => item.value === value)[0].value
+					return dictArr.filter(item => item.value === value)[0]?.value
 				} else {
 					console.error('未匹配到对应字典的value值')
 					return ''

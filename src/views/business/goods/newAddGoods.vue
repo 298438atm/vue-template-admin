@@ -42,7 +42,7 @@
           <el-date-picker v-model="form.dateSelect" placeholder="请选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="商品创建时间" placeholder="请选择商品创建时间" :widthMultiple="2">
+        <el-form-item label="商品创建时间" placeholder="请选择商品创建时间" widthMultiple="2">
           <el-date-picker
             v-model="form.goodsCreateTime"
             type="daterange"
@@ -73,6 +73,7 @@ export default {
           label: '商品名称',
           prop: 'name',
           align: 'center',
+          search: true
         },
         {
           label: '商品编号',
@@ -86,7 +87,7 @@ export default {
         },
         {
           label: '添加时间',
-          prop: 'date',
+          prop: 'createTime',
           align: 'center',
         },
       ],
@@ -113,9 +114,9 @@ export default {
         this.pageObj = Object.assign(this.pageObj, pageObj)
       }
       this.tableLoading = true
-      getTable(Object.assign({}, this.pageObj, this.form)).then((res) => {
-        this.tableData = res.data
-        this.pageObj.total = res.total
+      getTable(Object.assign({}, this.pageObj, this.form)).then(({record, total }) => {
+        this.tableData = record
+        this.pageObj.total = total
         this.tableLoading = false
       })
     },
@@ -130,6 +131,6 @@ export default {
 .el-time-select,
 .el-date-editor,
 .el-range-editor {
-  width: 100%;
+  width: 100% !important;
 }
 </style>

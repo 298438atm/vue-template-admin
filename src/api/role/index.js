@@ -16,9 +16,9 @@ export function checkNameOrCode(params) {
   })
 }
 
-export function addEditMenu(data) {
+export function addEditRole(data) {
   return request({
-    url: '/role/addEditMenu',
+    url: '/role/addEditRole',
     method: 'post',
     data
   })
@@ -38,18 +38,19 @@ export function delRole(data) {
   })
 }
 
-export function changeMenuStatus(id) {
+export function changeRoleStatus(id) {
   return request({
-    url: '/menu/changeMenuStatus',
-    method: 'get',
-    params: { id }
+    url: '/role/changeRoleStatus',
+    method: 'post',
+    data: { id }
   })
 }
 
 export default {
   getRoleList,
   checkNameOrCode,
-  addEditMenu,
+  addEditRole,
   delRole,
-  editRole
+  editRole,
+  changeRoleStatus
 }

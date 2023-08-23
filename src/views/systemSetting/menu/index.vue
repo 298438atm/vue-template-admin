@@ -52,12 +52,12 @@
       <template #endColumn>
         <el-table-column prop="operate" label="操作" align="center">
           <template #default="{ row }">
-            <el-button
-              type="text"
+            <MyTableBtn
+              btnType="status"
               :loading="row.statusLoading"
+              :status="row.status"
               @click="menuStatusChange(row, row.status ? '停用' : '启用')"
-              >{{ row.status ? '停用' : '启用' }}</el-button
-            >
+            ></MyTableBtn>
             <el-button type="text" @click="openMenuForm('edit', row)"
               >编辑</el-button
             >

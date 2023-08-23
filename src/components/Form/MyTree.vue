@@ -64,6 +64,9 @@ export default {
       filterText: '',
     }
   },
+  mounted() {
+    console.log();
+  },
   methods: {
     filterNode(value, data) {
       if (!value) return true
@@ -92,7 +95,9 @@ export default {
       deep: true,
       handler(newV) {
         if (newV.length > 0) {
-          // this.$refs.tree.setCheckedNodes(newV)
+          this.$nextTick(() => {
+            this.$refs.tree.setCheckedKeys(newV)
+          })
         }
       }
     }
