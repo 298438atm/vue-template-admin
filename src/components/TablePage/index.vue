@@ -1,19 +1,23 @@
 <template>
   <div>
-    <TableSearch v-show="isRetract" :search="search">
+    <TableSearch v-show="isRetract && showSearch" :search="search" :columns="columns" v-bind="searchProp">
       <template #formItem>
         <slot name="formItem"></slot>
       </template>
     </TableSearch>
     <BtnBox
+      v-if="showBtn"
       :searchShowToggle="() => (isRetract = !isRetract)"
       :isRetract="isRetract"
       :search="search"
       :columns="columns"
       @changeShowColumList="changeShowColumList"
     >
-      <template #btnBox>
-        <slot name="btnBox"></slot>
+      <template #leftBtn>
+        <slot name="leftBtn"></slot>
+      </template>
+      <template #rightBtn>
+        <slot name="rightBtn"></slot>
       </template>
     </BtnBox>
     <MyTable
@@ -48,6 +52,18 @@ export default {
       type: Function,
       default: () => ({}),
     },
+    showSearch: {
+      type: Boolean,
+      default: true,
+    },
+    showBtn: {
+      type: Boolean,
+      default: true,
+    },
+    searchProp: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {

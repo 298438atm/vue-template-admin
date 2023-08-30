@@ -13,7 +13,12 @@ const install = function (Vue) {
 		},
 		created() {
 			if (this.$options.dicts instanceof Array) {
-				getDictDatasBydictTypes(this.$options.dicts).then(res => {
+				this.getDictList(this.$options.dicts)
+			}
+		},
+		methods: {
+			getDictList(dictKeys) {
+				getDictDatasBydictTypes(dictKeys).then(res => {
 					//数据结构为 {dict1:[{value:'1', label: '类型1'}], dict2:[{value:'1', label: '类型1'}]
 					Object.keys(res).forEach(key => {
 						let value = res[key].map(item => {
@@ -24,9 +29,7 @@ const install = function (Vue) {
 						this.$set(this.dict, key, value)
 					});
 				})
-			}
-		},
-		methods: {
+			},
 			getDictValue(dictName, label) {
 				let dictArr = this.dict[dictName]
 				if (Array.isArray(dictArr) && dictArr.length > 0) {

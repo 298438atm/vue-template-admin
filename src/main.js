@@ -19,9 +19,9 @@ import '@/assets/css/reset.css'
 
 // 原型绑定方法
 import colorFun from '@/utils/colorFun'
-import commomFun from '@/utils/commomFun'
+import commonFun from '@/utils/commonFun'
 Vue.prototype.$colorFun = colorFun
-Vue.prototype.$commomFun = commomFun
+Vue.prototype.$commonFun = commonFun
 
 Vue.use(plugins)
 Vue.use(installCommomComponents)

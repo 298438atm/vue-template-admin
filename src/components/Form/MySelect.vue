@@ -20,11 +20,9 @@
 <script>
 export default {
   name: 'MySelect',
-  dicts: [this],
   props: {
     modelValue: {
-      type: String,
-      default: '',
+      type: [String, Object, Array],
     },
     options: {
       type: Array,

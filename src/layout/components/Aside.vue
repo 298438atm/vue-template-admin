@@ -12,7 +12,7 @@
     >
       <AsideItem
         v-for="item in routes"
-        :key="item.path"
+        :key="item.id"
         :route="item"
       ></AsideItem>
     </el-menu>

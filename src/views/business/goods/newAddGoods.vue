@@ -8,52 +8,11 @@
       :load="tableLoading"
     >
       <template #formItem>
-        <el-form-item label="商品名称">
-          <el-input
-            v-model="form.goodsName"
-            placeholder="请输入商品名称"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="商品类型">
-          <el-select v-model="form.select">
-            <el-option
-              v-for="item in dict['goodsType']"
-              :label="item.label"
-              :value="item.value"
-              :key="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="价格区间">
-          <el-select v-model="form.select">
-            <el-option
-              v-for="item in dict['priceRegion']"
-              :label="item.label"
-              :value="item.value"
-              :key="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="固定时间选择器">
-          <el-time-select v-model="form.timeSelect" placeholder="请选择时间">
-          </el-time-select>
-        </el-form-item>
-        <el-form-item label="日期选择器">
-          <el-date-picker v-model="form.dateSelect" placeholder="请选择日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="商品创建时间" placeholder="请选择商品创建时间" widthMultiple="2">
-          <el-date-picker
-            v-model="form.goodsCreateTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
+        <el-form-item label="请选择时间" prop="time" searchSort="5">
+          <MyTimePicker v-model="form.time"></MyTimePicker>
         </el-form-item>
       </template>
-      <template #btnBox>
+      <template #leftBtn>
         <el-button type="primary">新增</el-button>
       </template>
     </TablePage>
@@ -73,22 +32,46 @@ export default {
           label: '商品名称',
           prop: 'name',
           align: 'center',
-          search: true
+          search: true,
+          params: {
+            maxlength: 15
+          },
         },
         {
           label: '商品编号',
           prop: 'code',
           align: 'center',
+          search: true,
+        },
+        {
+          label: '商品类型',
+          prop: 'goodsType',
+          align: 'center',
+          type: 'select',
+          search: true,
+          dictKey: 'goodsType',
         },
         {
           label: '商品价格',
           prop: 'price',
           align: 'center',
+          type: 'select',
+          search: true,
+          dictKey: 'priceRegion',
         },
         {
-          label: '添加时间',
+          label: '入库时间',
           prop: 'createTime',
           align: 'center',
+          search: true,
+          type: 'date',
+          widthMultiple: '2',
+          params: {
+            type: 'daterange',
+            rangeSeparator: '至',
+            startPlaceholder: '开始日期',
+            endPlaceholder: '结束日期',
+          },
         },
       ],
       pageObj: {
@@ -99,7 +82,6 @@ export default {
       tableLoading: false,
     }
   },
-  dicts: ['goodsType', 'priceRegion'],
   created() {
     this.search()
   },
@@ -114,11 +96,13 @@ export default {
         this.pageObj = Object.assign(this.pageObj, pageObj)
       }
       this.tableLoading = true
-      getTable(Object.assign({}, this.pageObj, this.form)).then(({record, total }) => {
-        this.tableData = record
-        this.pageObj.total = total
-        this.tableLoading = false
-      })
+      getTable(Object.assign({}, this.pageObj, this.form)).then(
+        ({ record, total }) => {
+          this.tableData = record
+          this.pageObj.total = total
+          this.tableLoading = false
+        }
+      )
     },
   },
 }

@@ -1,23 +1,17 @@
 <template>
-  <el-input
+  <el-time-select
    v-bind="$attrs"
     v-on="$listeners"
     style="width: 100%"
     v-model="localValue"
-    :maxlength="$attrs.maxlength || 20"
-    :show-word-limit="$attrs.showWordLimit || true"
-    :clearable="$attrs.clearable || true"
-    :placeholder="$attrs.placeholder || '请输入'"
+    :placeholder="$attrs.placeholder || '请选择时间'"
   >
-    <template v-for="(value, name) in $slots" #[name]>
-      <slot :name="name"> </slot>
-    </template>
-  </el-input>
+  </el-time-select>
 </template>
 
 <script>
 export default {
-  name: 'MyInput',
+  name: 'MyTimePicker',
   props: {
     modelValue: {
       type: String,

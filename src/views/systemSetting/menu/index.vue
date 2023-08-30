@@ -9,6 +9,7 @@
       :orderNumber="false"
       :load="this.tableLoading"
       :expand-row-keys="expandRowKeys"
+      getRefMyTable="myTable"
       @selection-change="selectChange"
     >
       <template #formItem>
@@ -38,7 +39,7 @@
         </span>
         <span v-else>{{ data.row.name }}</span>
       </template>
-      <template #btnBox>
+      <template #leftBtn>
         <el-button type="primary" @click="openMenuForm('add')">新增</el-button>
         <el-button
           type="danger"
@@ -152,9 +153,9 @@ export default {
       API.getMenuList(Object.assign({}, this.pageObj, this.form)).then(
         (res) => {
           if (type === 'search') {
-            this.expandRowKeys = res.map((item) => item.id)
+            this.changeExpand(res, true)
           } else if (type === 'reset') {
-            this.expandRowKeys = ['systemSetting']
+            this.changeExpand(res, false)
           }
           this.tableLoading = false
           this.tableData = res
@@ -164,6 +165,15 @@ export default {
     // 勾选
     selectChange(select) {
       this.ids = select.map((item) => item.id)
+    },
+    // 展开或收起所有
+    changeExpand(arr, flag) {
+      arr.forEach((row) => {
+        this.$refs.myTable.toggleRowExpansion(row, flag)
+        if (Array.isArray(row.children)) {
+          this.changeExpand(row.children, flag)
+        }
+      })
     },
     async delMenu(row) {
       await this.$confirm(`确认删除所选数据吗？`, '提示', {

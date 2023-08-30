@@ -32,9 +32,25 @@ export function verifyType(data, type) {
   return returnType(data) === type
 }
 
+export function dispatch(currentVm, componentName, vm) {
+  let parentVm = currentVm.$parent
+  while (parentVm.$options.name !== 'TablePage') {
+    parentVm = parentVm.$parent
+  }
+  parentVm = parentVm.$parent
+  parentVm.$refs[componentName] = vm
+}
+
+// 判断是否为空
+export function isEmpt(value) {
+  return value === null || value === '' || value === undefined
+}
+
 export default {
   formatTime,
   returnType,
   verifyType,
+  dispatch,
+  isEmpt,
   ...lodash
 }

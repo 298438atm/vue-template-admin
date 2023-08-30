@@ -6,6 +6,7 @@
       v-loading="load"
       v-on="$listeners"
       show-overflow-tooltip
+      ref="myTable"
     >
       <el-table-column
         v-if="selectType === 'multiple'"
@@ -35,6 +36,7 @@
         v-for="item in showColumList"
         v-bind="item"
         :key="item.prop"
+        :align="item.align || 'center'"
       >
         <template #default="data">
           <slot :name="item.prop" :data="data">
@@ -102,6 +104,9 @@ export default {
         this.localPageObj
       }
     },
+  },
+  mounted() {
+    this.$commonFun.dispatch(this, 'myTable', this.$refs.myTable)
   },
   data() {
     return {

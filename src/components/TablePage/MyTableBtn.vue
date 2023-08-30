@@ -3,10 +3,10 @@
     v-bind="$attrs"
     v-on="$listeners"
     :type="$attrs.type || 'text'"
-    :icon="icon"
-    :class="colorRed"
+    :icon="$attrs.icon || btnList[btnType]['icon']"
+    :class="btnList[btnType]['class']"
   >
-    <slot>{{ btnName }}</slot>
+    <slot>{{ btnList[btnType]['btnName'] }}</slot>
   </el-button>
 </template>
 
@@ -24,30 +24,30 @@ export default {
     },
   },
   computed: {
-    icon() {
-      if (this.btnType === 'edit') {
-        return 'el-icon-edit'
-      } else if (this.btnType === 'del') {
-        return 'el-icon-delete'
-      } else if (this.btnType === 'status') {
-        return this.status === '1' ? 'el-icon-open' : 'el-icon-turn-off'
-      }
-    },
-    btnName() {
-      if (this.btnType === 'edit') {
-        return '修改'
-      } else if (this.btnType === 'del') {
-        return '删除'
-      } else if (this.btnType === 'status') {
-        return this.status === '1' ? '停用' : '启用'
-      }
-    },
-    colorRed() {
-      return {
-        'btn_text_red': this.btnType === 'del'
+  },
+  data() {
+    return {
+      btnList: {
+        del: {
+          icon: 'el-icon-delete',
+          class: 'btn_text_red',
+          btnName: '删除'
+        },
+        edit: {
+          icon: 'el-icon-edit',
+          btnName: '修改'
+        },
+        status: {
+          icon: this.status === '1' ? 'el-icon-open' : 'el-icon-turn-off',
+          btnName: this.status === '1' ? '停用' : '启用'
+        },
+        save: {
+          icon: 'el-icon-check',
+          btnName: '保存'
+        }
       }
     }
-  },
+  }
 }
 </script>
 

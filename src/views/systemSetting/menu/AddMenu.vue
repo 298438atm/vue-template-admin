@@ -55,6 +55,7 @@
           <el-form-item prop="path" :label="formLabelType + '路由'">
             <MyInput
               v-model="form.path"
+              :maxlength="50"
               :placeholder="`请输入${formLabelType}路由`"
             ></MyInput>
           </el-form-item>
@@ -63,6 +64,7 @@
           <el-form-item prop="component" label="组件地址">
             <MyInput
               v-model="form.component"
+              :maxlength="50"
               :placeholder="`请输入${formLabelType}组件地址`"
             ></MyInput>
           </el-form-item>

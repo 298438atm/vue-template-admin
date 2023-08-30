@@ -1,11 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <img src="https://bpic.51yuansu.com/activity/20230710/64abc18f93ec5.jpg" alt="">
+    <button>文件上传</button>
+
 </body>
+<script>
+    // 请求用户选择文件
+    const filePicker = document.querySelector('#file-picker');
+
+    document.querySelector('button').addEventListener('click', async (event) => {
+        this.createAndWriteVueFile()
+    });
+    async function createAndWriteVueFile() {
+        const fileName = 'MyComponent.vue';
+        const fileContent = `<template>
+                            <div>
+                                <h1>Hello, Vue!</h1>
+                            </div>
+                            </template>
+
+                            <style scoped>
+                                /* 样式... */
+                            </style>
+                            `
+
+        const options = {
+            suggestedName: fileName, // 建议的文件名
+            types: [
+                {
+                    description: 'Vue Files',
+                    accept: {
+                        'text/vue': ['.vue'],
+                    },
+                },
+            ],
+        };
+
+        try {
+            // 请求选择保存文件的位置
+            const fileHandle = await window.showSaveFilePicker(options);
+            const writable = await fileHandle.createWritable();
+
+            // 写入数据
+            await writable.write(fileContent);
+
+            // 完成写入
+            await writable.close();
+
+            console.log('Vue 文件创建并写入成功！');
+        } catch (error) {
+            console.error('Vue 文件创建或写入失败：', error);
+        }
+    }
+</script>
+
 </html>

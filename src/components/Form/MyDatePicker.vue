@@ -1,32 +1,29 @@
 <template>
-  <el-input
+  <el-date-picker
    v-bind="$attrs"
     v-on="$listeners"
     style="width: 100%"
     v-model="localValue"
-    :maxlength="$attrs.maxlength || 20"
-    :show-word-limit="$attrs.showWordLimit || true"
-    :clearable="$attrs.clearable || true"
-    :placeholder="$attrs.placeholder || '请输入'"
+    :placeholder="$attrs.placeholder || '请选择日期'"
+    :value-format="$attrs.valueFormat || 'yyyy-MM-dd'"
   >
-    <template v-for="(value, name) in $slots" #[name]>
-      <slot :name="name"> </slot>
-    </template>
-  </el-input>
+  </el-date-picker>
 </template>
 
 <script>
 export default {
-  name: 'MyInput',
+  name: 'MyDatePicker',
   props: {
     modelValue: {
-      type: String,
-      default: '',
+      type: [String, Array, Object, Number],
     }
   },
   model: {
     prop: 'modelValue',
     event: 'updateModelValue',
+  },
+  created() {
+    
   },
   computed: {
     localValue: {
@@ -34,6 +31,7 @@ export default {
         return this.modelValue
       },
       set(newV) {
+        console.log(123);
         this.$emit('updateModelValue', newV)
       },
     },

@@ -30,7 +30,7 @@
           ></MySelect>
         </el-form-item>
       </template>
-      <template #btnBox>
+      <template #leftBtn>
         <el-button
           type="primary"
           @click="openDictTypeForm('add')"

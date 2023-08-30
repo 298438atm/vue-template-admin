@@ -1,4 +1,4 @@
-import { verifyType} from '@/utils/commomFun'
+import { verifyType} from '@/utils/commonFun'
 const state = {
   themeColor: '#03748b',
   menuColor: '#03748b',

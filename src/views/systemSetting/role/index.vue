@@ -44,7 +44,7 @@
         </span>
         <span v-else>{{ data.row.name }}</span>
       </template>
-      <template #btnBox>
+      <template #leftBtn>
         <el-button type="primary" @click="openRoleForm('add')">新增</el-button>
         <el-button
           type="danger"
