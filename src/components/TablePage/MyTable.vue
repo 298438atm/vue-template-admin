@@ -49,7 +49,7 @@
       </el-table-column>
       <slot name="endColumn"></slot>
     </el-table>
-    <div class="pagination_box" v-if="pageObj">
+    <div class="pagination_box" v-if="pageProp">
       <el-pagination
         v-bind="mergePageObj"
         @size-change="sizeChange"
@@ -86,7 +86,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    pageObj: {
+    pageProp: {
       type: [Object, Boolean],
       default: () => ({}),
     },
@@ -98,8 +98,8 @@ export default {
   },
   computed: {
     mergePageObj() {
-      if (this.pageObj) {
-        return Object.assign({}, this.localPageObj, this.pageObj)
+      if (this.pageProp) {
+        return Object.assign({}, this.localPageObj, this.pageProp)
       } else {
         this.localPageObj
       }

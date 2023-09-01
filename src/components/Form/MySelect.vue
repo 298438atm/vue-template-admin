@@ -3,8 +3,8 @@
     style="width: 100%"
     v-model="localValue"
     :placeholder="$attrs.placeholder ? $attrs.placeholder : '请选择'"
-    :clearable="$attrs.clearable ? $attrs.clearable : true"
-    :filterable="$attrs.filterable ? $attrs.filterable : true"
+    :clearable="$commonFun.isEmpt($attrs.clearable) ? true : $attrs.clearable"
+    :filterable="$commonFun.isEmpt($attrs.filterable) ? true : $attrs.filterable"
     v-bind="$attrs"
     v-on="$listeners"
   >

@@ -3,7 +3,7 @@
     <TablePage
       :data="tableData"
       :columns="columns"
-      :pageObj="pageObj"
+      :pageProp="pageProp"
       :search="search"
       :load="tableLoading"
     >
@@ -74,7 +74,7 @@ export default {
           },
         },
       ],
-      pageObj: {
+      pageProp: {
         total: 0,
         currentPage: 1,
         pageSize: 10,
@@ -87,19 +87,19 @@ export default {
   },
 
   methods: {
-    search(type, pageObj) {
+    search(type, pageProp) {
       if (type === 'reset') {
         this.form = {}
       } else if (type === 'search') {
-        this.pageObj.currentPage = 1
+        this.pageProp.currentPage = 1
       } else if (type === 'pagination') {
-        this.pageObj = Object.assign(this.pageObj, pageObj)
+        this.pageProp = Object.assign(this.pageProp, pageProp)
       }
       this.tableLoading = true
-      getTable(Object.assign({}, this.pageObj, this.form)).then(
+      getTable(Object.assign({}, this.pageProp, this.form)).then(
         ({ record, total }) => {
           this.tableData = record
-          this.pageObj.total = total
+          this.pageProp.total = total
           this.tableLoading = false
         }
       )

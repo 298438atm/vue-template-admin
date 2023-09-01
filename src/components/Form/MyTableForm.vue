@@ -129,7 +129,6 @@ export default {
         .filter((item) => item.rules)
         .map((item) => item.prop)
         .map((item) => `tableData.${index}.${item}`)
-      console.log(rulesProps, 'rulesProps')
       this.$refs.formRules.validateField(rulesProps, (errMsg) => {
         if (!errMsg) {
           this.$set(row, 'edit', false)

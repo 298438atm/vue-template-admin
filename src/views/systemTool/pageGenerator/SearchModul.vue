@@ -1,13 +1,5 @@
 <template>
-  <el-card>
-    <template #header>
-      <div class="header_box">
-        <span>搜索栏</span>
-        <!-- <el-button type="text" @click="preview" v-if="searchFormData.showSearch"
-          >预览</el-button
-        > -->
-      </div>
-    </template>
+  <el-card header="搜索栏">
     <el-form :model="searchFormData" inline label-width="160px">
       <el-form-item label="是否需要搜索栏："
         ><el-checkbox v-model="searchFormData.showSearch"></el-checkbox
@@ -68,8 +60,8 @@ export default {
     console.log(this, 'aa');
   },
   methods: {
-    preview() {
-      this.visible = true
+    getFormData() {
+      return this.searchFormData
     },
   },
   watch: {

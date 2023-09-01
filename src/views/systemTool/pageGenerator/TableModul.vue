@@ -1,20 +1,30 @@
 <template>
   <el-card header="表格栏">
-    <el-form :model="tableFormData" inline label-width="160px">
+    <el-form :model="tableFormData" inline label-width="160px" :rules="rules" ref="form">
       <el-form-item label="是否需要边框："
         ><el-checkbox v-model="tableFormData.border"></el-checkbox
       ></el-form-item>
       <el-form-item label="是否需要序号："
         ><el-checkbox v-model="tableFormData.orderNumber"></el-checkbox
       ></el-form-item>
-      <el-form-item label="能否选择：">
+      <el-form-item label="能否选择：" prop="selectType">
         <MySelect
           v-model="tableFormData.selectType"
           :options="selectOptions"
         ></MySelect>
       </el-form-item>
+      <el-form-item label="是否需要操作按钮："
+        ><el-checkbox v-model="tableFormData.isBtn"></el-checkbox
+      ></el-form-item>
+      <el-form-item label="操作按钮：" prop="btns" v-if="tableFormData.isBtn">
+        <MySelect
+          v-model="tableFormData.btns"
+          :options="btnsList"
+          multiple
+        ></MySelect>
+      </el-form-item>
     </el-form>
-    <MyTableForm v-model="formTableData" :columns="columns"></MyTableForm>
+    <MyTableForm ref="MyTableForm" v-model="tableTableData" :columns="columns"></MyTableForm>
   </el-card>
 </template>
 
@@ -27,12 +37,20 @@ export default {
         border: true,
         orderNumber: true,
         isCenter: true,
-        selectType: 'multiple'
+        selectType: 'multiple',
+        isBtn: false,
+        btns: []
       },
       selectOptions: [
         { label: '多选', value: 'multiple' },
         { label: '单选', value: 'radio' },
         { label: '不能选择', value: 'none' },
+      ],
+      btnsList: [
+        {label: '修改',value: 'edit'},
+        {label: '保存',value: 'save'},
+        {label: '删除',value: 'del'},
+        {label: '启用停用',value: 'status'},
       ],
       columns: [
         {
@@ -69,17 +87,28 @@ export default {
           type: 'input',
           label: '搜素条件字典值',
           prop: 'searchDictKey',
-        },
-        {
-          type: 'input',
-          label: '回显转换字典值',
-          prop: 'columnsDictKey',
-        },
+        }
       ],
-      formTableData: [],
+      rules: {
+        selectType: {required: true, message: '请选择表格是否可选', trigger: 'change'},
+        btns: {required: true, message: '请选择操作按钮', trigger: 'change'}
+      },
+      tableTableData: [],
       visible: false,
     }
   },
+  methods: {
+    async getFormData() {
+      const formFlag = await this.$refs.form.validate()
+      const tableFlagFlag = await this.$refs.MyTableForm.validate()
+      if (formFlag && tableFlagFlag) {
+        return {
+          tableFormData: this.tableFormData,
+          tableTableData: this.tableTableData
+        }
+      }
+    }
+  }
 }
 </script>
 

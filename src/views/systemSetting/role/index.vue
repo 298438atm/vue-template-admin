@@ -6,7 +6,7 @@
       :columns="columns"
       :search="search"
       :load="this.tableLoading"
-      :pageObj="pageObj"
+      :pageProp="pageProp"
       show-overflow-tooltip
       @selection-change="selectChange"
     >
@@ -128,7 +128,7 @@ export default {
           showOverflowTooltip: true,
         },
       ],
-      pageObj: {
+      pageProp: {
         total: 0,
         currentPage: 1,
         pageSize: 10,
@@ -148,21 +148,21 @@ export default {
     this.search()
   },
   methods: {
-    search(type, pageObj) {
+    search(type, pageProp) {
       if (type === 'reset') {
         this.form = {}
       } else if (type === 'search') {
-        this.pageObj.currentPage = 1
+        this.pageProp.currentPage = 1
       } else if (type === 'pagination') {
-        this.pageObj = Object.assign(this.pageObj, pageObj)
+        this.pageProp = Object.assign(this.pageProp, pageProp)
       }
       this.tableLoading = true
-      API.getRoleList(Object.assign({}, this.pageObj, this.form)).then(
+      API.getRoleList(Object.assign({}, this.pageProp, this.form)).then(
         ({ currentPage, total, pageSize, record }) => {
           this.tableData = record
-          this.pageObj.currentPage = currentPage
-          this.pageObj.pageSize = pageSize
-          this.pageObj.total = total
+          this.pageProp.currentPage = currentPage
+          this.pageProp.pageSize = pageSize
+          this.pageProp.total = total
         }
       ).finally(() => {
         this.tableLoading = false

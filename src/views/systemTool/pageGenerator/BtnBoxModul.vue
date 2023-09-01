@@ -1,14 +1,12 @@
 <template>
-  <el-card>
-    <template #header>
-      <div class="header_box">
-        <span>按钮栏</span>
-        <!-- <el-button type="text" @click="preview" v-if="btnsFormData.showBtns"
-          >预览</el-button
-        > -->
-      </div>
-    </template>
-    <el-form :model="btnsFormData" inline label-width="160px">
+  <el-card header="按钮栏">
+    <el-form
+      :model="btnsFormData"
+      inline
+      label-width="160px"
+      :rules="rules"
+      ref="form"
+    >
       <el-form-item label="是否需要按钮栏："
         ><el-checkbox v-model="btnsFormData.showBtns"></el-checkbox
       ></el-form-item>
@@ -25,7 +23,7 @@
         ref="MyTableForm"
         :columns="btnsColumns"
         v-if="btnsFormData.showBtns"
-        v-model="formTableData"
+        v-model="btnsTableData"
       >
       </MyTableForm>
     </el-form>
@@ -85,14 +83,26 @@ export default {
           },
         },
       ],
-      formTableData: [],
+      rules: {},
+      btnsTableData: [],
     }
   },
   methods: {
-    async preview() {
-      const flag = await this.$refs.MyTableForm.validate()
-      if (flag) {
-        this.visible = true
+    async getFormData() {
+      if (this.btnsFormData.showBtns) {
+        if (await this.$refs.MyTableForm.validate()) {
+          return {
+          btnsFormData: this.btnsFormData,
+          btnsTableData: this.btnsTableData,
+        }
+        } else {
+          return false
+        }
+      } else {
+        return {
+          btnsFormData: this.btnsFormData,
+          btnsTableData: [],
+        }
       }
     },
   },

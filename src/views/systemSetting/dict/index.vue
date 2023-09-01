@@ -3,7 +3,7 @@
     <TablePage
       :data="tableData"
       :columns="columns"
-      :pageObj="pageObj"
+      :pageProp="pageProp"
       :search="search"
       :load="tableLoading"
       @selection-change="selectChange"
@@ -130,7 +130,7 @@ export default {
           align: 'center',
         },
       ],
-      pageObj: {
+      pageProp: {
         total: 0,
         currentPage: 1,
         pageSize: 10,
@@ -156,19 +156,19 @@ export default {
     this.search()
   },
   methods: {
-    search(type, pageObj) {
+    search(type, pageProp) {
       if (type === 'reset') {
         this.form = {}
       } else if (type === 'search') {
-        this.pageObj.currentPage = 1
+        this.pageProp.currentPage = 1
       } else if (type === 'pagination') {
-        this.pageObj = Object.assign(this.pageObj, pageObj)
+        this.pageProp = Object.assign(this.pageProp, pageProp)
       }
       this.tableLoading = true
-      API.getDictTypeList(Object.assign({}, this.pageObj, this.form)).then(
+      API.getDictTypeList(Object.assign({}, this.pageProp, this.form)).then(
         (res) => {
           this.tableData = res.record
-          this.pageObj.total = res.total
+          this.pageProp.total = res.total
         }
       ).finally(() => {
         this.tableLoading = false

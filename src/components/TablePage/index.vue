@@ -1,12 +1,18 @@
 <template>
   <div>
-    <TableSearch v-show="isRetract && showSearch" :search="search" :columns="columns" v-bind="searchProp">
+    <TableSearch
+      v-show="isRetract && searchProp"
+      :search="search"
+      :columns="columns"
+      v-bind="typeof searchProp === 'boolean' ? {} : searchProp"
+    >
       <template #formItem>
         <slot name="formItem"></slot>
       </template>
     </TableSearch>
     <BtnBox
-      v-if="showBtn"
+      v-if="btnBoxProp"
+      v-bind="typeof btnBoxProp === 'boolean' ? {} : searchProp"
       :searchShowToggle="() => (isRetract = !isRetract)"
       :isRetract="isRetract"
       :search="search"
@@ -56,13 +62,17 @@ export default {
       type: Boolean,
       default: true,
     },
-    showBtn: {
+    showBtns: {
       type: Boolean,
       default: true,
     },
     searchProp: {
-      type: Object,
-      default: () => ({})
+      type: [Object, Boolean],
+      default: () => ({}),
+    },
+    btnBoxProp: {
+      type: [Object, Boolean],
+      default: () => ({}),
     }
   },
   data() {
@@ -76,8 +86,8 @@ export default {
       this.showColumList = this.columns.filter((item) =>
         selectedProp.includes(item.prop)
       )
-    }
-  }
+    },
+  },
 }
 </script>
 
