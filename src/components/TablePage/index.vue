@@ -17,7 +17,7 @@
       :isRetract="isRetract"
       :search="search"
       :columns="columns"
-      @changeShowColumList="changeShowColumList"
+      v-model="showColumList"
     >
       <template #leftBtn>
         <slot name="leftBtn"></slot>
@@ -82,11 +82,6 @@ export default {
     }
   },
   methods: {
-    changeShowColumList(selectedProp) {
-      this.showColumList = this.columns.filter((item) =>
-        selectedProp.includes(item.prop)
-      )
-    },
   },
 }
 </script>

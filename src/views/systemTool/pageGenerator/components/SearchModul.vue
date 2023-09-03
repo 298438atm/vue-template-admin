@@ -1,5 +1,8 @@
 <template>
-  <el-card header="搜索栏">
+  <el-card>
+    <template #header>
+      <CardHeader title="搜索栏" @cache="cache"></CardHeader>
+    </template>
     <el-form :model="searchFormData" inline label-width="160px">
       <el-form-item label="是否需要搜索栏："
         ><el-checkbox v-model="searchFormData.showSearch"></el-checkbox
@@ -10,8 +13,20 @@
       <el-form-item label="是否需要重置按钮：" v-if="searchFormData.showSearch"
         ><el-checkbox v-model="searchFormData.showResetBtn"></el-checkbox
       ></el-form-item>
-      <el-form-item label="是否需要显示图标：" v-if="searchFormData.showSearch"
-        ><el-checkbox v-model="searchFormData.showIcon"></el-checkbox
+      <el-form-item v-if="searchFormData.showSearch">
+        <template #label>
+          <el-tooltip
+            effect="dark"
+            content="显示的图标为新建菜单的时候选中的图标"
+            placement="top"
+          >
+            <span>
+              <i class="el-icon-warning"></i>
+              是否需要显示图标：
+            </span>
+          </el-tooltip>
+        </template>
+        <el-checkbox v-model="searchFormData.showIcon"></el-checkbox
       ></el-form-item>
       <el-form-item label="是否需要回车搜索：" v-if="searchFormData.showSearch"
         ><el-checkbox v-model="searchFormData.returnSearch"></el-checkbox
@@ -26,20 +41,23 @@
           style="width: 100%"
         ></el-input-number
       ></el-form-item>
-      <el-form-item label="是否需要自定义标题：" v-if="searchFormData.showSearch"
-        ><MyInput placeholder="默认取页面标题" v-model="searchFormData.title"></MyInput
+      <el-form-item
+        label="是否需要自定义标题："
+        v-if="searchFormData.showSearch"
+        ><MyInput
+          placeholder="默认取页面标题"
+          v-model="searchFormData.title"
+        ></MyInput
       ></el-form-item>
     </el-form>
-    <!-- <el-dialog title="预览" :visible.sync="visible">
-      <TableSearch v-bind="searchFormData"></TableSearch>
-    </el-dialog> -->
   </el-card>
 </template>
 
 <script>
-import TableSearch from '@/components/TablePage/TableSearch.vue'
+import CardHeader from './CardHeader.vue'
+import TableSearch from '@/components/TablePage/TableSearch'
 export default {
-  components: { TableSearch },
+  components: { TableSearch, CardHeader },
   name: 'SearchModul',
   data() {
     return {
@@ -51,22 +69,33 @@ export default {
         returnSearch: true,
         showIcon: true,
         defaultShowRow: 1,
-        title: ''
+        title: '',
       },
-      visible: false
+      visible: false,
+      isCache: false,
     }
   },
   created() {
-    console.log(this, 'aa');
+    const searchFormData = JSON.parse(
+      localStorage.getItem('searchGenerator') || ''
+    )
+    if (searchFormData) {
+      this.searchFormData = searchFormData
+    }
   },
   methods: {
     getFormData() {
       return this.searchFormData
     },
+    cache() {
+      localStorage.setItem(
+        'searchGenerator',
+        JSON.stringify(this.searchFormData)
+      )
+      this.$message.success('缓存成功！')
+    },
   },
-  watch: {
-    
-  },
+  watch: {},
 }
 </script>
 
@@ -74,5 +103,8 @@ export default {
 .header_box {
   display: flex;
   justify-content: space-between;
+  .lock {
+    cursor: pointer;
+  }
 }
 </style>

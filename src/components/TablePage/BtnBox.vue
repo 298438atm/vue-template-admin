@@ -20,10 +20,10 @@
             @click="search"
             >刷新表格</el-button
           >
-          <el-popover placement="top" width="160" v-if="showScreenBtn">
+          <el-popover placement="top" width="180" v-if="showScreenBtn">
             <p>请勾选想要展示的列：</p>
             <div>
-              <el-checkbox-group v-model="showColumList">
+              <el-checkbox-group v-model="localShowColumList" class="checkbox_group">
                 <el-checkbox
                   v-for="item in columns"
                   :key="item.prop"
@@ -74,19 +74,38 @@ export default {
       type: Boolean,
       default: true,
     },
+    showColumList: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  model: {
+    prop: 'showColumList',
+    event: 'changeShowColumList',
+  },
+  computed: {
+    localShowColumList: {
+      get() {
+        return this.showColumList.map(item => item.prop)
+      },
+      set(list) {
+        this.$emit(
+          'changeShowColumList',
+          this.columns.filter((item) => list.includes(item.prop))
+        )
+      },
+    },
   },
   data() {
-    return {
-      showColumList: this.columns.map((item) => item.prop),
-    }
+    return {}
   },
   methods: {},
   watch: {
-    showColumList: {
+    columns: {
       deep: true,
       immediate: true,
-      handler(val) {
-        this.$emit('changeShowColumList', val)
+      handler(newV) {
+        this.localShowColumList = newV.map((item) => item.prop)
       },
     },
   },
@@ -98,5 +117,12 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+}
+.checkbox_group {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow: auto;
+  max-width: 160px;
 }
 </style>

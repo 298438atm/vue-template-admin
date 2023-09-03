@@ -24,7 +24,7 @@
         ></MySelect>
       </el-form-item>
     </el-form>
-    <MyTableForm ref="MyTableForm" v-model="tableTableData" :columns="columns"></MyTableForm>
+    <MyTableForm ref="MyTableForm" v-model="tableFormData.tableTableData" :columns="columns"></MyTableForm>
   </el-card>
 </template>
 
@@ -39,7 +39,8 @@ export default {
         isCenter: true,
         selectType: 'multiple',
         isBtn: false,
-        btns: []
+        btns: [],
+        tableTableData: []
       },
       selectOptions: [
         { label: '多选', value: 'multiple' },
@@ -93,7 +94,6 @@ export default {
         selectType: {required: true, message: '请选择表格是否可选', trigger: 'change'},
         btns: {required: true, message: '请选择操作按钮', trigger: 'change'}
       },
-      tableTableData: [],
       visible: false,
     }
   },
@@ -102,10 +102,7 @@ export default {
       const formFlag = await this.$refs.form.validate()
       const tableFlagFlag = await this.$refs.MyTableForm.validate()
       if (formFlag && tableFlagFlag) {
-        return {
-          tableFormData: this.tableFormData,
-          tableTableData: this.tableTableData
-        }
+        return this.tableFormData
       }
     }
   }

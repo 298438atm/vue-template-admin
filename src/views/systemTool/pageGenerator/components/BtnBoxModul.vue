@@ -1,5 +1,6 @@
 <template>
   <el-card header="按钮栏">
+      <CardHeader title="按钮栏" @cache="cache"></CardHeader>
     <el-form
       :model="btnsFormData"
       inline
@@ -19,11 +20,15 @@
       <el-form-item label="是否需要筛选按钮：" v-if="btnsFormData.showBtns"
         ><el-checkbox v-model="btnsFormData.showScreenBtn"></el-checkbox
       ></el-form-item>
+      <el-form-item label="快捷按钮：" v-if="btnsFormData.showBtns"
+        >
+        <el-button v-for="(item, index) in fastBtnList" :key="index" @click="addBtns(item)">{{item.name}}</el-button>
+        </el-form-item>
       <MyTableForm
         ref="MyTableForm"
         :columns="btnsColumns"
         v-if="btnsFormData.showBtns"
-        v-model="btnsTableData"
+        v-model="btnsFormData.btnsTableData"
       >
       </MyTableForm>
     </el-form>
@@ -31,8 +36,10 @@
 </template>
 
 <script>
+import CardHeader from './CardHeader.vue'
 export default {
   name: 'BtnBoxModul',
+  components: { CardHeader },
   data() {
     return {
       visible: false,
@@ -41,6 +48,7 @@ export default {
         showRetractBtn: true,
         showRefreshBtn: true,
         showScreenBtn: true,
+        btnsTableData: []
       },
       btnsColumns: [
         {
@@ -84,27 +92,30 @@ export default {
         },
       ],
       rules: {},
-      btnsTableData: [],
+      fastBtnList: [
+        {name: '新增', type: 'primary', icon: 'el-icon-circle-plus'},
+        {name: '删除', type: 'danger', icon: 'el-icon-delete-solid'},
+      ]
     }
   },
   methods: {
     async getFormData() {
       if (this.btnsFormData.showBtns) {
         if (await this.$refs.MyTableForm.validate()) {
-          return {
-          btnsFormData: this.btnsFormData,
-          btnsTableData: this.btnsTableData,
-        }
+          return this.btnsFormData
         } else {
           return false
         }
       } else {
-        return {
-          btnsFormData: this.btnsFormData,
-          btnsTableData: [],
-        }
+        return this.btnsFormData
       }
     },
+    addBtns(item) {
+      this.btnsFormData.btnsTableData.push(item)
+    },
+    cache() {
+      localStorage.setItem('btnBoxGenerator')
+    }
   },
 }
 </script>
@@ -113,5 +124,23 @@ export default {
 .header_box {
   display: flex;
   justify-content: space-between;
+}
+
+.fast_label {
+  display: inline-block;
+  width: 170px;
+  text-align: right;
+}
+.fast_btn_item {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: 1px solid gainsboro;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.fast_btn_item:hover {
+  background-color: gray;
+  color: #fff;
 }
 </style>

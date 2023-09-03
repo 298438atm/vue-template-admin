@@ -9,7 +9,7 @@
     </div>
     <el-dialog title="预览" :visible.sync="visible" width="80%">
       <TablePage
-        :data=[{}]
+        :data="[{}]"
         :searchProp="searchFormData"
         :showSearch="searchFormData.showSearch"
         v-bind="tableFormData"
@@ -25,10 +25,10 @@
             >{{ item.name }}</el-button
           >
         </template>
-        <template #endColumn v-if="operateBtns">
+        <template #endColumn v-if="tableFormData.isBtn">
           <el-table-column prop="operate" label="操作" align="center">
             <MyTableBtn
-              v-for="(item, index) in operateBtns || []"
+              v-for="(item, index) in operateBtns"
               :key="index"
               :btnType="item"
             ></MyTableBtn>
@@ -36,17 +36,30 @@
         </template>
       </TablePage>
       <template #footer>
-        <el-button type="primary" @click="writeFile">写入文件</el-button>
+        <el-button type="primary" @click="openWriteDialog">写入文件</el-button>
+      </template>
+    </el-dialog>
+    <el-dialog :visible.sync="writeVisible" title="文件写入" width="420px">
+      <el-form :model="vuePageData" label-width="100px" :rules="writeRules" ref="writeForm">
+        <el-form-item prop="componentName" label="组件名称：">
+          <MyInput v-model="vuePageData.componentName" placeholder="组件名称会成为vue文件name值" style="width: 100%"></MyInput>
+        </el-form-item>
+        <el-form-item prop="fileName" label="文件名称：">
+          <MyInput v-model="vuePageData.fileName"></MyInput>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="writeFile" type="primary">保存</el-button>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import SearchModul from './SearchModul.vue'
-import BtnBoxModul from './BtnBoxModul.vue'
-import TableModul from './TableModul.vue'
-import PageModul from './PageModul.vue'
+import SearchModul from './components/SearchModul.vue'
+import BtnBoxModul from './components/BtnBoxModul.vue'
+import TableModul from './components/TableModul.vue'
+import PageModul from './components/PageModul.vue'
 import { btnTemplateStr, operateBtnTempalteStr } from './compiler'
 export default {
   components: { SearchModul, BtnBoxModul, TableModul, PageModul },
@@ -61,6 +74,12 @@ export default {
       operateBtns: [],
       tableTableData: [],
       pageFormData: {},
+      writeVisible: false,
+      vuePageData: {},
+      writeRules: {
+        componentName: {required: true, message: '请输入组件名称', trigget: 'blur'},
+        fileName: {required: true, message: '请输入文件名称', trigget: 'blur'}
+      }
     }
   },
   methods: {
@@ -79,25 +98,30 @@ export default {
       )
       if (searchFlag && btnsFlag && tableFlag && pageFlag) {
         this.searchFormData = searchFlag.showSearch ? searchFlag : false
-        const { btnsFormData, btnsTableData } = btnsFlag
-        this.btnsFormData = btnsFormData.showBtns ? btnsFormData : false
+        const { btnsTableData } = btnsFlag
+        delete btnsFlag.btnsTableData
+        this.btnsFormData = btnsFlag.showBtns ? btnsFlag : false
         this.btnsTableData = btnsTableData.map((item) => {
-          item.style.forEach((attr) => {
+          item.style?.forEach((attr) => {
             item[attr] = true
           })
           delete item.style
           return item
         })
-        console.log(tableFlag, 'tableFlag');
-        const { tableFormData, tableTableData } = tableFlag
-        this.tableFormData = tableFormData
-        this.operateBtns = tableFormData.btns
+        const { tableTableData } = tableFlag
+        delete tableFlag.tableTableData
+        this.tableFormData = tableFlag
+        this.operateBtns = tableFlag.isBtn ? tableFlag.btns : []
         this.tableTableData = tableTableData
         this.pageFormData = pageFlag.isPagination ? pageFlag : false
         this.visible = true
       }
     },
+    openWriteDialog() {
+      this.writeVisible = true
+    },
     async writeFile() {
+      await this.$refs.writeForm.validate()
       const btnsStr = btnTemplateStr(this.btnsTableData)
       const operatoperateBtnStr = operateBtnTempalteStr(this.operateBtns)
       const fileStr = `<template>
@@ -119,9 +143,9 @@ export default {
 </template>
 
 <script>
-  import { getTable } from '@/api/test'
+  // import { getTable } from '@/api/test'
   export default {
-    name: 'newAddGoods',
+    name: '${this.componentName}',
     data() {
       return {
         form: {},
@@ -171,10 +195,9 @@ export default {
   }
 </style>`
       fileStr
-      const fileName = 'MyComponent.vue'
       const fileContent = fileStr
       const options = {
-        suggestedName: fileName, // 建议的文件名
+        suggestedName: this.fileName, // 建议的文件名
         types: [
           {
             description: 'Vue Files',

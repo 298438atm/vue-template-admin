@@ -185,10 +185,8 @@ export default {
       formItemList.sort((a, b) => {
         const sortA = a.getAttribute('searchSort') || 0
         const sortB = b.getAttribute('searchSort') || 0
-        console.log(sortA - sortB, 'sortA - sortB');
         return sortA - sortB
       })
-      console.log(formItemList)
       let sumSpanNum = 0
       let flag = false
       for (let index = 0; index < formItemList.length; index++) {
@@ -204,7 +202,7 @@ export default {
         element.style.width = (spanNum / 24) * 100 + '%'
         if (!flag) {
           sumSpanNum += spanNum
-          if (sumSpanNum > 24) {
+          if (sumSpanNum > 24 * this.defaultShowRow) {
             flag = true
             this.hideColStartIndex = index
           }

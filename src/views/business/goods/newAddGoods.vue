@@ -4,6 +4,9 @@
       :data="tableData"
       :columns="columns"
       :pageProp="pageProp"
+      :searchProp="{
+        defaultShowRow: 1
+      }"
       :search="search"
       :load="tableLoading"
     >
