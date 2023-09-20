@@ -1,11 +1,12 @@
 <template>
-  <el-card header="按钮栏">
+  <el-card>
+    <template #header>
       <CardHeader title="按钮栏" @cache="cache"></CardHeader>
+    </template>
     <el-form
       :model="btnsFormData"
       inline
       label-width="160px"
-      :rules="rules"
       ref="form"
     >
       <el-form-item label="是否需要按钮栏："
@@ -20,10 +21,14 @@
       <el-form-item label="是否需要筛选按钮：" v-if="btnsFormData.showBtns"
         ><el-checkbox v-model="btnsFormData.showScreenBtn"></el-checkbox
       ></el-form-item>
-      <el-form-item label="快捷按钮：" v-if="btnsFormData.showBtns"
+      <el-form-item label="快捷按钮：" v-if="btnsFormData.showBtns">
+        <el-button
+          v-for="(item, index) in fastBtnList"
+          :key="index"
+          @click="addBtns(item)"
+          >{{ item.name }}</el-button
         >
-        <el-button v-for="(item, index) in fastBtnList" :key="index" @click="addBtns(item)">{{item.name}}</el-button>
-        </el-form-item>
+      </el-form-item>
       <MyTableForm
         ref="MyTableForm"
         :columns="btnsColumns"
@@ -37,18 +42,21 @@
 
 <script>
 import CardHeader from './CardHeader.vue'
+import cache from '../mixins'
 export default {
   name: 'BtnBoxModul',
   components: { CardHeader },
+  mixins: [cache],
   data() {
     return {
+      key: 'btnsFormData',
       visible: false,
       btnsFormData: {
         showBtns: true,
         showRetractBtn: true,
         showRefreshBtn: true,
         showScreenBtn: true,
-        btnsTableData: []
+        btnsTableData: [],
       },
       btnsColumns: [
         {
@@ -91,11 +99,10 @@ export default {
           },
         },
       ],
-      rules: {},
       fastBtnList: [
-        {name: '新增', type: 'primary', icon: 'el-icon-circle-plus'},
-        {name: '删除', type: 'danger', icon: 'el-icon-delete-solid'},
-      ]
+        { name: '新增', type: 'primary', icon: 'el-icon-circle-plus' },
+        { name: '删除', type: 'danger', icon: 'el-icon-delete-solid' },
+      ],
     }
   },
   methods: {
@@ -112,20 +119,12 @@ export default {
     },
     addBtns(item) {
       this.btnsFormData.btnsTableData.push(item)
-    },
-    cache() {
-      localStorage.setItem('btnBoxGenerator')
     }
   },
 }
 </script>
 
 <style lang="less" scoped>
-.header_box {
-  display: flex;
-  justify-content: space-between;
-}
-
 .fast_label {
   display: inline-block;
   width: 170px;

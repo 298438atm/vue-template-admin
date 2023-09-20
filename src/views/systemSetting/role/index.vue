@@ -32,17 +32,17 @@
           </el-select>
         </el-form-item>
       </template>
-      <template #name="{ data }">
-        <span v-if="data.row.name.indexOf(form.name) > -1">
-          {{ data.row.name.substr(0, data.row.name.indexOf(form.name))
+      <template #name="{ row }">
+        <span v-if="row.name.indexOf(form.name) > -1">
+          {{ row.name.substr(0, row.name.indexOf(form.name))
           }}<span style="color: #f50">{{ form.name }}</span
           >{{
-            data.row.name.substr(
-              data.row.name.indexOf(form.name) + form.name.length
+            row.name.substr(
+              row.name.indexOf(form.name) + form.name.length
             )
           }}
         </span>
-        <span v-else>{{ data.row.name }}</span>
+        <span v-else>{{ row.name }}</span>
       </template>
       <template #leftBtn>
         <el-button type="primary" @click="openRoleForm('add')">新增</el-button>

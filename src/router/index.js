@@ -41,7 +41,7 @@ function formatRoutes(routes) {
   routes.forEach(item => {
     let obj = {
       path: item.path || '',
-      meta: { name: item.name, keepAlive: item.keepAlive || false, icon: item.icon },
+      meta: { name: item.name, keepAlive: item.keepAlive || false, icon: item.icon, id: item.id },
       component: routerCompnentHanlde(item, 1),
       name: item.name
     }
@@ -56,12 +56,23 @@ function formatRoutes(routes) {
 // 处理路由组件
 function routerCompnentHanlde(route, type) {
   if (route.type === 'page') {
-    return () => import(`@/views/${route.component}`)
+    return () => import(`@/views${route.component}`)
   } else {
     return {
       render(c) {
         return c('router-view')
       }
+    }
+  }
+}
+
+// 去到第一个页面
+function toFirstPage(routes) {
+  for (const item of routes) {
+    if (item.type === 'page') {
+      return item.path
+    } else {
+      return toFirstPage(item.children)
     }
   }
 }
@@ -83,8 +94,9 @@ router.beforeEach((to, from, next) => {
       });
       store.dispatch('user/getMenu').then(res => {
         addRoutes(res)
+        console.log(toFirstPage(res), 'res');
         loadingInstance.close()
-        next(to.path)
+        next(toFirstPage(res))
       })
     } else {
       next()

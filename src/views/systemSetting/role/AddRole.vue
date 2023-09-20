@@ -35,7 +35,8 @@
           <MyTree
             v-if="localVisible"
             type="role"
-            v-model="form.roleIds"
+            nodeKey="code"
+            v-model="form.menuIds"
           ></MyTree>
         </el-col>
       </el-row>
@@ -98,7 +99,7 @@ export default {
         code: undefined,
         status: '1',
         remark: undefined,
-        roleIds: [],
+        menuIds: [],
       },
       rules: {
         name: [
@@ -108,7 +109,7 @@ export default {
             trigger: ['blur', 'change'],
           },
           {
-            validator: this.$commomFun.debounce(checkNameOrCode, 500, {leading: true}),
+            validator: this.$commonFun.debounce(checkNameOrCode, 500, {leading: true}),
             trigger: ['blur', 'change'],
           },
         ],
@@ -119,7 +120,7 @@ export default {
             trigger: ['blur', 'change'],
           },
           {
-            validator: this.$commomFun.debounce(checkNameOrCode, 500),
+            validator: this.$commonFun.debounce(checkNameOrCode, 500),
             trigger: ['blur', 'change'],
           },
         ],
@@ -151,7 +152,7 @@ export default {
         code: undefined,
         status: '1',
         remark: undefined,
-        roleIds: [],
+        menuIds: [],
       }
       this.$refs.form.resetFields()
       this.localVisible = false

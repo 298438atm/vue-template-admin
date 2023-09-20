@@ -7,7 +7,7 @@
       :collapse="isCollapse"
       :text-color="menuTextColor"
       :background-color="menuColor"
-      :default-active="$route.path"
+      :default-active="$route.meta.id"
       :active-text-color="menuTextActiveColor"
     >
       <AsideItem

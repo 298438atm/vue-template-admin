@@ -27,8 +27,16 @@
         导航栏激活颜色：
         <el-color-picker v-model="menuTextActiveColorValue" />
       </div>
+      <!-- <div class="color_item">
+        组件大小：
+        <el-select v-model="elementSizeValue">
+          <el-option label="迷你的" value="mini"></el-option>
+          <el-option label="较小的" value="small"></el-option>
+          <el-option label="正常的" value="medium"></el-option>
+        </el-select>
+      </div> -->
       <div class="btn_box">
-        <el-button type="primary" @click="submit">确定</el-button>
+        <el-button type="primary" @click="updateTheme">确定</el-button>
         <el-button @click="defaultTheme">恢复默认主题</el-button>
         <el-button @click="resetTheme">重置</el-button>
       </div>
@@ -37,6 +45,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import Element from 'element-ui'
 import chalkCss from './chalk.js'
 // const version = require('element-ui/package.json').version // element-ui version from node_modules
 import { mapState } from 'vuex'
@@ -56,6 +66,7 @@ export default {
       'menuTextColor',
       'menuTextActiveColor',
       'menuColor',
+      // 'elementSize',
     ]),
     localVisible: {
       get() {
@@ -72,6 +83,7 @@ export default {
       themeColorValue: '',
       menuTextColorValue: '',
       menuTextActiveColorValue: '',
+      // elementSizeValue: 'small',
       predefine: [
         '#03748b',
         '#256DCB',
@@ -99,6 +111,7 @@ export default {
       this.menuTextColorValue = this.menuTextColor
       this.menuTextActiveColorValue = this.menuTextActiveColor
       this.menuColorValue = this.menuColor
+      // this.elementSizeValue = this.elementSize
     },
     isSyncMenuBgk() {
       this.menuColorValue = this.themeColorValue
@@ -110,12 +123,6 @@ export default {
     },
     // 修改主题颜色
     updateTheme() {
-      const loading = this.$loading({
-        lock: true,
-        text: '主题更换中...',
-        spinner: 'el-icon-loading',
-        background: '#fff',
-      })
       // 获取新颜色列表（之所以是列表因为一种主题色还要随之配到一些列相似色，比如触碰按钮时颜色变浅，按钮点击时颜色变深）
       const themeCluster = this.getThemeCluster(
         this.themeColorValue.replace('#', '')
@@ -153,8 +160,8 @@ export default {
         { themeColor: this.themeColorValue },
         { menuTextColor: this.menuTextColorValue },
         { menuTextActiveColor: this.menuTextActiveColorValue },
+        // { elementSize: this.elementSizeValue },
       ])
-      loading.close()
       this.localVisible = false
     },
     async defaultTheme() {

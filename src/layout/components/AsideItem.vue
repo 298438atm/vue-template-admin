@@ -1,5 +1,5 @@
 <template>
-  <div class="AsideItem">
+  <div class="AsideItem" :style="`--beforeColor: ${menuTextActiveColor}`">
     <el-menu-item v-if="route.type === 'page'" :index="route.id" @click="$router.push(route.path)">
       <i :class="route.icon"></i>
       <span v-show="!isCollapse">{{ route.name }}</span>
@@ -37,6 +37,10 @@ export default {
     routes() {
       return this.$store.state.user.routes
     },
+    menuTextActiveColor() {
+      return this.$store.state.theme.menuTextActiveColor
+    }
+
   },
   methods: {},
 }
@@ -67,7 +71,7 @@ export default {
       left: 0;
       width: 3px;
       height: 40px;
-      background-color: rgb(100, 190, 255);
+      background-color: var(--beforeColor);
     }
   }
 }

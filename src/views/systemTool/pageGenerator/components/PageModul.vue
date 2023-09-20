@@ -1,5 +1,8 @@
 <template>
-  <el-card header="分页栏">
+  <el-card>
+    <template #header>
+      <CardHeader title="分页栏"></CardHeader>
+    </template>
     <el-form
       :model="paginationFormData"
       inline
@@ -66,10 +69,15 @@
 </template>
 
 <script>
+import CardHeader from './CardHeader.vue'
+import cache from '../mixins'
 export default {
   name: 'PageModul',
+  components: {CardHeader},
+  mixins: [cache],
   data() {
     return {
+      key: 'paginationFormData',
       paginationFormData: {
         isPagination: true,
         background: true,
@@ -127,10 +135,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less" scoped>
-.header_box {
-  display: flex;
-  justify-content: space-between;
-}
-</style>

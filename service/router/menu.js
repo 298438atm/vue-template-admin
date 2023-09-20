@@ -5,23 +5,56 @@ const express = require('express')
 const Router = express.Router()
 const fs = require('fs')
 
+function findParentMenus(menuStructure, menuIds) {
+  const result = {};
+
+  // 递归查找父级菜单
+  function findParents(menuId, menuItems) {
+    menuItems.forEach((menuItem) => {
+      if (menuIds.includes(menuItem.code)) {
+        result[menuItem.code] = menuItem;
+
+        if (menuItem.parentMenu !== 'rootMenu') {
+          findParents(menuItem.parentMenu, menuStructure);
+        }
+      } else if (menuItem.children) {
+        findParents(menuId, menuItem.children);
+      }
+    });
+  }
+
+  // 遍历菜单 ID 集合
+  menuIds.forEach((menuId) => {
+    console.log(menuId, 'menuId');
+    findParents(menuId, menuStructure);
+  });
+  return Object.values(result);
+}
+
+
 //挂载具体路由
 Router.get('/getRoutes', function (req, res) {
-  console.log(req.tokenData, 'req.tokenData');
-  const { role } = req.tokenData
-  const { name = '', status = '' } = req.query
+  const { roleIds } = req.tokenData
   const menuData = JSON.parse(fs.readFileSync('./data/menu.json', 'utf8'))
-  const data = menuData.filter(item => item.name.includes(name) && (item.status === '' ? true : item.status.includes(status)))
+  const roleData = JSON.parse(fs.readFileSync('./data/role.json', 'utf8'))
+  let selfMenuIds = []
+  roleData.forEach(item => {
+    if (roleIds.includes(item.code)) {
+      selfMenuIds = selfMenuIds.concat(item.menuIds)
+    }
+  })
+  console.log(selfMenuIds);
+  const selfMenu = findParentMenus(menuData, selfMenuIds)
+  console.log(selfMenu, 'selfMenu');
+  const data = selfMenu.filter(item => item.status === '1')
   res.send({
     code: 200,
-    data: role === 'admin' ? data : data
+    data
   })
-
 })
 // 路由列表
 Router.get('/getMenuList', function (req, res) {
   const { name = '', status = '' } = req.query
-  console.log(status, 'status');
   const menuData = JSON.parse(fs.readFileSync('./data/menu.json', 'utf8'))
   const data = treeFilter(menuData, item => item.name.includes(name) && (status === '' ? true : (item.status === status)))
   res.send({
@@ -39,14 +72,12 @@ Router.get('/getMenuList', function (req, res) {
 
 Router.post('/addEditMenu', function (req, res) {
   let menuData = JSON.parse(fs.readFileSync('./data/menu.json', 'utf8'))
-  console.log(req.body);
   if (!req.body.id) {
     if (req.body.parentMenu === 'rootMenu') {
       req.body.createTime = global.selfUtils.formatTime(null, 'YYYY-MM-DD hh:mm:ss')
       req.body.id = global.selfUtils.createId()
       menuData.push(req.body)
     } else {
-      console.log(123123123);
       menuData = addMenu(req.body.parentMenu, menuData)
     }
   } else {
@@ -97,7 +128,6 @@ Router.delete('/delMenu', function (req, res) {
           delMenu(ids, item.children)
         }
       } else {
-        console.log(ids);
         list.splice(index, 1)
       }
     });

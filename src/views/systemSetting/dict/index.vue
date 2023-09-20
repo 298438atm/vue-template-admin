@@ -47,9 +47,9 @@
           删除
         </el-button>
       </template>
-      <template #dictTypeName="{ data }">
-        <el-button type="text" @click="openDictDataForm(data.row)">{{
-          data.row['dictTypeName']
+      <template #dictTypeName="{ row }">
+        <el-button type="text" @click="openDictDataForm(row)">{{
+          row['dictTypeName']
         }}</el-button>
       </template>
       <template #endColumn>

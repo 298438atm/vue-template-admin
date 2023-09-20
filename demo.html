@@ -8,57 +8,56 @@
 </head>
 
 <body>
-    <button>文件上传</button>
-
-</body>
-<script>
-    // 请求用户选择文件
-    const filePicker = document.querySelector('#file-picker');
-
-    document.querySelector('button').addEventListener('click', async (event) => {
-        this.createAndWriteVueFile()
-    });
-    async function createAndWriteVueFile() {
-        const fileName = 'MyComponent.vue';
-        const fileContent = `<template>
-                            <div>
-                                <h1>Hello, Vue!</h1>
-                            </div>
-                            </template>
-
-                            <style scoped>
-                                /* 样式... */
-                            </style>
-                            `
-
-        const options = {
-            suggestedName: fileName, // 建议的文件名
-            types: [
-                {
-                    description: 'Vue Files',
-                    accept: {
-                        'text/vue': ['.vue'],
-                    },
-                },
-            ],
-        };
-
-        try {
-            // 请求选择保存文件的位置
-            const fileHandle = await window.showSaveFilePicker(options);
-            const writable = await fileHandle.createWritable();
-
-            // 写入数据
-            await writable.write(fileContent);
-
-            // 完成写入
-            await writable.close();
-
-            console.log('Vue 文件创建并写入成功！');
-        } catch (error) {
-            console.error('Vue 文件创建或写入失败：', error);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        const APISecret = 'MmEyMDk5MDY4NDU0MWIzNTllZDdmYmJl'
+        const APIKey = '9c55c46a4c72a3360fc1112f069cafcc'
+        function getWebsocketUrl() {
+            return new Promise((resolve, reject) => {
+                var apiKey = APIKey
+                var apiSecret = APISecret
+                var url = 'wss://spark-api.xf-yun.com/v1.1/chat'
+                var host = 'spark-api.xf-yun.com'
+                var date = new Date().toGMTString()
+                var algorithm = 'hmac-sha256'
+                var headers = 'host date request-line'
+                var signatureOrigin = `host: ${host}\ndate: ${date}\nGET /v1.1/chat HTTP/1.1`
+                var signatureSha = CryptoJS.HmacSHA256(signatureOrigin, apiSecret)
+                var signature = CryptoJS.enc.Base64.stringify(signatureSha)
+                var authorizationOrigin = `api_key="${apiKey}", algorithm="${algorithm}", headers="${headers}", signature="${signature}"`
+                var authorization = btoa(authorizationOrigin)
+                url = `${url}?authorization=${authorization}&date=${date}&host=${host}`
+                resolve(url)
+            })
         }
-    }
-</script>
+        getWebsocketUrl().then(url => {
+            var ws = new WebSocket(url);
+            ws.onopen = function (evt) {
+                console.log("Connection open ...");
+                ws.send(JSON.stringify({
+                    "header": {
+                        "app_id": "5802eb00",
+                        "uid": "12345"
+                    },
+                    "parameter": {
+                        "chat": {
+                            "domain": "general",
+                            "temperature": 0.5,
+                            "max_tokens": 4096,
+                        }
+                    },
+                    "payload": {
+                        "message": {
+                            "text": [
+                                { "role": "user", "content": "你是谁" }
+                            ]
+                        }
+                    }
+                }))
+            };
+
+        })
+    </script>
+</body>
 
 </html>

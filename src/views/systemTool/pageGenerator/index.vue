@@ -39,10 +39,24 @@
         <el-button type="primary" @click="openWriteDialog">写入文件</el-button>
       </template>
     </el-dialog>
-    <el-dialog :visible.sync="writeVisible" title="文件写入" width="420px">
-      <el-form :model="vuePageData" label-width="100px" :rules="writeRules" ref="writeForm">
+    <el-dialog
+      :visible.sync="writeVisible"
+      title="文件写入"
+      width="420px"
+      :before-close="writeCloseBefore"
+    >
+      <el-form
+        :model="vuePageData"
+        label-width="100px"
+        :rules="writeRules"
+        ref="writeForm"
+      >
         <el-form-item prop="componentName" label="组件名称：">
-          <MyInput v-model="vuePageData.componentName" placeholder="组件名称会成为vue文件name值" style="width: 100%"></MyInput>
+          <MyInput
+            v-model="vuePageData.componentName"
+            placeholder="组件名称会成为vue文件name值"
+            style="width: 100%"
+          ></MyInput>
         </el-form-item>
         <el-form-item prop="fileName" label="文件名称：">
           <MyInput v-model="vuePageData.fileName"></MyInput>
@@ -75,11 +89,22 @@ export default {
       tableTableData: [],
       pageFormData: {},
       writeVisible: false,
-      vuePageData: {},
+      vuePageData: {
+        componentName: undefined,
+        fileName: undefined,
+      },
       writeRules: {
-        componentName: {required: true, message: '请输入组件名称', trigget: 'blur'},
-        fileName: {required: true, message: '请输入文件名称', trigget: 'blur'}
-      }
+        componentName: {
+          required: true,
+          message: '请输入组件名称',
+          trigget: 'blur',
+        },
+        fileName: {
+          required: true,
+          message: '请输入文件名称',
+          trigget: 'blur',
+        },
+      },
     }
   },
   methods: {
@@ -121,8 +146,9 @@ export default {
       this.writeVisible = true
     },
     async writeFile() {
-      await this.$refs.writeForm.validate()
       const btnsStr = btnTemplateStr(this.btnsTableData)
+      console.log(btnsStr, 'btnsStr');
+      await this.$refs.writeForm.validate()
       const operatoperateBtnStr = operateBtnTempalteStr(this.operateBtns)
       const fileStr = `<template>
   <div>
@@ -145,17 +171,17 @@ export default {
 <script>
   // import { getTable } from '@/api/test'
   export default {
-    name: '${this.componentName}',
+    name: '${this.vuePageData.componentName}',
     data() {
       return {
         form: {},
-        tableData: [{}],
+        tableData: [],
         searchProp: ${JSON.stringify(this.searchFormData)},
-        tableFormData: ${JSON.stringify(this.tableFormData)}
+        tableFormData: ${JSON.stringify(this.tableFormData)},
         columns: ${JSON.stringify(this.tableTableData)},
         pageProp: ${JSON.stringify(this.pageFormData)},
         btnsFormData: ${JSON.stringify(this.btnsFormData)},
-        tableLoading: false,
+        tableLoading: false
       }
     },
     created() {
@@ -197,7 +223,7 @@ export default {
       fileStr
       const fileContent = fileStr
       const options = {
-        suggestedName: this.fileName, // 建议的文件名
+        suggestedName: this.vuePageData.fileName, // 建议的文件名
         types: [
           {
             description: 'Vue Files',
@@ -215,10 +241,19 @@ export default {
         await writable.write(fileContent)
         // 完成写入
         await writable.close()
-        console.log('Vue 文件创建并写入成功！')
+        this.$message.success('文件创建并写入成功！')
+        this.writeCloseBefore()
+        this.visible = false
       } catch (error) {
-        console.error('Vue 文件创建或写入失败：', error)
+        this.$message.error('文件创建并写入失败！')
       }
+    },
+    writeCloseBefore(done) {
+      this.$refs.writeForm.resetFields()
+      if (typeof done === 'function') {
+        done()
+      }
+      this.writeVisible = false
     },
   },
 }

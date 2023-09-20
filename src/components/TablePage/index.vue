@@ -4,6 +4,8 @@
       v-show="isRetract && searchProp"
       :search="search"
       :columns="columns"
+      :searchForm="searchForm"
+      :changeSearchForm="changeSearchForm"
       v-bind="typeof searchProp === 'boolean' ? {} : searchProp"
     >
       <template #formItem>
@@ -32,8 +34,8 @@
       :search="search"
       :showColumList="showColumList"
     >
-      <template v-for="item in columns" #[item.prop]="{ data }">
-        <slot :name="item.prop" :data="data"></slot>
+      <template v-for="item in columns" #[item.prop]="{ row, index, text }">
+        <slot :name="item.prop" :row="row" :index="index" :text="text"></slot>
       </template>
       <template #endColumn>
         <slot name="endColumn"></slot>
@@ -73,7 +75,15 @@ export default {
     btnBoxProp: {
       type: [Object, Boolean],
       default: () => ({}),
+    },
+    searchForm: {
+      type: Object,
+      default: () => ({})
     }
+  },
+  model: {
+    prop: 'searchForm',
+    event: 'changeSearchForm'
   },
   data() {
     return {
@@ -82,6 +92,9 @@ export default {
     }
   },
   methods: {
+    changeSearchForm(val) {
+      this.$emit('changeSearchForm', val)
+    }
   },
 }
 </script>

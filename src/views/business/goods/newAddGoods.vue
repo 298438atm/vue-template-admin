@@ -5,7 +5,7 @@
       :columns="columns"
       :pageProp="pageProp"
       :searchProp="{
-        defaultShowRow: 1
+        defaultShowRow: 1,
       }"
       :search="search"
       :load="tableLoading"
@@ -37,7 +37,7 @@ export default {
           align: 'center',
           search: true,
           params: {
-            maxlength: 15
+            maxlength: 15,
           },
         },
         {
@@ -64,7 +64,7 @@ export default {
         },
         {
           label: '入库时间',
-          prop: 'createTime',
+          prop: 'time',
           align: 'center',
           search: true,
           type: 'date',

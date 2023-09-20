@@ -1,6 +1,15 @@
 <template>
-  <el-card header="表格栏">
-    <el-form :model="tableFormData" inline label-width="160px" :rules="rules" ref="form">
+  <el-card>
+    <template #header>
+      <CardHeader title="表格栏" @cache="cache"></CardHeader>
+    </template>
+    <el-form
+      :model="tableFormData"
+      inline
+      label-width="160px"
+      :rules="rules"
+      ref="form"
+    >
       <el-form-item label="是否需要边框："
         ><el-checkbox v-model="tableFormData.border"></el-checkbox
       ></el-form-item>
@@ -24,15 +33,24 @@
         ></MySelect>
       </el-form-item>
     </el-form>
-    <MyTableForm ref="MyTableForm" v-model="tableFormData.tableTableData" :columns="columns"></MyTableForm>
+    <MyTableForm
+      ref="MyTableForm"
+      v-model="tableFormData.tableTableData"
+      :columns="columns"
+    ></MyTableForm>
   </el-card>
 </template>
 
 <script>
+import CardHeader from './CardHeader.vue'
+import cache from '../mixins'
 export default {
   name: 'TableModul',
+  components: { CardHeader },
+  mixins: [cache],
   data() {
     return {
+      key: 'tableFormData',
       tableFormData: {
         border: true,
         orderNumber: true,
@@ -40,7 +58,7 @@ export default {
         selectType: 'multiple',
         isBtn: false,
         btns: [],
-        tableTableData: []
+        tableTableData: [],
       },
       selectOptions: [
         { label: '多选', value: 'multiple' },
@@ -48,10 +66,10 @@ export default {
         { label: '不能选择', value: 'none' },
       ],
       btnsList: [
-        {label: '修改',value: 'edit'},
-        {label: '保存',value: 'save'},
-        {label: '删除',value: 'del'},
-        {label: '启用停用',value: 'status'},
+        { label: '修改', value: 'edit' },
+        { label: '保存', value: 'save' },
+        { label: '删除', value: 'del' },
+        { label: '启用停用', value: 'status' },
       ],
       columns: [
         {
@@ -88,15 +106,20 @@ export default {
           type: 'input',
           label: '搜素条件字典值',
           prop: 'searchDictKey',
-        }
+        },
       ],
       rules: {
-        selectType: {required: true, message: '请选择表格是否可选', trigger: 'change'},
-        btns: {required: true, message: '请选择操作按钮', trigger: 'change'}
+        selectType: {
+          required: true,
+          message: '请选择表格是否可选',
+          trigger: 'change',
+        },
+        btns: { required: true, message: '请选择操作按钮', trigger: 'change' },
       },
       visible: false,
     }
   },
+  
   methods: {
     async getFormData() {
       const formFlag = await this.$refs.form.validate()
@@ -104,9 +127,7 @@ export default {
       if (formFlag && tableFlagFlag) {
         return this.tableFormData
       }
-    }
-  }
+    },
+  },
 }
 </script>
-
-<style lang="less" scoped></style>

@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     initTheme() {
-      console.log(123123);
       const themeColorData = JSON.parse(localStorage.getItem('theme'))
       if (themeColorData !== null) {
         this.$store.commit('theme/CHANGE_STATE', themeColorData)

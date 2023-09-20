@@ -56,11 +56,15 @@
 <script>
 import CardHeader from './CardHeader.vue'
 import TableSearch from '@/components/TablePage/TableSearch'
+import cache from '../mixins'
+
 export default {
   components: { TableSearch, CardHeader },
   name: 'SearchModul',
+  mixins: [cache],
   data() {
     return {
+      key: 'searchFormData',
       searchFormData: {
         showSearch: true,
         showSearchBtn: true,
@@ -75,36 +79,11 @@ export default {
       isCache: false,
     }
   },
-  created() {
-    const searchFormData = JSON.parse(
-      localStorage.getItem('searchGenerator') || ''
-    )
-    if (searchFormData) {
-      this.searchFormData = searchFormData
-    }
-  },
   methods: {
     getFormData() {
       return this.searchFormData
-    },
-    cache() {
-      localStorage.setItem(
-        'searchGenerator',
-        JSON.stringify(this.searchFormData)
-      )
-      this.$message.success('缓存成功！')
     },
   },
   watch: {},
 }
 </script>
-
-<style lang="less" scoped>
-.header_box {
-  display: flex;
-  justify-content: space-between;
-  .lock {
-    cursor: pointer;
-  }
-}
-</style>

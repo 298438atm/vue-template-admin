@@ -104,6 +104,7 @@ export default {
         type: 'warning',
       })
       sessionStorage.removeItem('token')
+      this.$store.commit('user/ROUTES_CHANGE', [])
       this.$router.push('/login')
     },
   },

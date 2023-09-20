@@ -38,7 +38,6 @@
             v-if="item.type === 'select'"
             v-model="form[item.prop]"
             v-bind="item.params"
-            :options="dict[item.dictKey]"
             :placeholder="item.params?.placeholder || '请选择' + item.label"
           ></MySelect>
           <MyDatePicker
@@ -126,11 +125,15 @@ export default {
     returnSearch: {
       type: Boolean,
       default: true
+    },
+    changeSearchForm: {
+      type: Function,
+      default: () => {}
     }
   },
   model: {
-    prop: 'form',
-    event: 'formChange',
+    prop: 'searchForm',
+    event: 'changeSearchForm'
   },
   computed: {
     isRetackt() {
@@ -243,6 +246,13 @@ export default {
         }
       },
     },
+    form: {
+      deep: true,
+      immediate: true,
+      handler(newV) {
+        this.changeSearchForm(newV)
+      }
+    }
   },
 }
 </script>

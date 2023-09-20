@@ -3,8 +3,8 @@
     <div class="login-box">
       <h2>vue2-admin-tempalte</h2>
       <el-form :model="form" :rules="rules" ref="form">
-        <el-form-item prop="username" label="登录名">
-          <el-input v-model="form.username" placeholder="请输入登录名"/>
+        <el-form-item prop="nickname" label="登录名">
+          <el-input v-model="form.nickname" placeholder="请输入登录名"/>
         </el-form-item>
         <el-form-item prop="password" label="密码">
           <el-input v-model="form.password" show-password placeholder="请输入密码"/>
@@ -16,20 +16,20 @@
 </template>
 
 <script>
-import { getUserInfo, login } from '@/api/user'
+import { login } from '@/api/user'
 import SessionCRUD from '@/utils/sessionCRUD'
 export default {
   name: 'Login',
   data () {
     return {
       form: {
-        username: 'admin',
-        password: 'admin'
+        nickname: '付峻玲',
+        password: '298438'
       },
       rules: {
-        username: [
+        nickname: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 4, max: 12, message: '长度在 4 到 12 个字符', trigger: 'blur' }
+          { min: 2, max: 20, message: '长度在 4 到 12 个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -47,10 +47,11 @@ export default {
       await this.$refs.form.validate()
       this.loading = true
       login(this.form).then(res => {
-        this.loading = false
         const { token } = res
         SessionCRUD.set('token', token)
         this.$router.push('/home')
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

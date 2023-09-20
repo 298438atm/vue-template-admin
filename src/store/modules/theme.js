@@ -3,7 +3,8 @@ const state = {
   themeColor: '#03748b',
   menuColor: '#03748b',
   menuTextColor: '#ffffff',
-  menuTextActiveColor: '#000000'
+  menuTextActiveColor: '#000000',
+  elementSize: 'small'
 }
 
 const mutations = {

@@ -38,12 +38,12 @@
         :key="item.prop"
         :align="item.align || 'center'"
       >
-        <template #default="data">
-          <slot :name="item.prop" :data="data">
+        <template #default="{row, $index}">
+          <slot :name="item.prop" :row="row" :index="$index" :text="row[item.prop]">
             <div v-if="item.statusTag">
-              <StatusTag :status="data.row[item.prop]"></StatusTag>
+              <StatusTag :status="row[item.prop]"></StatusTag>
             </div>
-            <span v-else>{{ data.row[item.prop] }}</span>
+            <span v-else>{{ row[item.prop] }}</span>
           </slot>
         </template>
       </el-table-column>
@@ -94,7 +94,7 @@ export default {
       type: [Boolean, undefined],
       default: false,
     },
-    search: Function,
+    search: Function
   },
   computed: {
     mergePageObj() {

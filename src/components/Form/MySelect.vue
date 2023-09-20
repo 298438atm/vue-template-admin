@@ -4,15 +4,17 @@
     v-model="localValue"
     :placeholder="$attrs.placeholder ? $attrs.placeholder : '请选择'"
     :clearable="$commonFun.isEmpt($attrs.clearable) ? true : $attrs.clearable"
-    :filterable="$commonFun.isEmpt($attrs.filterable) ? true : $attrs.filterable"
+    :filterable="
+      $commonFun.isEmpt($attrs.filterable) ? true : $attrs.filterable
+    "
     v-bind="$attrs"
     v-on="$listeners"
   >
     <el-option
-      v-for="item in options"
+      v-for="item in localOptions"
       :key="item[optionKey]"
-      :label="item[optionLabelFiled]"
-      :value="optionValueIsObject ? item : item[optionValueFiled]"
+      :label="item[optionLabel]"
+      :value="optionValueIsObject ? item : item[optionValue]"
     ></el-option>
   </el-select>
 </template>
@@ -24,20 +26,17 @@ export default {
     modelValue: {
       type: [String, Object, Array],
     },
-    options: {
-      type: Array,
-      default: () => [],
-    },
+    options: [Function, Array],
     optionKey: {
       type: String,
       default: 'id',
     },
     optionValueIsObject: Boolean,
-    optionValueFiled: {
+    optionValue: {
       type: String,
       default: 'value',
     },
-    optionLabelFiled: {
+    optionLabel: {
       type: String,
       default: 'label',
     },
@@ -46,6 +45,11 @@ export default {
     prop: 'modelValue',
     event: 'updateModelValue',
   },
+  data() {
+    return {
+      localOptions: [],
+    }
+  },
   computed: {
     localValue: {
       get() {
@@ -53,6 +57,20 @@ export default {
       },
       set(newV) {
         this.$emit('updateModelValue', newV)
+      },
+    },
+  },
+  watch: {
+    options: {
+      immediate: true,
+      async handler(newV) {
+        if (typeof newV === 'function') {
+          newV((list) => {
+            this.localOptions = list
+          })
+        } else {
+          this.localOptions = newV
+        }
       },
     },
   },

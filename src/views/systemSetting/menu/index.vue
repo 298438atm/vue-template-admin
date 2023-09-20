@@ -27,17 +27,13 @@
           </el-select>
         </el-form-item>
       </template>
-      <template #name="{ data }">
-        <span v-if="data.row.name.indexOf(form.name) > -1">
-          {{ data.row.name.substr(0, data.row.name.indexOf(form.name))
+      <template #name="{ row }">
+        <span v-if="row.name.indexOf(form.name) > -1">
+          {{ row.name.substr(0, row.name.indexOf(form.name))
           }}<span style="color: #f50">{{ form.name }}</span
-          >{{
-            data.row.name.substr(
-              data.row.name.indexOf(form.name) + form.name.length
-            )
-          }}
+          >{{ row.name.substr(row.name.indexOf(form.name) + form.name.length) }}
         </span>
-        <span v-else>{{ data.row.name }}</span>
+        <span v-else>{{ row.name }}</span>
       </template>
       <template #leftBtn>
         <el-button type="primary" @click="openMenuForm('add')">新增</el-button>
@@ -59,17 +55,15 @@
               :status="row.status"
               @click="menuStatusChange(row, row.status ? '停用' : '启用')"
             ></MyTableBtn>
-            <el-button type="text" @click="openMenuForm('edit', row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              class="btn_text_red"
+            <MyTableBtn
+              btnType="edit"
+              @click="openMenuForm('edit', row)"
+            ></MyTableBtn>
+            <MyTableBtn
+              btnType="del"
               :loading="row.delLoading"
-              :disabled="row.disabled"
               @click="delMenu(row)"
-              >删除</el-button
-            >
+            ></MyTableBtn>
             {{ row.loading }}
           </template>
         </el-table-column>

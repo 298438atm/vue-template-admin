@@ -22,6 +22,9 @@ global.secretKey = 'fujunlingyangdandan'
 app.use(express.urlencoded())
 app.use(express.json())
 const noTokenApi = ['/user/login']
+app.use('/demo', (req) => {
+  req.rawListeners('123')
+})
 app.use((req, res, next) => {
   setTimeout(() => {
     if (noTokenApi.includes(req._parsedUrl.pathname)) {
