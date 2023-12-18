@@ -9,6 +9,13 @@ export function login(params) {
   })
 }
 
+export function getUserInfo() {
+  return request({
+    url: '/user/getUserInfo',
+    method: 'get'
+  })
+}
+
 export function getMenu() {
   return request({
     url: '/getMenu',
@@ -51,10 +58,12 @@ export function changeStatus(params) {
   })
 }
 
+
 export default {
   getList,
   getRoleList,
   addOrEdit,
   del,
-  changeStatus
+  changeStatus,
+  getUserInfo
 }

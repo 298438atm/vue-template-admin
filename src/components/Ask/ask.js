@@ -17,7 +17,7 @@ export class Ask {
       this.readyState = WebSocket.OPEN;
       console.log('WebSocket连接成功');
       this.vm.$emit('ws', {
-        type: 'init',
+        type: 'success',
         data: event
       })
 
@@ -40,7 +40,6 @@ export class Ask {
     
     // 处理连接关闭事件
     this.socket.onclose = (event) => {
-      console.log(event, 'event');
       this.readyState = WebSocket.CLOSED;
       console.log('WebSocket连接已关闭');
       this.vm.$emit('ws', {
@@ -112,7 +111,4 @@ export class Ask {
   }
 }
 
-export function packageText(content) {
-  return [{role: 'user', content}]
-}
 

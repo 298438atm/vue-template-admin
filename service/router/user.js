@@ -18,7 +18,7 @@ Router.get('/login', function (req, res) {
       data: {
         token
       },
-      msg: '登录成功！'
+      msg: '欢迎登录vue-admin-template平台！'
     })
   } else {
     res.send({
@@ -26,6 +26,13 @@ Router.get('/login', function (req, res) {
       msg: '用户不存在！'
     })
   }
+})
+
+Router.get('/getUserInfo', function (req, res) {
+  res.send({
+    code: 200,
+    data: req.tokenData
+  })
 })
 
 Router.get('/list', function (req, res) {

@@ -45,8 +45,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Element from 'element-ui'
 import chalkCss from './chalk.js'
 // const version = require('element-ui/package.json').version // element-ui version from node_modules
 import { mapState } from 'vuex'

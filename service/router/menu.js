@@ -5,13 +5,12 @@ const express = require('express')
 const Router = express.Router()
 const fs = require('fs')
 
-function findParentMenus(menuStructure, menuIds) {
+function findParentMenus(menuStructure, menuCodes) {
   const result = {};
-
   // 递归查找父级菜单
   function findParents(menuId, menuItems) {
     menuItems.forEach((menuItem) => {
-      if (menuIds.includes(menuItem.code)) {
+      if (menuCodes.includes(menuItem.code)) {
         result[menuItem.code] = menuItem;
 
         if (menuItem.parentMenu !== 'rootMenu') {
@@ -24,8 +23,7 @@ function findParentMenus(menuStructure, menuIds) {
   }
 
   // 遍历菜单 ID 集合
-  menuIds.forEach((menuId) => {
-    console.log(menuId, 'menuId');
+  menuCodes.forEach((menuId) => {
     findParents(menuId, menuStructure);
   });
   return Object.values(result);
@@ -40,12 +38,10 @@ Router.get('/getRoutes', function (req, res) {
   let selfMenuIds = []
   roleData.forEach(item => {
     if (roleIds.includes(item.code)) {
-      selfMenuIds = selfMenuIds.concat(item.menuIds)
+      selfMenuIds = selfMenuIds.concat(item.menuCodes)
     }
   })
-  console.log(selfMenuIds);
   const selfMenu = findParentMenus(menuData, selfMenuIds)
-  console.log(selfMenu, 'selfMenu');
   const data = selfMenu.filter(item => item.status === '1')
   res.send({
     code: 200,
@@ -72,6 +68,7 @@ Router.get('/getMenuList', function (req, res) {
 
 Router.post('/addEditMenu', function (req, res) {
   let menuData = JSON.parse(fs.readFileSync('./data/menu.json', 'utf8'))
+  let roleData = JSON.parse(fs.readFileSync('./data/role.json', 'utf8'))
   if (!req.body.id) {
     if (req.body.parentMenu === 'rootMenu') {
       req.body.createTime = global.selfUtils.formatTime(null, 'YYYY-MM-DD hh:mm:ss')
@@ -83,7 +80,14 @@ Router.post('/addEditMenu', function (req, res) {
   } else {
     menuData = editMenu(req.body, menuData)
   }
+  roleData = roleData.map(item => {
+    if (item.code === 'systemAdmin') {
+      item.menuCodes.push(req.body.code)
+    }
+    return item
+  })
   fs.writeFileSync('./data/menu.json', JSON.stringify(menuData))
+  fs.writeFileSync('./data/role.json', JSON.stringify(roleData))
   res.send({
     code: 200,
     msg: (req.body.id ? '修改' : '新增') + '成功！'

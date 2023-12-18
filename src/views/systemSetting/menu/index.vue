@@ -183,9 +183,10 @@ export default {
         this.delBtnLoading = false
         ids = this.ids
       }
-      API.delMenu(ids).then((res) => {
+      API.delMenu(ids).finally((res) => {
         row ? this.$set(row, 'delLoading', false) : (this.delBtnLoading = false)
         this.search()
+        this.store.dispatch('user/getMenu')
       })
     },
     async menuStatusChange(row, text) {
@@ -195,9 +196,10 @@ export default {
         type: 'warning',
       })
       this.$set(row, 'statusLoading', true)
-      API.changeMenuStatus(row.id).then(() => {
+      API.changeMenuStatus(row.id).finally(() => {
         this.$set(row, 'statusLoading', false)
         this.search()
+        this.store.dispatch('user/getMenu')
       })
     },
     openMenuForm(type, row = {}) {

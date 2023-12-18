@@ -147,7 +147,6 @@ export default {
     },
     async writeFile() {
       const btnsStr = btnTemplateStr(this.btnsTableData)
-      console.log(btnsStr, 'btnsStr');
       await this.$refs.writeForm.validate()
       const operatoperateBtnStr = operateBtnTempalteStr(this.operateBtns)
       const fileStr = `<template>

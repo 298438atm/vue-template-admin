@@ -28,8 +28,13 @@ export function formatTime(formatTimeStr = 'YYYY-MM-DD hh:mm:ss', date = new Dat
 export function returnType(data) {
   return Object.prototype.toString.call(data).slice(8, -1)
 }
+// 检验数据类型
 export function verifyType(data, type) {
   return returnType(data) === type
+}
+// 空类型校验
+export function verifyEmpty(data) {
+  return data === '' || data === undefined || data === null
 }
 
 export function dispatch(currentVm, componentName, vm) {
@@ -50,6 +55,7 @@ export default {
   formatTime,
   returnType,
   verifyType,
+  verifyEmpty,
   dispatch,
   isEmpt,
   ...lodash

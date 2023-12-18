@@ -29,6 +29,7 @@ export default {
   },
   created() {
     this.initTheme()
+    this.$store.dispatch('user/getUserInfo')
   },
   methods: {
     initTheme() {

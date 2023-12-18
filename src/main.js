@@ -1,11 +1,3 @@
-/*
- * @Author: fujunling 2984387807@qq.com
- * @Date: 2023-06-07 15:16:43
- * @LastEditors: fujunling 2984387807@qq.com
- * @LastEditTime: 2023-08-07 11:05:17
- * @FilePath: \vue2-admin-template\src\main.js
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -13,7 +5,10 @@ import store from './store'
 import './plugins/element.js' 
 import plugins from './plugins'
 import installCommomComponents from '@/components/install.js'
-
+import tools_ui from "@code_life/tools_ui"
+import "@code_life/tools_ui/tools_ui.css"
+console.log(tools_ui, 'tools_ui');
+// 引入样式
 import '@/assets/css/common.scss'
 import '@/assets/css/reset.css'
 
@@ -22,9 +17,13 @@ import colorFun from '@/utils/colorFun'
 import commonFun from '@/utils/commonFun'
 Vue.prototype.$colorFun = colorFun
 Vue.prototype.$commonFun = commonFun
+// 创建一个事件总线
+Vue.prototype.$bus = new Vue()
 
 Vue.use(plugins)
 Vue.use(installCommomComponents)
+Vue.use(tools_ui)
+
 Vue.config.productionTip = false
 new Vue({
   router,

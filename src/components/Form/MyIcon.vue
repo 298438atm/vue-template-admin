@@ -356,7 +356,7 @@ export default {
 ul {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-  width: 500px;
+  width: 100%;
   list-style: none;
   padding: 0 15px 0 0;
   margin: 0;

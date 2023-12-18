@@ -214,7 +214,7 @@ export default {
             trigger: ['blur', 'change'],
           },
         ],
-        dictDataCode: [
+        dictDataType: [
           { required: true, message: '请选择字典数据类型', trigger: 'change' },
         ],
         dictDataCode: [

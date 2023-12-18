@@ -1,21 +1,21 @@
 import axios from 'axios'
 import router from '@/router';
-import SessiomCrud from '@/utils/sessionCRUD'
+import { getSessionByKey } from '@/utils/sessionCRUD'
 import systemConfig from '@/config/system'
 import { Notification } from 'element-ui';
 import { Message } from 'element-ui';
 const request = axios.create({
-  baseURL: 'http://localhost:3333',
+  baseURL: 'http://127.0.0.1:3333',
   timeout: 100000
 })
 
 request.interceptors.request.use(config => {
   const { noToken } = config
   if (!noToken) {
-    const token = SessiomCrud.get('token')
+    const token = getSessionByKey('token')
     if (!token) {
-      Notification({ title: '提示', message: 'token不存在！请重新登录', type: 'error' })
-      return Promise.reject('token不存在！请重新登录')
+      Notification({ title: '提示', message: 'token不存在！请重新登录!', type: 'error' })
+      return Promise.reject('token不存在！请重新登录!')
     }
     config.headers['Authorization'] = token
   }

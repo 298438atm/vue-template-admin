@@ -17,7 +17,7 @@
 
 <script>
 import { login } from '@/api/user'
-import SessionCRUD from '@/utils/sessionCRUD'
+import { setSessionByKey } from '@/utils/sessionCRUD'
 export default {
   name: 'Login',
   data () {
@@ -48,7 +48,7 @@ export default {
       this.loading = true
       login(this.form).then(res => {
         const { token } = res
-        SessionCRUD.set('token', token)
+        setSessionByKey('token', token)
         this.$router.push('/home')
       }).finally(() => {
         this.loading = false

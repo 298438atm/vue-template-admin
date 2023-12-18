@@ -17,7 +17,8 @@
       <img src="@/assets/image/tx.png" alt="头像" />
       <el-dropdown @command="dropdownClick">
         <span class="dropdown">
-          fujl<i class="el-icon-arrow-down el-icon--right"></i>
+          {{ userInfo.nickname
+          }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -33,6 +34,8 @@
 
 <script>
 import ThemePicker from '@/components/ThemePicker'
+import { mapState } from 'vuex'
+import { clearSession } from '@/utils/sessionCRUD'
 export default {
   name: 'Header',
   components: { ThemePicker },
@@ -43,12 +46,8 @@ export default {
     }
   },
   computed: {
-    isCollapse() {
-      return this.$store.state.app.isCollapse
-    },
-    isFullScreen() {
-      return this.$store.state.app.isFullScreen
-    },
+    ...mapState('app', ['isCollapse', 'isFullScreen']),
+    ...mapState('user', ['userInfo']),
     collapseClass() {
       return this.isCollapse ? 'el-icon-s-unfold icon' : 'el-icon-s-fold icon'
     },
@@ -103,8 +102,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       })
-      sessionStorage.removeItem('token')
+      clearSession()
       this.$store.commit('user/ROUTES_CHANGE', [])
+      this.$store.commit('pageTags/CLEAN_TAG')
+      this.$store.commit('user/ROUTES_USER_INFO', {})
       this.$router.push('/login')
     },
   },
@@ -120,7 +121,7 @@ export default {
   align-items: center;
   width: 100%;
   height: 70px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
   & > .left_box {
     display: flex;
     align-content: center;

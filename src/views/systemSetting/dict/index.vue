@@ -209,7 +209,6 @@ export default {
     openDictTypeForm(type, row) {
       this.dictTypeProps.visible = true
       this.dictTypeProps.type = type
-      console.log(clone)
       this.dictTypeProps.formData = clone(row)
     },
     openDictDataForm({ dictDataType, id, dictTypeName }) {

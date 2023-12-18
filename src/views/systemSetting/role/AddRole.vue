@@ -36,7 +36,7 @@
             v-if="localVisible"
             type="role"
             nodeKey="code"
-            v-model="form.menuIds"
+            v-model="form.menuCodes"
           ></MyTree>
         </el-col>
       </el-row>
@@ -88,7 +88,7 @@ export default {
           if (res) {
             callback()
           } else {
-            callback(new Error(typeName + '名称不能重复！'))
+            callback(new Error(typeName + '不能重复！'))
           }
         }
       )
@@ -99,7 +99,7 @@ export default {
         code: undefined,
         status: '1',
         remark: undefined,
-        menuIds: [],
+        menuCodes: [],
       },
       rules: {
         name: [
@@ -152,7 +152,7 @@ export default {
         code: undefined,
         status: '1',
         remark: undefined,
-        menuIds: [],
+        menuCodes: [],
       }
       this.$refs.form.resetFields()
       this.localVisible = false

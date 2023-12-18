@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import SessiomCrud from '@/utils/sessionCRUD'
+import { getSessionByKey } from '@/utils/sessionCRUD'
 import { Notification } from 'element-ui';
 import store from '@/store/index'
 import { Loading } from 'element-ui';
@@ -83,7 +83,7 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
-  if (SessiomCrud.get('token')) {
+  if (getSessionByKey('token')) {
     const { routes } = store.state.user
     if (routes.length === 0) {
       let loadingInstance = Loading.service({
@@ -94,15 +94,20 @@ router.beforeEach((to, from, next) => {
       });
       store.dispatch('user/getMenu').then(res => {
         addRoutes(res)
-        console.log(toFirstPage(res), 'res');
         loadingInstance.close()
-        next(toFirstPage(res))
+        const pageTags = getSessionByKey('pageTags')
+        // 页面刷新的跳转逻辑
+        if (Array.isArray(pageTags) && pageTags.length > 0) {
+          next(to.fullPath)
+        } else {
+          next(toFirstPage(res))
+        }
       })
     } else {
       next()
     }
   } else {
-    Notification({ title: '提示', message: 'token不存在！请重新登录', type: 'error' })
+    Notification({ title: '提示', message: 'token不存在！请重新登录!', type: 'error' })
     next('/login')
   }
 })

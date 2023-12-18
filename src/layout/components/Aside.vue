@@ -1,5 +1,5 @@
 <template>
-  <div class="aside" :style="`--menuColor: ${menuColor}`">
+  <div class="aside">
     <div class="logo">
       <img src="@/assets/image/logo.png" alt="logo" height="50" />
     </div>

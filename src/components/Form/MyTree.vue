@@ -64,9 +64,6 @@ export default {
       filterText: '',
     }
   },
-  mounted() {
-    console.log();
-  },
   methods: {
     filterNode(value, data) {
       if (!value) return true

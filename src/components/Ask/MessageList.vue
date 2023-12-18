@@ -1,7 +1,7 @@
 <template>
-  <div class="message_list_box" :style="`--menuColor: ${menuColor}`">
+  <div class="message_list_box">
     <div
-      v-for="(item, index) in mssageList"
+      v-for="(item, index) in messageList"
       :key="index"
       class="message_item"
       :style="styleByRole(item.role)"
@@ -26,16 +26,19 @@
 import { mapState } from 'vuex'
 export default {
   name: 'MessageList',
-  noInstall: true,
+  props: {
+    messageList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   computed: {
     ...mapState('theme', ['menuColor']),
   },
   data() {
     return {
-      mssageList: [
-        { role: 'user', content: '你是谁' },
-        { role: 'assistant', content: '我是涅狄' },
-      ],
+      // mssageList: [],
+      localMessageList: []
     }
   },
   methods: {
@@ -45,7 +48,7 @@ export default {
         flexDirection: role === 'user' ? 'row-reverse' : 'row',
       }
     },
-  },
+  }
 }
 </script>
 
@@ -83,7 +86,7 @@ export default {
   }
   .message_centent::before {
     content: '';
-     top: 50%;
+    top: 50%;
     transform: translateY(-50%);
     position: absolute;
     display: inline-block;

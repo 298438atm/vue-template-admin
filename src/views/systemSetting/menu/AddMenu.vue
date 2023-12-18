@@ -10,6 +10,7 @@
         <el-col :span="12">
           <el-form-item prop="parentMenu" label="父级菜单">
             <MySelectTree
+              v-if="localVisible"
               v-model="form.parentMenu"
               :selectProp="selectProp"
               :treeProp="treeProp"
@@ -34,6 +35,22 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
+        <el-col :span="12" v-if="form.type === 'page'">
+          <el-form-item prop="componentName" label="组件名称">
+            <MyInput
+              v-model="form.componentName"
+              :placeholder="`请输入组件名称`"
+            ></MyInput>
+          </el-form-item>
+        </el-col>
+        <!-- <el-col :span="12" v-if="form.type === 'page'">
+          <el-form-item prop="title" label="页面标题">
+            <MyInput
+              v-model="form.title"
+              placeholder="请输入页面标题"
+            ></MyInput>
+          </el-form-item>
+        </el-col> -->
         <el-col :span="12">
           <el-form-item prop="name" :label="formLabelType + '名称'">
             <MyInput
@@ -52,18 +69,18 @@
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="form.type === 'page'">
-          <el-form-item prop="path" :label="formLabelType + '路由'">
+          <el-form-item prop="pageRoute" :label="formLabelType + '路由'">
             <MyInput
-              v-model="form.path"
+              v-model="form.pageRoute"
               :maxlength="50"
               :placeholder="`请输入${formLabelType}路由`"
             ></MyInput>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="form.type === 'page'">
-          <el-form-item prop="component" label="组件地址">
+          <el-form-item prop="componentPath" label="组件地址">
             <MyInput
-              v-model="form.component"
+              v-model="form.componentPath"
               :maxlength="50"
               :placeholder="`请输入${formLabelType}组件地址`"
             ></MyInput>
@@ -71,10 +88,11 @@
         </el-col>
         <el-col :span="12" v-if="form.type !== 'button'">
           <el-form-item prop="icon" :label="formLabelType + '图标'">
-            <MyIcon
+            <ClIconSelect
               v-model="form.icon"
+              style="width: 100%"
               :placeholder="`请选择${formLabelType}图标`"
-            ></MyIcon>
+            ></ClIconSelect>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -97,6 +115,7 @@
               v-model="form.remark"
               type="textarea"
               :placeholder="`请输入${formLabelType}备注`"
+              maxlength="200"
             ></MyInput>
           </el-form-item>
         </el-col>
@@ -155,10 +174,10 @@ export default {
         type: 'menu',
         name: undefined,
         code: undefined,
-        component: undefined,
+        componentPath: undefined,
         status: '1',
         keepAlive: false,
-        path: undefined,
+        pageRoute: undefined,
         icon: undefined,
         remark: undefined,
       },
@@ -174,26 +193,33 @@ export default {
         props: { label: 'name' },
       },
       rules: {
-        parentMenu: [
-          { required: true, message: '请选择父级菜单', trigger: 'change' },
-        ],
-        name: [
-          {
-            required: true,
-            message: '请输入名称',
-            trigger: ['blur', 'change'],
-          },
-        ],
-        code: [
-          {
+        parentMenu: { required: true, message: '请选择父级菜单', trigger: 'change' },
+        componentName: {
+          required: true,
+          message: '请输入组件名称',
+          trigger: ['blur', 'change'],
+        },
+        name: {
+          required: true,
+          message: '请输入名称',
+          trigger: ['blur', 'change'],
+        },
+        title: {
+          required: true,
+          message: '请输入页面标题',
+          trigger: ['blur', 'change'],
+        },
+        code: {
             required: true,
             message: '请输入编码',
             trigger: ['blur', 'change'],
           },
-        ],
-        icon: [
-          { required: true, message: '请选择菜单图标', trigger: 'change' },
-        ],
+        icon: { required: true, message: '请选择菜单图标', trigger: 'change' },
+        pageRoute: {
+          required: true,
+          message: '请输入页面路由',
+          trigger: ['blur', 'change']
+        },
       },
       cuerentParentMenuType: undefined,
       allowTypes: ['menu', 'page'],
@@ -204,8 +230,8 @@ export default {
     // 切换时清除非当前类型的字段数据
     menuTypeChange(type) {
       if (type !== 'page') {
-        this.form.path = undefined
-        this.form.component = undefined
+        this.form.pageRoute = undefined
+        this.form.componentPath = undefined
         this.form.keepAlive = undefined
       }
       if (type === 'button') {
@@ -221,10 +247,10 @@ export default {
         type: 'menu',
         name: undefined,
         code: undefined,
-        component: undefined,
+        componentPath: undefined,
         status: '1',
         keepAlive: false,
-        path: undefined,
+        pageRoute: undefined,
         icon: undefined,
         remark: undefined,
       }
@@ -245,11 +271,15 @@ export default {
       this.$refs.form.validate((flag) => {
         if (flag) {
           this.submitLoading = true
-          API.addEditMenu(this.form).then((res) => {
-            this.submitLoading = false
-            this.cancel()
-            this.search()
-          })
+          API.addEditMenu(this.form)
+            .then((res) => {
+              this.store.dispatch('user/getMenu')
+            })
+            .finally(() => {
+              this.submitLoading = false
+              this.cancel()
+              this.search()
+            })
         }
       })
     },

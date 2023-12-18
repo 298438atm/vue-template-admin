@@ -10,7 +10,10 @@
         </div>
         <div class="btn_box">
           <slot name="btn">
-            <el-button @click="search('reset')" icon="el-icon-refresh-right" v-if="showResetBtn"
+            <el-button
+              @click="search('reset')"
+              icon="el-icon-refresh-right"
+              v-if="showResetBtn"
               >重置</el-button
             >
             <el-button
@@ -55,6 +58,7 @@
         </el-form-item>
         <slot name="formItem"></slot>
       </div>
+
       <div class="retractor" v-if="showRetractBtn">
         <span @click="retacktChange">
           {{ isRetacktText }}<i :class="isRetackt"></i>
@@ -77,7 +81,7 @@ export default {
     // 是否展示图标
     showIcon: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 图标，默认为新建菜单的icon图标
     icon: {
@@ -87,12 +91,12 @@ export default {
     // 显示搜索按钮
     showSearchBtn: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 显示重置按钮
     showResetBtn: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 默认展示几行
     defaultShowRow: {
@@ -102,7 +106,7 @@ export default {
     // 显示收起按钮
     showRetractBtn: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 用户的布局
     formItemCol: {
@@ -124,16 +128,16 @@ export default {
     },
     returnSearch: {
       type: Boolean,
-      default: true
+      default: true,
     },
     changeSearchForm: {
       type: Function,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   model: {
     prop: 'searchForm',
-    event: 'changeSearchForm'
+    event: 'changeSearchForm',
   },
   computed: {
     isRetackt() {
@@ -210,6 +214,10 @@ export default {
             this.hideColStartIndex = index
           }
         }
+        // 对于不足一行但是默认展示一行的情况下，是否收起时不做处理，默认会收起
+        // if (index + 1 === formItemList.length && sumSpanNum <= 24 && this.defaultShowRow >= 1) {
+        //   this.hideColStartIndex = index + 1
+        // }
       }
     },
     retacktChange() {
@@ -223,6 +231,7 @@ export default {
         }
       })
       this.retackt = !this.retackt
+      this.$bus.$emit('setHight')
     },
   },
   watch: {
@@ -251,8 +260,8 @@ export default {
       immediate: true,
       handler(newV) {
         this.changeSearchForm(newV)
-      }
-    }
+      },
+    },
   },
 }
 </script>

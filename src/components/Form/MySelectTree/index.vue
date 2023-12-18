@@ -112,7 +112,6 @@ export default {
       handler(newV) {
         if (newV) {
           const currentMenu = this.findMenuById(this.localTreeList, newV)
-          console.log(currentMenu, 'currentMenu');
           this.selectedList = [currentMenu]
         }
       },

@@ -1,14 +1,41 @@
-export default class SessiomCrud {
-  static get(key) {
-    const data = window.sessionStorage.getItem(key)
-    return data ? JSON.parse(data) : undefined
+import { verifyEmpty } from './commonFun'
+
+export function getSessionByKey(key) {
+  if (verifyEmpty(key)) {
+    console.err('session的key为空！')
+  } else {
+    const keyStr = String(key)
+    return JSON.parse(window.sessionStorage.getItem(keyStr))
   }
-  
-  static set(key, data) {
-    window.sessionStorage.setItem(key, JSON.stringify(data))
+}
+export function setSessionByKey(key, data) {
+  if (verifyEmpty(key)) {
+    console.err('session的key为空！')
+  } else {
+    let dataStr = ''
+    const keyStr = String(key)
+    if (!verifyEmpty(data)) {
+      dataStr = JSON.stringify(data)
+      window.sessionStorage.setItem(keyStr, dataStr)
+    } else {
+      window.sessionStorage.setItem(keyStr, '')
+    }
   }
-  
-  static del(key) {
-    window.sessionStorage.removeItem(key)
+}
+export function delSessionByKey(key) {
+  if (verifyEmpty(key)) {
+    console.err('session的key为空！')
+  } else {
+    window.sessionStorage.removeItem(keyStr)
   }
+}
+export function clearSession() {
+  window.sessionStorage.clear()
+}
+
+export default {
+  getSessionByKey,
+  setSessionByKey,
+  delSessionByKey,
+  clearSession,
 }

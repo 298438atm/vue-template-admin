@@ -1,21 +1,25 @@
 <template>
   <div>
-    <TableSearch
-      v-show="isRetract && searchProp"
-      :search="search"
-      :columns="columns"
-      :searchForm="searchForm"
-      :changeSearchForm="changeSearchForm"
-      v-bind="typeof searchProp === 'boolean' ? {} : searchProp"
-    >
-      <template #formItem>
-        <slot name="formItem"></slot>
-      </template>
-    </TableSearch>
+    <CollapseTransition @transition-end="transitionEnd">
+      <TableSearch
+        v-show="isRetract && searchProp"
+        :search="search"
+        :columns="columns"
+        :searchForm="searchForm"
+        :changeSearchForm="changeSearchForm"
+        v-bind="typeof searchProp === 'boolean' ? {} : searchProp"
+      >
+        <template #formItem>
+          <slot name="formItem"></slot>
+        </template>
+      </TableSearch>
+    </CollapseTransition>
     <BtnBox
       v-if="btnBoxProp"
       v-bind="typeof btnBoxProp === 'boolean' ? {} : searchProp"
-      :searchShowToggle="() => (isRetract = !isRetract)"
+      :searchShowToggle="
+        () => ((isRetract = !isRetract), $bus.$emit('setHight'))
+      "
       :isRetract="isRetract"
       :search="search"
       :columns="columns"
@@ -78,12 +82,12 @@ export default {
     },
     searchForm: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   model: {
     prop: 'searchForm',
-    event: 'changeSearchForm'
+    event: 'changeSearchForm',
   },
   data() {
     return {
@@ -91,10 +95,14 @@ export default {
       showColumList: [],
     }
   },
+  mounted() {},
   methods: {
     changeSearchForm(val) {
       this.$emit('changeSearchForm', val)
-    }
+    },
+    transitionEnd() {
+      this.$bus.$emit('setHight')
+    },
   },
 }
 </script>

@@ -6,6 +6,7 @@
       v-loading="load"
       v-on="$listeners"
       show-overflow-tooltip
+      :height="height"
       ref="myTable"
     >
       <el-table-column
@@ -38,8 +39,13 @@
         :key="item.prop"
         :align="item.align || 'center'"
       >
-        <template #default="{row, $index}">
-          <slot :name="item.prop" :row="row" :index="$index" :text="row[item.prop]">
+        <template #default="{ row, $index }">
+          <slot
+            :name="item.prop"
+            :row="row"
+            :index="$index"
+            :text="row[item.prop]"
+          >
             <div v-if="item.statusTag">
               <StatusTag :status="row[item.prop]"></StatusTag>
             </div>
@@ -94,7 +100,7 @@ export default {
       type: [Boolean, undefined],
       default: false,
     },
-    search: Function
+    search: Function,
   },
   computed: {
     mergePageObj() {
@@ -107,6 +113,13 @@ export default {
   },
   mounted() {
     this.$commonFun.dispatch(this, 'myTable', this.$refs.myTable)
+    this.setHeight()
+    window.addEventListener('resize', this.setHeight)
+    // 事件总线监听
+    this.$bus.$on('setHight', this.setHeight)
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.setHeight)
   },
   data() {
     return {
@@ -118,6 +131,7 @@ export default {
         currentPage: 1,
         pageSize: 10,
       },
+      height: null,
     }
   },
   methods: {
@@ -126,6 +140,17 @@ export default {
     },
     currentChange(val) {
       this.search('pagination', { currentPage: val })
+    },
+    // 设置高度
+    setHeight() {
+      this.$nextTick(() => {
+        if (this.$refs.myTable) {
+          let offsetTop = this.$refs.myTable.$el.getBoundingClientRect().top
+          this.height =
+            Math.floor(document.documentElement.offsetHeight - offsetTop - 100) +
+            'px'
+        }
+      })
     },
   },
 }

@@ -6,6 +6,7 @@
       placeholder="请输入您的问题，按回车键进行查询"
       :rows="3"
       v-on:keydown.enter.native="keyUp"
+      :disabled="disabled"
     ></el-input>
   </div>
 </template>
@@ -14,6 +15,13 @@
 export default {
   name: 'SendBox',
   noInstall: true,
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+    
+  },
   data() {
     return {
       request: '',
@@ -25,6 +33,7 @@ export default {
       if (!shiftKey) {
         e.preventDefault()
         this.$emit('send', this.request)
+        this.request = ''
       }
     },
   },
