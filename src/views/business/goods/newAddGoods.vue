@@ -3,7 +3,7 @@
     <TablePage
       :data="tableData"
       :columns="columns"
-      :pageProp="pageProp"
+      :pageData="pageData"
       :searchProp="{
         defaultShowRow: 1,
       }"
@@ -77,7 +77,7 @@ export default {
           },
         },
       ],
-      pageProp: {
+      pageData: {
         total: 0,
         currentPage: 1,
         pageSize: 10,
@@ -90,19 +90,19 @@ export default {
   },
 
   methods: {
-    search(type, pageProp) {
+    search(type, pageData) {
       if (type === 'reset') {
         this.form = {}
       } else if (type === 'search') {
-        this.pageProp.currentPage = 1
+        this.pageData.currentPage = 1
       } else if (type === 'pagination') {
-        this.pageProp = Object.assign(this.pageProp, pageProp)
+        this.pageData = Object.assign(this.pageData, pageData)
       }
       this.tableLoading = true
-      getTable(Object.assign({}, this.pageProp, this.form)).then(
+      getTable(Object.assign({}, this.pageData, this.form)).then(
         ({ record, total }) => {
           this.tableData = record
-          this.pageProp.total = total
+          this.pageData.total = total
           this.tableLoading = false
         }
       )

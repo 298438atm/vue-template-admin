@@ -95,7 +95,6 @@ export default {
       showColumList: [],
     }
   },
-  mounted() {},
   methods: {
     changeSearchForm(val) {
       this.$emit('changeSearchForm', val)

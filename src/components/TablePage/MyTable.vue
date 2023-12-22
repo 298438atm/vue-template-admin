@@ -10,15 +10,15 @@
       ref="myTable"
     >
       <el-table-column
-        v-if="selectType === 'multiple'"
+        v-if="isSelect === 'multiple'"
         type="selection"
-        :width="selectionWidth"
+        v-bind="selectColumsData"
         align="center"
       ></el-table-column>
       <el-table-column
-        v-else-if="selectType === 'radio'"
+        v-else-if="isSelect === 'radio'"
         type="index"
-        :width="selectionWidth"
+        v-bind="selectColumsData"
         align="center"
       >
         <template #default="{ $index }">
@@ -26,10 +26,9 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="orderNumber"
+        v-if="isOrderNumber"
         type="index"
         label="序号"
-        :width="orderNumberWidth"
         align="center"
       >
       </el-table-column>
@@ -55,7 +54,7 @@
       </el-table-column>
       <slot name="endColumn"></slot>
     </el-table>
-    <div class="pagination_box" v-if="pageProp">
+    <div class="pagination_box" v-if="pageData">
       <el-pagination
         v-bind="mergePageObj"
         @size-change="sizeChange"
@@ -71,41 +70,44 @@ export default {
   name: 'MyTable',
   props: {
     // 选择框类型  multiple：多选，radio：单选，none：不需要选择
-    selectType: {
+    isSelect: {
       type: String,
       default: 'multiple',
     },
-    orderNumber: {
+    // 选项列的属性集合
+    selectColumsData: {
+      type: Object,
+      default: () => ({})
+    },
+    isOrderNumber: {
       type: Boolean,
       default: true,
     },
-    orderNumberWidth: {
-      type: String,
-      default: '60',
-    },
-    selectionWidth: {
-      type: String,
-      default: '60',
+    // 序号列属性集合
+    orderNumberColumsData: {
+      type: Object,
+      default: () => ({})
     },
     // 列表展示字段
     showColumList: {
       type: Array,
       default: () => [],
     },
-    pageProp: {
+    // 分页属性
+    pageData: {
       type: [Object, Boolean],
       default: () => ({}),
     },
     load: {
-      type: [Boolean, undefined],
+      type: Boolean,
       default: false,
     },
     search: Function,
   },
   computed: {
     mergePageObj() {
-      if (this.pageProp) {
-        return Object.assign({}, this.localPageObj, this.pageProp)
+      if (this.pageData) {
+        return Object.assign({}, this.localPageObj, this.pageData)
       } else {
         this.localPageObj
       }
@@ -147,7 +149,7 @@ export default {
         if (this.$refs.myTable) {
           let offsetTop = this.$refs.myTable.$el.getBoundingClientRect().top
           this.height =
-            Math.floor(document.documentElement.offsetHeight - offsetTop - 100) +
+            Math.floor(document.documentElement.offsetHeight - offsetTop - 50) +
             'px'
         }
       })

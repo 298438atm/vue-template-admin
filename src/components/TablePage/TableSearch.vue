@@ -5,7 +5,7 @@
         <div class="left_box">
           <slot name="title">
             <i :class="$route.meta.icon" class="icon" v-if="showIcon"></i>
-            <span class="name">{{ title || $route.name }}</span>
+            <span class="name">{{ title || $route.meta.name }}</span>
           </slot>
         </div>
         <div class="btn_box">

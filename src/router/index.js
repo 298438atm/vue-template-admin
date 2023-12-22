@@ -23,6 +23,7 @@ const router = new VueRouter({
 })
 
 function addRoutes(routesList) {
+  console.log(formatRoutes(routesList));
   const waitAddRoutes = {
     path: '',
     component: () => import('@/layout/index.vue'),
@@ -40,10 +41,10 @@ function formatRoutes(routes) {
   const resRoutes = []
   routes.forEach(item => {
     let obj = {
-      path: item.path || '',
+      path: item.pageRoute || '',
       meta: { name: item.name, keepAlive: item.keepAlive || false, icon: item.icon, id: item.id },
       component: routerCompnentHanlde(item, 1),
-      name: item.name
+      name: item.componentName
     }
     if (Array.isArray(item.children) && item.children.length > 0) {
       obj.children = formatRoutes(item.children)
@@ -56,7 +57,7 @@ function formatRoutes(routes) {
 // 处理路由组件
 function routerCompnentHanlde(route, type) {
   if (route.type === 'page') {
-    return () => import(`@/views${route.component}`)
+    return () => import(`@/views${route.componentPath}`)
   } else {
     return {
       render(c) {
@@ -68,17 +69,20 @@ function routerCompnentHanlde(route, type) {
 
 // 去到第一个页面
 function toFirstPage(routes) {
+  console.log(routes, 'routes');
   for (const item of routes) {
     if (item.type === 'page') {
-      return item.path
+      return item.componentPath
+    } else if (item.isLeaf) {
+      continue;
     } else {
-      return toFirstPage(item.children)
+      return toFirstPage(item.children || [])
     }
   }
 }
 
 router.beforeEach((to, from, next) => {
-  document.title = to.name
+  document.title = to.meta?.name || 'vue-admin-template'
   if (to.path === '/login') {
     next()
     return
@@ -94,14 +98,15 @@ router.beforeEach((to, from, next) => {
       });
       store.dispatch('user/getMenu').then(res => {
         addRoutes(res)
-        loadingInstance.close()
         const pageTags = getSessionByKey('pageTags')
         // 页面刷新的跳转逻辑
         if (Array.isArray(pageTags) && pageTags.length > 0) {
           next(to.fullPath)
         } else {
+          console.log(toFirstPage(res), 'resres');
           next(toFirstPage(res))
         }
+        loadingInstance.close()
       })
     } else {
       next()

@@ -4,9 +4,9 @@
       row-key="id"
       :data="tableData"
       :columns="columns"
-      :pageProp="false"
+      :pageData="false"
       :search="search"
-      :orderNumber="false"
+      :isOrderNumber="false"
       :load="this.tableLoading"
       :expand-row-keys="expandRowKeys"
       getRefMyTable="myTable"
@@ -21,9 +21,9 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="菜单状态">
-          <el-select v-model="form.status">
-            <el-option :value="true" label="启用"></el-option>
-            <el-option :value="false" label="停用"></el-option>
+          <el-select v-model="form.status" clearable>
+            <el-option value="1" label="启用"></el-option>
+            <el-option value="0" label="停用"></el-option>
           </el-select>
         </el-form-item>
       </template>
@@ -37,6 +37,7 @@
       </template>
       <template #leftBtn>
         <el-button type="primary" @click="openMenuForm('add')">新增</el-button>
+        <el-button type="primary" @click="expandAllToggle">全部{{expandAll ? '收起' : '展开'}}</el-button>
         <el-button
           type="danger"
           v-show="ids.length > 0"
@@ -109,12 +110,17 @@ export default {
           statusTag: true,
         },
         {
+          label: '排序',
+          prop: 'sort',
+          align: 'center',
+        },
+        {
           label: '备注',
           prop: 'remark',
           align: 'center',
         },
       ],
-      pageProp: {
+      pageData: {
         total: 0,
         currentPage: 1,
         pageSize: 10,
@@ -129,22 +135,23 @@ export default {
       expandRowKeys: [],
       tableLoading: false,
       delBtnLoading: false,
+      expandAll: false
     }
   },
   created() {
     this.search()
   },
   methods: {
-    search(type, pageProp) {
+    search(type, pageData) {
       if (type === 'reset') {
         this.form = {}
       } else if (type === 'search') {
-        this.pageProp.currentPage = 1
+        this.pageData.currentPage = 1
       } else if (type === 'pagination') {
-        this.pageProp = Object.assign(this.pageProp, pageProp)
+        this.pageData = Object.assign(this.pageData, pageData)
       }
       this.tableLoading = true
-      API.getMenuList(Object.assign({}, this.pageProp, this.form)).then(
+      API.getMenuList(Object.assign({}, this.pageData, this.form)).then(
         (res) => {
           if (type === 'search') {
             this.changeExpand(res, true)
@@ -161,6 +168,11 @@ export default {
       this.ids = select.map((item) => item.id)
     },
     // 展开或收起所有
+    expandAllToggle() {
+      this.expandAll = !this.expandAll
+      this.changeExpand(this.tableData, this.expandAll)
+    },
+    // 展开或收起所有方法
     changeExpand(arr, flag) {
       arr.forEach((row) => {
         this.$refs.myTable.toggleRowExpansion(row, flag)

@@ -14,11 +14,11 @@
         ><el-checkbox v-model="tableFormData.border"></el-checkbox
       ></el-form-item>
       <el-form-item label="是否需要序号："
-        ><el-checkbox v-model="tableFormData.orderNumber"></el-checkbox
+        ><el-checkbox v-model="tableFormData.isOrderNumber"></el-checkbox
       ></el-form-item>
-      <el-form-item label="能否选择：" prop="selectType">
+      <el-form-item label="能否选择：" prop="isSelect">
         <MySelect
-          v-model="tableFormData.selectType"
+          v-model="tableFormData.isSelect"
           :options="selectOptions"
         ></MySelect>
       </el-form-item>
@@ -53,9 +53,9 @@ export default {
       key: 'tableFormData',
       tableFormData: {
         border: true,
-        orderNumber: true,
+        isOrderNumber: true,
         isCenter: true,
-        selectType: 'multiple',
+        isSelect: 'multiple',
         isBtn: false,
         btns: [],
         tableTableData: [],
@@ -109,7 +109,7 @@ export default {
         },
       ],
       rules: {
-        selectType: {
+        isSelect: {
           required: true,
           message: '请选择表格是否可选',
           trigger: 'change',

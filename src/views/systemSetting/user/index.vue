@@ -8,7 +8,7 @@
       :load="tableLoading"
       :searchProp="searchProp"
       :columns="columns"
-      :pageProp="pageProp"
+      :pageData="pageData"
       :btnBoxProp="btnsFormData"
       @selection-change="selectChange"
     >
@@ -88,9 +88,9 @@ export default {
       },
       tableFormData: {
         border: true,
-        orderNumber: true,
+        isOrderNumber: true,
         isCenter: true,
-        selectType: 'multiple',
+        isSelect: 'multiple',
         isBtn: true,
         btns: ['edit', 'del'],
       },
@@ -125,7 +125,7 @@ export default {
           statusTag: true,
         },
       ],
-      pageProp: {
+      pageData: {
         isPagination: true,
         background: true,
         hideOnSinglePage: false,
@@ -167,27 +167,27 @@ export default {
       this.roleList = await API.getRoleList()
       cb(this.roleList)
     },
-    search(type, pageProp) {
+    search(type, pageData) {
       if (type === 'reset') {
         this.form = {}
       } else if (type === 'search') {
-        this.pageProp.currentPage = 1
+        this.pageData.currentPage = 1
       } else if (type === 'pagination') {
-        this.pageProp = Object.assign(this.pageProp, pageProp)
+        this.pageData = Object.assign(this.pageData, pageData)
       }
       this.tableLoading = true
       API.getList(
         Object.assign(
           {},
           {
-            currentPage: this.pageProp.currentPage,
-            pageSize: this.pageProp.pageSize,
+            currentPage: this.pageData.currentPage,
+            pageSize: this.pageData.pageSize,
           },
           this.form
         )
       ).then(({ record, total }) => {
         this.tableData = record
-        this.pageProp.total = total
+        this.pageData.total = total
         this.tableLoading = false
       })
     },

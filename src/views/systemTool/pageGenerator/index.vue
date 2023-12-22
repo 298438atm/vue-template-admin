@@ -14,7 +14,7 @@
         :showSearch="searchFormData.showSearch"
         v-bind="tableFormData"
         :columns="tableTableData"
-        :pageProp="pageFormData"
+        :pageData="pageFormData"
         :btnBoxProp="btnsFormData"
       >
         <template #leftBtn>
@@ -158,7 +158,7 @@ export default {
       :searchProp="searchProp"
       v-bind="tableFormData"
       :columns="columns"
-      :pageProp="pageProp"
+      :pageData="pageData"
       :btnBoxProp="btnsFormData"
     >
         ${btnsStr}
@@ -178,7 +178,7 @@ export default {
         searchProp: ${JSON.stringify(this.searchFormData)},
         tableFormData: ${JSON.stringify(this.tableFormData)},
         columns: ${JSON.stringify(this.tableTableData)},
-        pageProp: ${JSON.stringify(this.pageFormData)},
+        pageData: ${JSON.stringify(this.pageFormData)},
         btnsFormData: ${JSON.stringify(this.btnsFormData)},
         tableLoading: false
       }
@@ -188,19 +188,19 @@ export default {
     },
 
     methods: {
-      search(type, pageProp) {
+      search(type, pageData) {
         if (type === 'reset') {
           this.form = {}
         } else if (type === 'search') {
-          this.pageProp.currentPage = 1
+          this.pageData.currentPage = 1
         } else if (type === 'pagination') {
-          this.pageProp = Object.assign(this.pageProp, pageProp)
+          this.pageData = Object.assign(this.pageData, pageData)
         }
         this.tableLoading = true
-        getTable(Object.assign({}, this.pageProp, this.form)).then(
+        getTable(Object.assign({}, this.pageData, this.form)).then(
           ({ record, total }) => {
             this.tableData = record
-            this.pageProp.total = total
+            this.pageData.total = total
             this.tableLoading = false
           }
         )

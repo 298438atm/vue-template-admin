@@ -1,10 +1,10 @@
 <template>
   <div class="AsideItem" :style="`--beforeColor: ${menuTextActiveColor}`">
-    <el-menu-item v-if="route.type === 'page'" :index="route.id" @click="$router.push(route.path)">
+    <el-menu-item v-if="route.type === 'page'" :index="route.code" @click="$router.push(route.pageRoute)">
       <i :class="route.icon"></i>
       <span v-show="!isCollapse">{{ route.name }}</span>
     </el-menu-item>
-    <el-submenu v-else-if="route.type === 'menu'" :index="route.id">
+    <el-submenu v-else-if="route.type === 'menu'" :index="route.code">
       <template slot="title">
         <i :class="route.icon"></i>
         <span v-show="!isCollapse">{{ route.name }}</span>

@@ -73,7 +73,7 @@
 export default {
   name: 'MyTableForm',
   props: {
-    orderNumber: {
+    isOrderNumber: {
       type: Boolean,
       default: true,
     },

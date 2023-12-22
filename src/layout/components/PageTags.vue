@@ -7,9 +7,9 @@
           :key="item.path"
           class="tag_item"
           disable-transitions
-          :type="item.path === $route.path ? '' : 'info'"
+          :type="item.fullPath === $route.fullPath ? '' : 'info'"
           :closable="tags.length > 1"
-          @click="$router.push(item.path)"
+          @click="$router.push(item.fullPath)"
           @close="delTag(item)"
         >
           <span>{{ item.meta.name }}</span>

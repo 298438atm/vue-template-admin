@@ -43,14 +43,6 @@
             ></MyInput>
           </el-form-item>
         </el-col>
-        <!-- <el-col :span="12" v-if="form.type === 'page'">
-          <el-form-item prop="title" label="页面标题">
-            <MyInput
-              v-model="form.title"
-              placeholder="请输入页面标题"
-            ></MyInput>
-          </el-form-item>
-        </el-col> -->
         <el-col :span="12">
           <el-form-item prop="name" :label="formLabelType + '名称'">
             <MyInput
@@ -69,11 +61,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="form.type === 'page'">
-          <el-form-item prop="pageRoute" :label="formLabelType + '路由'">
+          <el-form-item prop="pageRoute" label="页面路由">
             <MyInput
               v-model="form.pageRoute"
               :maxlength="50"
-              :placeholder="`请输入${formLabelType}路由`"
+              :placeholder="`请输入页面路由`"
             ></MyInput>
           </el-form-item>
         </el-col>
@@ -107,6 +99,14 @@
               active-text="启用"
               inactive-text="停用"
             ></el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" required>
+          <el-form-item prop="keepAlive" label="排序">
+            <el-input-number
+              v-model="form.sort"
+              :min="0"
+            ></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="24">
