@@ -5,11 +5,6 @@ https://zhuanlan.zhihu.com/p/498294194
 2.关注用户体验
 3.关注可访问性 */
 /* Box sizing rules */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
 
 /* Remove default margin */
 body,

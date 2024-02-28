@@ -37,7 +37,9 @@
       </template>
       <template #leftBtn>
         <el-button type="primary" @click="openMenuForm('add')">新增</el-button>
-        <el-button type="primary" @click="expandAllToggle">全部{{expandAll ? '收起' : '展开'}}</el-button>
+        <el-button type="primary" @click="expandAllToggle"
+          >全部{{ expandAll ? '收起' : '展开' }}</el-button
+        >
         <el-button
           type="danger"
           v-show="ids.length > 0"
@@ -135,7 +137,7 @@ export default {
       expandRowKeys: [],
       tableLoading: false,
       delBtnLoading: false,
-      expandAll: false
+      expandAll: false,
     }
   },
   created() {
@@ -188,7 +190,7 @@ export default {
         type: 'warning',
       })
       let ids = []
-      if (row) {
+      if (row.id) {
         this.$set(row, 'delLoading', true)
         ids = [row.id]
       } else {
@@ -196,7 +198,9 @@ export default {
         ids = this.ids
       }
       API.delMenu(ids).finally((res) => {
-        row ? this.$set(row, 'delLoading', false) : (this.delBtnLoading = false)
+        row.id
+          ? this.$set(row, 'delLoading', false)
+          : (this.delBtnLoading = false)
         this.search()
         this.store.dispatch('user/getMenu')
       })
@@ -208,11 +212,14 @@ export default {
         type: 'warning',
       })
       this.$set(row, 'statusLoading', true)
-      API.changeMenuStatus(row.id).finally(() => {
-        this.$set(row, 'statusLoading', false)
-        this.search()
-        this.store.dispatch('user/getMenu')
-      })
+      API.changeMenuStatus(row.id)
+        .then(() => {
+          this.search()
+          this.store.dispatch('user/getMenu')
+        })
+        .finally(() => {
+          this.$set(row, 'statusLoading', false)
+        })
     },
     openMenuForm(type, row = {}) {
       this.menuDialogData.visible = true

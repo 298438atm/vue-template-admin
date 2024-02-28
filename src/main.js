@@ -7,7 +7,6 @@ import plugins from './plugins'
 import installCommomComponents from '@/components/install.js'
 import tools_ui from "@code_life/tools_ui"
 import "@code_life/tools_ui/tools_ui.css"
-console.log(tools_ui, 'tools_ui');
 // 引入样式
 import '@/assets/css/common.scss'
 import '@/assets/css/reset.css'

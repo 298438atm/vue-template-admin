@@ -116,19 +116,6 @@ Router.get('/getRoutes', function (req, res) {
   })
 })
 
-// 排序方法
-function sortList(list) {
-  list.sort((a, b) => {
-    if (a.children) {
-      sortList(a.children)
-    }
-    if (b.children) {
-      sortList(b.children)
-    }
-    return a.sort - b.sort
-  })
-}
-
 // 路由列表
 Router.get('/getMenuList', function (req, res) {
   const { name = '', status = '' } = req.query
@@ -165,8 +152,8 @@ Router.post('/addEditMenu', function (req, res) {
   let menuData = JSON.parse(fs.readFileSync('./data/menu.json', 'utf8'))
   let roleData = JSON.parse(fs.readFileSync('./data/role.json', 'utf8'))
   if (!req.body.id) {
+    req.body.is = global.selfUtils.createId()
     menuData.push(req.body)
-    req.body.isLeaf = true
     roleData = roleData.map((item) => {
       if (item.code === 'systemAdmin') {
         item.menuCodes.push(req.body.code)
@@ -194,32 +181,38 @@ Router.post('/addEditMenu', function (req, res) {
 
 Router.delete('/delMenu', function (req, res) {
   let menuData = JSON.parse(fs.readFileSync('./data/menu.json', 'utf8'))
-  let roleData = JSON.parse(fs.readFileSync('./data/role.json', 'utf8'))
-
-  const copyMenuData = JSON.parse(JSON.stringify(menuData))
-  const codes = req.body
-  menuData.forEach((item, index) => {
-    if (codes.includes(item.code)) {
-      if (item.isLeaf) {
-        let idx = copyMenuData.findIndex((itm) => itm.code === item.code)
-        copyMenuData.splice(idx, 1)
-      } else {
-        delSonMenu(copyMenuData, item.code)
-      }
-    }
-  })
-  // 更新角色数据
-  roleData = roleData.map((item) => {
-    let delCodes = item.menuCodes.filter((itm) => !codes.includes(itm))
-    item.menuCodes = delCodes
-    return item
-  })
+  let index = menuData.findIndex(item => item.code === req.code)
+  menuData.splice(index, 1)
   fs.writeFileSync('./data/menu.json', JSON.stringify(menuData))
-  fs.writeFileSync('./data/role.json', JSON.stringify(roleData))
   res.send({
     code: 200,
     msg: '删除成功！',
   })
+  // // let roleData = JSON.parse(fs.readFileSync('./data/role.json', 'utf8'))
+  // const copyMenuData = JSON.parse(JSON.stringify(menuData))
+  // const codes = req.body
+  // menuData.forEach((item, index) => {
+  //   if (codes.includes(item.code)) {
+  //     if (item.isLeaf) {
+  //       let idx = copyMenuData.findIndex((itm) => itm.code === item.code)
+  //       copyMenuData.splice(idx, 1)
+  //     } else {
+  //       delSonMenu(copyMenuData, item.code)
+  //     }
+  //   }
+  // })
+  // // 更新角色数据
+  // roleData = roleData.map((item) => {
+  //   let delCodes = item.menuCodes.filter((itm) => !codes.includes(itm))
+  //   item.menuCodes = delCodes
+  //   return item
+  // })
+  // fs.writeFileSync('./data/menu.json', JSON.stringify(menuData))
+  // fs.writeFileSync('./data/role.json', JSON.stringify(roleData))
+  // res.send({
+  //   code: 200,
+  //   msg: '删除成功！',
+  // })
   function delSonMenu(menus, code) {
     let idx = menus.findIndex((itm) => itm.code === code)
     console.log(idx)

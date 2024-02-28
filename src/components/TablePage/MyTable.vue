@@ -149,7 +149,7 @@ export default {
         if (this.$refs.myTable) {
           let offsetTop = this.$refs.myTable.$el.getBoundingClientRect().top
           this.height =
-            Math.floor(document.documentElement.offsetHeight - offsetTop - 50) +
+            Math.floor(document.documentElement.offsetHeight - offsetTop - 100) +
             'px'
         }
       })

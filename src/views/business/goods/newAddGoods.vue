@@ -10,11 +10,6 @@
       :search="search"
       :load="tableLoading"
     >
-      <template #formItem>
-        <el-form-item label="请选择时间" prop="time" searchSort="5">
-          <MyTimePicker v-model="form.time"></MyTimePicker>
-        </el-form-item>
-      </template>
       <template #leftBtn>
         <el-button type="primary">新增</el-button>
       </template>
@@ -90,13 +85,19 @@ export default {
   },
 
   methods: {
-    search(type, pageData) {
+    search(type, pageDataOrForm) {
       if (type === 'reset') {
         this.form = {}
+        this.pageData = {
+          total: 0,
+          currentPage: 1,
+          pageSize: 10,
+        }
       } else if (type === 'search') {
         this.pageData.currentPage = 1
+        this.form = Object.assign(this.form, pageDataOrForm)
       } else if (type === 'pagination') {
-        this.pageData = Object.assign(this.pageData, pageData)
+        this.pageData = Object.assign(this.pageData, pageDataOrForm)
       }
       this.tableLoading = true
       getTable(Object.assign({}, this.pageData, this.form)).then(

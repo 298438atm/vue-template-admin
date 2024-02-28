@@ -11,16 +11,16 @@
         <div class="btn_box">
           <slot name="btn">
             <el-button
-              @click="search('reset')"
+              v-if="isResetBtn"
               icon="el-icon-refresh-right"
-              v-if="showResetBtn"
+              @click="search('reset')"
               >重置</el-button
             >
             <el-button
-              v-if="showSearchBtn"
-              @click="search('search')"
+              v-if="isSearchBtn"
               type="primary"
               icon="el-icon-search"
+              @click="search('search', form)"
               >查询</el-button
             >
           </slot>
@@ -89,12 +89,12 @@ export default {
       default: 'el-icon-s-order',
     },
     // 显示搜索按钮
-    showSearchBtn: {
+    isSearchBtn: {
       type: Boolean,
       default: true,
     },
     // 显示重置按钮
-    showResetBtn: {
+    isResetBtn: {
       type: Boolean,
       default: true,
     },

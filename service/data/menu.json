@@ -173,12 +173,34 @@
   {
     "parentMenu": "rootMenu",
     "type": "menu",
+    "name": "A",
+    "code": "A",
+    "status": "1",
+    "keepAlive": false,
+    "icon": "el-icon-user-solid",
+    "isLeaf": true
+  },
+  {
+    "parentMenu": "rootMenu",
+    "type": "menu",
     "name": "AA",
     "code": "AA",
     "status": "1",
     "keepAlive": false,
-    "icon": "el-icon-phone-outline",
+    "icon": "el-icon-setting",
     "sort": 1,
     "isLeaf": true
+  },
+  {
+    "parentMenu": "rootMenu",
+    "type": "menu",
+    "name": "AA",
+    "code": "AA",
+    "status": "1",
+    "keepAlive": false,
+    "icon": "el-icon-setting",
+    "sort": 1,
+    "isLeaf": true,
+    "remark": "AAAAAAAAAAa"
   }
 ]
