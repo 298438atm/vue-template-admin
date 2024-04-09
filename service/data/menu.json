@@ -129,6 +129,7 @@
     "type": "page",
     "icon": "el-icon-s-data",
     "id": "newAddGoods",
+    "keepAlive": true,
     "parentMenu": "goods",
     "status": "1",
     "pageRoute": "/business/goods/newAddGoods",
@@ -137,70 +138,5 @@
     "sort": 2,
     "componentName": "NewAddGoods",
     "isLeaf": true
-  },
-  {
-    "parentMenu": "rootMenu",
-    "type": "menu",
-    "name": "系统工具",
-    "code": "systemTool",
-    "status": "1",
-    "keepAlive": false,
-    "icon": "el-icon-upload",
-    "createTime": "2023-08-24 15:45:23",
-    "id": "1692863123488czwutdxzarp",
-    "sort": 3,
-    "remark": "我是系统工具",
-    "isLeaf": false
-  },
-  {
-    "parentMenu": "systemTool",
-    "type": "page",
-    "name": "页面生成器",
-    "code": "pageGenerator",
-    "status": "1",
-    "keepAlive": false,
-    "icon": "el-icon-star-on",
-    "createTime": "2023-08-24 15:47:40",
-    "id": "1692863260894g0iflxy0v39",
-    "componentPath": "/systemTool/pageGenerator",
-    "pageRoute": "/systemTool/pageGenerator",
-    "sort": 1,
-    "children": [],
-    "componentName": "PageGenerator",
-    "remark": "我是页面生成器",
-    "isLeaf": true
-  },
-  {
-    "parentMenu": "rootMenu",
-    "type": "menu",
-    "name": "A",
-    "code": "A",
-    "status": "1",
-    "keepAlive": false,
-    "icon": "el-icon-user-solid",
-    "isLeaf": true
-  },
-  {
-    "parentMenu": "rootMenu",
-    "type": "menu",
-    "name": "AA",
-    "code": "AA",
-    "status": "1",
-    "keepAlive": false,
-    "icon": "el-icon-setting",
-    "sort": 1,
-    "isLeaf": true
-  },
-  {
-    "parentMenu": "rootMenu",
-    "type": "menu",
-    "name": "AA",
-    "code": "AA",
-    "status": "1",
-    "keepAlive": false,
-    "icon": "el-icon-setting",
-    "sort": 1,
-    "isLeaf": true,
-    "remark": "AAAAAAAAAAa"
   }
 ]
