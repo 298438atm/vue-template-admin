@@ -1,12 +1,12 @@
 import axios from 'axios'
-import router from '@/router';
+import router from '@/router'
 import { getSessionByKey } from '@/utils/sessionCRUD'
 import systemConfig from '@/config/system'
-import { Notification } from 'element-ui';
-import { Message } from 'element-ui';
+import { Notification } from 'element-ui'
+import { Message } from 'element-ui'
 const request = axios.create({
   baseURL: 'http://127.0.0.1:3333',
-  timeout: 100000
+  timeout: 100000,
 })
 
 request.interceptors.request.use(config => {
@@ -14,7 +14,11 @@ request.interceptors.request.use(config => {
   if (!noToken) {
     const token = getSessionByKey('token')
     if (!token) {
-      Notification({ title: '提示', message: 'token不存在！请重新登录!', type: 'error' })
+      Notification({
+        title: '提示',
+        message: 'token不存在！请重新登录!',
+        type: 'error',
+      })
       return Promise.reject('token不存在！请重新登录!')
     }
     config.headers['Authorization'] = token
@@ -34,14 +38,14 @@ request.interceptors.response.use(res => {
         if (res.data.msg && systemConfig.automaticTip && !res.config.noTips) {
           Message({
             type: 'success',
-            message: res.data.msg
+            message: res.data.msg,
           })
         }
         return Promise.resolve(res.data.data)
       } else {
         Message({
           type: 'error',
-          message: res.data.msg
+          message: res.data.msg,
         })
         return Promise.reject(res.data)
       }
@@ -51,7 +55,7 @@ request.interceptors.response.use(res => {
   } else {
     Message({
       type: 'error',
-      message: res.statusText
+      message: res.statusText,
     })
     return Promise.reject(res.data)
   }

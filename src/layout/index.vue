@@ -7,10 +7,10 @@
         <PageTags></PageTags>
       </el-header>
       <el-main>
-        <keep-alive v-if="$route.meta.keepAlive">
-          <router-view></router-view>
+        <keep-alive>
+          <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
-        <router-view></router-view>
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -28,6 +28,7 @@ export default {
     return {}
   },
   created() {
+    console.log(this.$route, '$route');
     this.initTheme()
     this.$store.dispatch('user/getUserInfo')
   },

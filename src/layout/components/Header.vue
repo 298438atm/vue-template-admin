@@ -3,11 +3,12 @@
     <div class="left_box">
       <i :class="collapseClass" @click="isCollapseChange"></i>
       <div class="current_path">
+        <span> vue2-template-admin </span>
         <el-breadcrumb separator="/">
           <el-breadcrumb-item
             v-for="(item, index) in showRoutePath"
             :key="index"
-            >{{ item.name }}</el-breadcrumb-item
+            >{{ item.meta.name }}</el-breadcrumb-item
           >
         </el-breadcrumb>
       </div>
@@ -52,7 +53,7 @@ export default {
       return this.isCollapse ? 'el-icon-s-unfold icon' : 'el-icon-s-fold icon'
     },
     showRoutePath() {
-      return this.$route.matched.filter((item) => item.name)
+      return this.$route.matched
     },
   },
   methods: {
@@ -134,6 +135,7 @@ export default {
       align-items: center;
       padding-left: 20px;
       font-size: 14px;
+      color: #606266;
     }
   }
   .right_box {
